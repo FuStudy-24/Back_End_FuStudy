@@ -218,6 +218,7 @@ namespace FuStudy_API.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
+                    MajorId = table.Column<long>(type: "bigint", nullable: false),
                     AcademicLevel = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     WorkPlace = table.Column<string>(type: "longtext", nullable: false)
@@ -232,6 +233,12 @@ namespace FuStudy_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Mentor", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Mentor_Major_MajorId",
+                        column: x => x.MajorId,
+                        principalTable: "Major",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Mentor_User_UserId",
                         column: x => x.UserId,
@@ -485,7 +492,7 @@ namespace FuStudy_API.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     StudentId = table.Column<long>(type: "bigint", nullable: false),
                     CategoryId = table.Column<long>(type: "bigint", nullable: false),
-                    QuestionContent = table.Column<string>(type: "longtext", nullable: false)
+                    Content = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -632,7 +639,7 @@ namespace FuStudy_API.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     QuestionId = table.Column<long>(type: "bigint", nullable: false),
-                    Comment = table.Column<string>(type: "longtext", nullable: false)
+                    Content = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -756,6 +763,11 @@ namespace FuStudy_API.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Mentor_MajorId",
+                table: "Mentor",
+                column: "MajorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Mentor_UserId",
                 table: "Mentor",
                 column: "UserId");
@@ -857,9 +869,6 @@ namespace FuStudy_API.Migrations
                 name: "Booking");
 
             migrationBuilder.DropTable(
-                name: "Major");
-
-            migrationBuilder.DropTable(
                 name: "MeetingHistory");
 
             migrationBuilder.DropTable(
@@ -903,6 +912,9 @@ namespace FuStudy_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Wallet");
+
+            migrationBuilder.DropTable(
+                name: "Major");
 
             migrationBuilder.DropTable(
                 name: "Conversation");

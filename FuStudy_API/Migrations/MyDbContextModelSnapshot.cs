@@ -354,6 +354,9 @@ namespace FuStudy_API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<long>("MajorId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("OnlineStatus")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -374,6 +377,8 @@ namespace FuStudy_API.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MajorId");
 
                     b.HasIndex("UserId");
 
@@ -478,6 +483,10 @@ namespace FuStudy_API.Migrations
                     b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime(6)");
 
@@ -487,10 +496,6 @@ namespace FuStudy_API.Migrations
 
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("QuestionContent")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
@@ -515,7 +520,7 @@ namespace FuStudy_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Comment")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -920,11 +925,19 @@ namespace FuStudy_API.Migrations
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Mentor", b =>
                 {
+                    b.HasOne("FuStudy_Repository.Entity.Major", "Major")
+                        .WithMany()
+                        .HasForeignKey("MajorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("FuStudy_Repository.Entity.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Major");
 
                     b.Navigation("User");
                 });

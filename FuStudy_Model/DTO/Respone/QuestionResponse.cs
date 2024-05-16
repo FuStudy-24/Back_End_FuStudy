@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FuStudy_Model.DTO.Respone
 {
-    internal class QuestionResponse
+    public class QuestionResponse
     {
     }
 }
