@@ -618,6 +618,10 @@
         }
       },
       "FuStudy_Service/1.0.0": {
+        "dependencies": {
+          "FuStudy_Model": "1.0.0",
+          "FuStudy_Repository": "1.0.0"
+        },
         "runtime": {
           "FuStudy_Service.dll": {}
         }

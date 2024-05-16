@@ -24,3 +24,16 @@ C:\Users\admin\Desktop\Ki8\PRN231\Back_End_FuStudy\FuStudy_Model\obj\Debug\net8.
 C:\Users\admin\Desktop\Ki8\PRN231\Back_End_FuStudy\FuStudy_Model\obj\Debug\net8.0\refint\FuStudy_Model.dll
 C:\Users\admin\Desktop\Ki8\PRN231\Back_End_FuStudy\FuStudy_Model\obj\Debug\net8.0\FuStudy_Model.pdb
 C:\Users\admin\Desktop\Ki8\PRN231\Back_End_FuStudy\FuStudy_Model\obj\Debug\net8.0\ref\FuStudy_Model.dll
+D:\C#\FuStudy\FuStudy_Model\bin\Debug\net8.0\FuStudy_Model.deps.json
+D:\C#\FuStudy\FuStudy_Model\bin\Debug\net8.0\FuStudy_Model.dll
+D:\C#\FuStudy\FuStudy_Model\bin\Debug\net8.0\FuStudy_Model.pdb
+D:\C#\FuStudy\FuStudy_Model\obj\Debug\net8.0\FuStudy_Model.csproj.AssemblyReference.cache
+D:\C#\FuStudy\FuStudy_Model\obj\Debug\net8.0\FuStudy_Model.GeneratedMSBuildEditorConfig.editorconfig
+D:\C#\FuStudy\FuStudy_Model\obj\Debug\net8.0\FuStudy_Model.AssemblyInfoInputs.cache
+D:\C#\FuStudy\FuStudy_Model\obj\Debug\net8.0\FuStudy_Model.AssemblyInfo.cs
+D:\C#\FuStudy\FuStudy_Model\obj\Debug\net8.0\FuStudy_Model.csproj.CoreCompileInputs.cache
+D:\C#\FuStudy\FuStudy_Model\obj\Debug\net8.0\FuStudy_Model.sourcelink.json
+D:\C#\FuStudy\FuStudy_Model\obj\Debug\net8.0\FuStudy_Model.dll
+D:\C#\FuStudy\FuStudy_Model\obj\Debug\net8.0\refint\FuStudy_Model.dll
+D:\C#\FuStudy\FuStudy_Model\obj\Debug\net8.0\FuStudy_Model.pdb
+D:\C#\FuStudy\FuStudy_Model\obj\Debug\net8.0\ref\FuStudy_Model.dll

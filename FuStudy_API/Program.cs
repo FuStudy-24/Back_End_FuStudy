@@ -5,6 +5,10 @@ using FuStudy_Repository.Repository;
 using FuStudy_Repository;
 using FuStudy_Model.Mapper;
 using AutoMapper;
+using FuStudy_Service.Interface;
+using FuStudy_Service.Service;
+using Microsoft.Extensions.Hosting;
+using System.Runtime.CompilerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,17 +37,21 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 }
 );
 
+
+
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+
 
 
 // Service add o day
 //builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IQuestionService, QuestionService>();
 
 //Build CORS
 /*builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
@@ -54,7 +62,7 @@ var app = builder.Build();
     //Dòng dưới là nhận hết
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));*/
-
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -1142,6 +1142,10 @@
       "FuStudy_Service/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "FuStudy_Model": "1.0.0",
+          "FuStudy_Repository": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/FuStudy_Service.dll": {}
         },
@@ -3195,23 +3199,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\admin\\.nuget\\packages\\": {},
+    "C:\\Users\\pkhoa\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FUStudy_API\\FuStudy_API.csproj",
+      "projectUniqueName": "D:\\C#\\FuStudy\\FUStudy_API\\FuStudy_API.csproj",
       "projectName": "FuStudy_API",
-      "projectPath": "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FUStudy_API\\FuStudy_API.csproj",
-      "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FUStudy_API\\obj\\",
+      "projectPath": "D:\\C#\\FuStudy\\FUStudy_API\\FuStudy_API.csproj",
+      "packagesPath": "C:\\Users\\pkhoa\\.nuget\\packages\\",
+      "outputPath": "D:\\C#\\FuStudy\\FUStudy_API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\pkhoa\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3220,23 +3224,24 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FuStudy_Model\\FuStudy_Model.csproj": {
-              "projectPath": "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FuStudy_Model\\FuStudy_Model.csproj"
+            "D:\\C#\\FuStudy\\FuStudy_Model\\FuStudy_Model.csproj": {
+              "projectPath": "D:\\C#\\FuStudy\\FuStudy_Model\\FuStudy_Model.csproj"
             },
-            "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FUStudy_Repository\\FuStudy_Repository.csproj": {
-              "projectPath": "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FUStudy_Repository\\FuStudy_Repository.csproj"
+            "D:\\C#\\FuStudy\\FUStudy_Repository\\FuStudy_Repository.csproj": {
+              "projectPath": "D:\\C#\\FuStudy\\FUStudy_Repository\\FuStudy_Repository.csproj"
             },
-            "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FuStudy_Service\\FuStudy_Service.csproj": {
-              "projectPath": "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FuStudy_Service\\FuStudy_Service.csproj"
+            "D:\\C#\\FuStudy\\FuStudy_Service\\FuStudy_Service.csproj": {
+              "projectPath": "D:\\C#\\FuStudy\\FuStudy_Service\\FuStudy_Service.csproj"
             },
-            "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\Tools\\Tools.csproj": {
-              "projectPath": "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\Tools\\Tools.csproj"
+            "D:\\C#\\FuStudy\\Tools\\Tools.csproj": {
+              "projectPath": "D:\\C#\\FuStudy\\Tools\\Tools.csproj"
             }
           }
         }
@@ -3245,11 +3250,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -3290,7 +3290,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

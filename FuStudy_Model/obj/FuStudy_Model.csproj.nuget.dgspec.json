@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FuStudy_Model\\FuStudy_Model.csproj": {}
+    "D:\\C#\\FuStudy\\FuStudy_Model\\FuStudy_Model.csproj": {}
   },
   "projects": {
-    "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FuStudy_Model\\FuStudy_Model.csproj": {
+    "D:\\C#\\FuStudy\\FuStudy_Model\\FuStudy_Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FuStudy_Model\\FuStudy_Model.csproj",
+        "projectUniqueName": "D:\\C#\\FuStudy\\FuStudy_Model\\FuStudy_Model.csproj",
         "projectName": "FuStudy_Model",
-        "projectPath": "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FuStudy_Model\\FuStudy_Model.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\admin\\Desktop\\Ki8\\PRN231\\Back_End_FuStudy\\FuStudy_Model\\obj\\",
+        "projectPath": "D:\\C#\\FuStudy\\FuStudy_Model\\FuStudy_Model.csproj",
+        "packagesPath": "C:\\Users\\pkhoa\\.nuget\\packages\\",
+        "outputPath": "D:\\C#\\FuStudy\\FuStudy_Model\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\pkhoa\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,11 +39,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -74,7 +70,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

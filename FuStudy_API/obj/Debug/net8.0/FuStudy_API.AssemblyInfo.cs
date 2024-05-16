@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FuStudy_API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0dbcc2dab68bc4f7cd7c25be1fd7ead1de1271ff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+acafacb340eb89cf90cbac53fbe8288ad6247347")]
 [assembly: System.Reflection.AssemblyProductAttribute("FuStudy_API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FuStudy_API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
