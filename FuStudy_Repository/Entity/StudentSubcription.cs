@@ -11,6 +11,10 @@ namespace FuStudy_Repository.Entity
     [Table("StudentSubcription")]
     public class StudentSubcription
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
+
         public long StudentId { get; set; }
 
         public long SubcriptionId { get; set; }

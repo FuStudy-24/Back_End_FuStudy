@@ -12,6 +12,7 @@ namespace FuStudy_Repository.Entity
     public class MeetingHistory
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         public long StudentId { get; set; }

@@ -12,21 +12,22 @@ namespace FuStudy_Repository.Entity
     public class MessageReaction
     {
         [Key]
-        public long id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
 
-        public long userId { get; set; }
+        public long UserId { get; set; }
 
-        public long conversationMessageId { get; set; }
+        public long ConversationMessageId { get; set; }
 
         [Required]
-        public string reactionType { get; set; }
+        public string ReactionType { get; set; }
 
-        public DateTime createAt { get; set; }
+        public DateTime CreateAt { get; set; }
 
-        [ForeignKey("userId")]
-        public User user { get; set; }
+        [ForeignKey("UserId")]
+        public required User User { get; set; }
 
-        [ForeignKey("conversationMessageId")]
-        public ConversationMessage conversationMessage { get; set; }
+        [ForeignKey("ConversationMessageId")]
+        public required ConversationMessage ConversationMessage { get; set; }
     }
 }

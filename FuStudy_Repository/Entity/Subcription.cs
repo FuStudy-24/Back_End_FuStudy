@@ -12,6 +12,7 @@ namespace FuStudy_Repository.Entity
     public class Subcription
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         [Required]

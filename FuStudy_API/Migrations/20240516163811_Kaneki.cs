@@ -96,13 +96,14 @@ namespace FuStudy_API.Migrations
                 name: "RolePermission",
                 columns: table => new
                 {
-                    RoleId = table.Column<long>(type: "bigint", nullable: false),
-                    PermissionId = table.Column<long>(type: "bigint", nullable: false),
                     Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    RoleId = table.Column<long>(type: "bigint", nullable: false),
+                    PermissionId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RolePermission", x => new { x.RoleId, x.PermissionId });
+                    table.PrimaryKey("PK_RolePermission", x => x.Id);
                     table.ForeignKey(
                         name: "FK_RolePermission_Permission_PermissionId",
                         column: x => x.PermissionId,
@@ -522,6 +523,8 @@ namespace FuStudy_API.Migrations
                 name: "StudentSubcription",
                 columns: table => new
                 {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     StudentId = table.Column<long>(type: "bigint", nullable: false),
                     SubcriptionId = table.Column<long>(type: "bigint", nullable: false),
                     LimitQuestion = table.Column<int>(type: "int", nullable: false),
@@ -531,7 +534,7 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentSubcription", x => new { x.StudentId, x.SubcriptionId });
+                    table.PrimaryKey("PK_StudentSubcription", x => x.Id);
                     table.ForeignKey(
                         name: "FK_StudentSubcription_Student_StudentId",
                         column: x => x.StudentId,
@@ -605,26 +608,26 @@ namespace FuStudy_API.Migrations
                 name: "MessageReaction",
                 columns: table => new
                 {
-                    id = table.Column<long>(type: "bigint", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    userId = table.Column<long>(type: "bigint", nullable: false),
-                    conversationMessageId = table.Column<long>(type: "bigint", nullable: false),
-                    reactionType = table.Column<string>(type: "longtext", nullable: false)
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    ConversationMessageId = table.Column<long>(type: "bigint", nullable: false),
+                    ReactionType = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    createAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    CreateAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MessageReaction", x => x.id);
+                    table.PrimaryKey("PK_MessageReaction", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MessageReaction_ConversationMessage_conversationMessageId",
-                        column: x => x.conversationMessageId,
+                        name: "FK_MessageReaction_ConversationMessage_ConversationMessageId",
+                        column: x => x.ConversationMessageId,
                         principalTable: "ConversationMessage",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MessageReaction_User_userId",
-                        column: x => x.userId,
+                        name: "FK_MessageReaction_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -773,14 +776,14 @@ namespace FuStudy_API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MessageReaction_conversationMessageId",
+                name: "IX_MessageReaction_ConversationMessageId",
                 table: "MessageReaction",
-                column: "conversationMessageId");
+                column: "ConversationMessageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MessageReaction_userId",
+                name: "IX_MessageReaction_UserId",
                 table: "MessageReaction",
-                column: "userId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_StudentId",
@@ -828,9 +831,19 @@ namespace FuStudy_API.Migrations
                 column: "PermissionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RolePermission_RoleId",
+                table: "RolePermission",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Student_UserId",
                 table: "Student",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentSubcription_StudentId",
+                table: "StudentSubcription",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentSubcription_SubcriptionId",

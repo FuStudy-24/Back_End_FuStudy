@@ -12,6 +12,7 @@ namespace FuStudy_Repository.Entity
     public class Conversation
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         public long User1Id { get; set; }

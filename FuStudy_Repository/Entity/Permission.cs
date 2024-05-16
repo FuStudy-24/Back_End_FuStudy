@@ -12,6 +12,7 @@ namespace FuStudy_Repository.Entity
     public class Permission
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         [Required]

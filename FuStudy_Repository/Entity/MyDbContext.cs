@@ -40,16 +40,7 @@ namespace FuStudy_Repository.Entity
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
-        
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-          
-            modelBuilder.Entity<RolePermission>()
-                .HasKey(rp => new { rp.RoleId, rp.PermissionId });
-            modelBuilder.Entity<StudentSubcription>()
-                .HasKey(ss => new { ss.StudentId, ss.SubcriptionId });
-        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

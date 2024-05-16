@@ -387,30 +387,30 @@ namespace FuStudy_API.Migrations
 
             modelBuilder.Entity("FuStudy_Repository.Entity.MessageReaction", b =>
                 {
-                    b.Property<long>("id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("conversationMessageId")
+                    b.Property<long>("ConversationMessageId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("createAt")
+                    b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("reactionType")
+                    b.Property<string>("ReactionType")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<long>("userId")
+                    b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("conversationMessageId");
+                    b.HasIndex("ConversationMessageId");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("MessageReaction");
                 });
@@ -596,18 +596,23 @@ namespace FuStudy_API.Migrations
 
             modelBuilder.Entity("FuStudy_Repository.Entity.RolePermission", b =>
                 {
-                    b.Property<long>("RoleId")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long>("PermissionId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("Id")
+                    b.Property<long>("RoleId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("RoleId", "PermissionId");
+                    b.HasKey("Id");
 
                     b.HasIndex("PermissionId");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("RolePermission");
                 });
@@ -632,11 +637,11 @@ namespace FuStudy_API.Migrations
 
             modelBuilder.Entity("FuStudy_Repository.Entity.StudentSubcription", b =>
                 {
-                    b.Property<long>("StudentId")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long>("SubcriptionId")
-                        .HasColumnType("bigint");
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int>("CurrentQuestion")
                         .HasColumnType("int");
@@ -650,7 +655,15 @@ namespace FuStudy_API.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("StudentId", "SubcriptionId");
+                    b.Property<long>("StudentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SubcriptionId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
 
                     b.HasIndex("SubcriptionId");
 
@@ -944,21 +957,21 @@ namespace FuStudy_API.Migrations
 
             modelBuilder.Entity("FuStudy_Repository.Entity.MessageReaction", b =>
                 {
-                    b.HasOne("FuStudy_Repository.Entity.ConversationMessage", "conversationMessage")
+                    b.HasOne("FuStudy_Repository.Entity.ConversationMessage", "ConversationMessage")
                         .WithMany()
-                        .HasForeignKey("conversationMessageId")
+                        .HasForeignKey("ConversationMessageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FuStudy_Repository.Entity.User", "user")
+                    b.HasOne("FuStudy_Repository.Entity.User", "User")
                         .WithMany()
-                        .HasForeignKey("userId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("conversationMessage");
+                    b.Navigation("ConversationMessage");
 
-                    b.Navigation("user");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Order", b =>
