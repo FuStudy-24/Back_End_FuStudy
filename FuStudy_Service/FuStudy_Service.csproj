@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Service\Interface\" />
+    <Compile Remove="Service\Interface\**" />
+    <EmbeddedResource Remove="Service\Interface\**" />
+    <None Remove="Service\Interface\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FuStudy_Model\FuStudy_Model.csproj" />
+    <ProjectReference Include="..\FUStudy_Repository\FuStudy_Repository.csproj" />
   </ItemGroup>
 
 </Project>

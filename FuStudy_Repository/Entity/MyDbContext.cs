@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
+using Microsoft.Extensions.Configuration;
 
 namespace FuStudy_Repository.Entity
 {
@@ -43,10 +44,26 @@ namespace FuStudy_Repository.Entity
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+          
             modelBuilder.Entity<RolePermission>()
                 .HasKey(rp => new { rp.RoleId, rp.PermissionId });
             modelBuilder.Entity<StudentSubcription>()
                 .HasKey(ss => new { ss.StudentId, ss.SubcriptionId });
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+                var connectionString = configuration.GetConnectionString("MyDB");
+
+                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                
+            }
         }
     }
 }

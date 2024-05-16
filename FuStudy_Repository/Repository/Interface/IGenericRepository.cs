@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -20,5 +21,7 @@ namespace FuStudy_Repository.Repository.Interface
         Task<bool> Delete(long id);
         void RemoveRange(IEnumerable<TEntity> entities);
         Task<IEnumerable<TEntity>> GetByFilterAsync(Expression<Func<TEntity, bool>> filterExpression);
+
+        Task<IEnumerable<TEntity>> GetAll();
     }
 }

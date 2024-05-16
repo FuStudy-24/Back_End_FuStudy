@@ -19,7 +19,7 @@ namespace FuStudy_Repository.Entity
         public long CategoryId { get; set; }
 
         [Required]
-        public string QuestionContent { get; set; }
+        public string Content { get; set; }
 
         public DateTime CreateDate { get; set; }
 
