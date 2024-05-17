@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Tools\Tools.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CoreApiResponse" Version="1.0.1" />
-  </ItemGroup>
-
 </Project>

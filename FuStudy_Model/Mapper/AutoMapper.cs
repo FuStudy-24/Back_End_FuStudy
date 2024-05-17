@@ -16,15 +16,13 @@ namespace FuStudy_Model.Mapper
         {
             //Request
             //CreateMap<FuStudyRequest, FuStudy>().ReverseMap();
-            CreateMap<CreateAccountDTORequest, User>().ReverseMap();
-            CreateMap<LoginDTORequest, User>().ReverseMap();
-
+            CreateMap<QuestionRequest, Question>().ReverseMap();
 
 
             //Reponse
             //CreateMap<FuStudyReponse, FuStudy>().ReverseMap();
-            CreateMap<CreateAccountDTOResponse, User>().ReverseMap();
-            CreateMap<LoginDTOResponse, User>().ReverseMap();
+            CreateMap<QuestionResponse, Question>().ReverseMap();
+
 
         }
     }

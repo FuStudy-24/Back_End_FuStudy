@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FuStudy_Model.DTO.Request;
+using FuStudy_Model.DTO.Respone;
 using FuStudy_Repository;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository.Interface;
@@ -8,21 +10,64 @@ using System.Collections.ObjectModel;
 
 namespace FuStudy_Service.Service
 {
-    public class QuestionService : IQuestionService
+    public class QuestionService(UnitOfWork unitOfWork, IMapper mapper) : IQuestionService
     {
-        private readonly UnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly UnitOfWork _unitOfWork = unitOfWork;
+        private readonly IMapper _mapper = mapper;
 
 
-        public QuestionService(UnitOfWork unitOfWork, IMapper mapper)
+        public async Task<IEnumerable<QuestionResponse>> GetAllQuestionsAsync()
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            var questions = _unitOfWork.QuestionRepository.Get();
+            return _mapper.Map<IEnumerable<QuestionResponse>>(questions);
         }
 
-        public Task<IEnumerable<Question>> GetAllQuestions()
+        public async Task<QuestionResponse> GetQuestionByIdAsync(long id)
         {
-            return null;
+            var question = _unitOfWork.QuestionRepository.GetByID(id);
+            return _mapper.Map<QuestionResponse>(question);
+        }
+
+
+        public async Task<QuestionResponse> CreateQuestionAsync(QuestionRequest questionRequest)
+        {
+
+            var question = _mapper.Map<Question>(questionRequest);
+            _unitOfWork.QuestionRepository.Insert(question);
+            _unitOfWork.Save();
+
+            return _mapper.Map<QuestionResponse>(question);
+        }
+
+        public async Task<QuestionResponse> UpdateQuestionAsync(QuestionRequest questionRequest, long questionId)
+        {
+            var question = _unitOfWork.QuestionRepository.GetByID(questionId);
+
+            if (question == null)
+            {
+                throw new Exception($"Question with ID: {questionId} not found");
+            }
+
+            _mapper.Map(questionRequest, question);
+            _unitOfWork.QuestionRepository.Update(question);
+            _unitOfWork.Save();
+
+            return _mapper.Map<QuestionResponse>(question);
+
+        }
+
+        public async Task<bool> DeleteQuestionAsync(long questionId)
+        {
+            var deletedQuestion = _unitOfWork.QuestionRepository.GetByID(questionId);
+
+            if (deletedQuestion == null)
+            {
+                throw new Exception($"Question with ID: {questionId} not found");
+            }
+            
+            _unitOfWork.QuestionRepository.Delete(deletedQuestion);
+            _unitOfWork.Save();
+            return true;
         }
     }
 }
