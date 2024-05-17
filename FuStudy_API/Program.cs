@@ -20,6 +20,10 @@ builder.Services.AddScoped<UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 
+// Service add o day
+//builder.Services.AddScoped<IUserService, UserService>();
+
+
 //Mapper
 var config = new MapperConfiguration(cfg =>
 {
