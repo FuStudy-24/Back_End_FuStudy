@@ -19,6 +19,8 @@ builder.Services.AddScoped<UnitOfWork>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
 
 // Service add o day
 //builder.Services.AddScoped<IUserService, UserService>();
