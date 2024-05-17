@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FuStudy_Model.DTO.Request;
+using FuStudy_Model.DTO.Respone;
 using FuStudy_Repository;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository.Interface;
@@ -20,10 +22,22 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public Task<IEnumerable<Question>> GetAllQuestions()
+        public async Task<IEnumerable<QuestionResponse>> GetAllQuestions()
         {
+            var questions = _unitOfWork.QuestionRepository.GetAll();
+            return _mapper.Map<IEnumerable<QuestionResponse>>(questions);
+        }
 
-            return _unitOfWork.QuestionRepository.GetAll();
+        public async Task<QuestionResponse> GetQuestionById(long id)
+        {
+            var question = _unitOfWork.QuestionRepository.GetById(id);
+            return _mapper.Map<QuestionResponse>(question);
+        }
+
+
+        public async Task<QuestionResponse> CreateQuestion(QuestionRequest questionRequest)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -42,9 +42,9 @@ namespace FuStudy_Repository.Repository
             throw new NotImplementedException();
         }
 
-        public Task<TEntity> GetById(long id)
+        public TEntity GetById(long id)
         {
-            throw new NotImplementedException();
+            return dbSet.Find(id);
         }
 
         public Task<TEntity> GetByIdAsync(long id)
@@ -67,10 +67,10 @@ namespace FuStudy_Repository.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public IEnumerable<TEntity> GetAll()
         {
 
-            return await dbSet.ToListAsync();
+            return dbSet.ToList();
         }
     }
 }
