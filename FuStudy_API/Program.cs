@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
-using FuStudy_Repository.Repository.Interface;
 using FuStudy_Repository.Repository;
-using FuStudy_Repository;
 using FuStudy_Model.Mapper;
 using AutoMapper;
 using FuStudy_Service.Interface;
@@ -15,9 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(IGenericRepository<>));
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 

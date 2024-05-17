@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
-using FuStudy_Repository.Repository.Interface;
 using System.Collections.ObjectModel;
 using System.Reflection.Metadata.Ecma335;
 using System.Linq.Expressions;

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Respone;
-using FuStudy_Repository;
 using FuStudy_Repository.Entity;
+using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
 using System;
 using System.Collections.Generic;
@@ -14,9 +14,9 @@ namespace FuStudy_Service.Service
 {
     public class BlogService : IBlogService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public BlogService(UnitOfWork unitOfWork, IMapper mapper)
+        public BlogService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

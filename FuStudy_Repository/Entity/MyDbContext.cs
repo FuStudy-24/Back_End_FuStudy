@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
 using Microsoft.Extensions.Configuration;
+using System.Runtime.Intrinsics.X86;
 
 namespace FuStudy_Repository.Entity
 {
     public class MyDbContext : DbContext
     {
-        public MyDbContext() 
+        public MyDbContext()
         {
         }
 
@@ -53,7 +54,7 @@ namespace FuStudy_Repository.Entity
                 var connectionString = configuration.GetConnectionString("MyDB");
 
                 optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-                
+
             }
         }
     }

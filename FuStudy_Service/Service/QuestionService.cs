@@ -1,20 +1,24 @@
 ﻿using AutoMapper;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Respone;
-using FuStudy_Repository;
 using FuStudy_Repository.Entity;
-using FuStudy_Repository.Repository.Interface;
+using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
 using System;
 using System.Collections.ObjectModel;
 
 namespace FuStudy_Service.Service
 {
-    public class QuestionService(UnitOfWork unitOfWork, IMapper mapper) : IQuestionService
+    public class QuestionService : IQuestionService
     {
-        private readonly UnitOfWork _unitOfWork = unitOfWork;
-        private readonly IMapper _mapper = mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
+        public QuestionService(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
 
         public async Task<IEnumerable<QuestionResponse>> GetAllQuestionsAsync()
         {
