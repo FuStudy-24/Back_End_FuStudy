@@ -372,3 +372,6 @@ FuStudy_Service/obj/
 FuStudy_Service/bin/
 Tools/obj/
 Tools/bin/
+
+# idea - generate code
+.idea/
