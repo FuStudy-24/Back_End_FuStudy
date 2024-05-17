@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using FuStudy_Repository.Entity;
 
 namespace FuStudy_Repository.Repository.Interface
 {
@@ -26,5 +27,7 @@ namespace FuStudy_Repository.Repository.Interface
         Task<IEnumerable<TEntity>> GetByFilterAsync(Expression<Func<TEntity, bool>> filterExpression);
         Task<TEntity> AddAsync(TEntity entity);
         Task<TEntity> GetByIdAsync(long id);
+        Task<IEnumerable<RolePermission>> GetRolePermissionsByRoleIdAsync(long roleId);
+
     }
 }

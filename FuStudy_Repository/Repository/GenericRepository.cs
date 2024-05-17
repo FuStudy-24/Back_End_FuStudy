@@ -107,5 +107,17 @@ namespace FuStudy_Repository.Repository
         {
             return await dbSet.FindAsync(id);
         }
+
+        public async Task<IEnumerable<RolePermission>> GetRolePermissionsByRoleIdAsync(long roleId)
+        {
+            if (typeof(TEntity) == typeof(RolePermission))
+            {
+                return await context.Set<RolePermission>()
+                    .Where(rp => rp.RoleId == roleId)
+                    .ToListAsync();
+            }
+
+            throw new InvalidOperationException("This method can only be used with RolePermission entities.");
+        }
     }
 }

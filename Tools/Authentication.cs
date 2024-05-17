@@ -33,6 +33,7 @@ public class Authentication
 
             long roleId = user.RoleId;
             Role role = await _unitOfWork.RoleRepository.GetByIdAsync(roleId);
+            
 
             // Log role value to console
             Console.WriteLine($"Role: {role}");
@@ -42,7 +43,8 @@ public class Authentication
                 new Claim(ClaimTypes.Sid, user.Id.ToString()),
                 new Claim("Name", user.Username),
                 new Claim(ClaimTypes.Role, role.RoleName),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                
             };
 
             var token = new JwtSecurityToken(
