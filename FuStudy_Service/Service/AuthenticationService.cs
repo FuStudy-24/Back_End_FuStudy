@@ -15,7 +15,7 @@ public class AuthenticationService: IAuthenticationService
     {
         _unitOfWork = unitOfWork; 
         _mapper = mapper; 
-    }
+    } 
     public async Task<User> Register(CreateAccountDTORequest createAccountDTORequest)
     {
         IEnumerable<User> checkEmail =
