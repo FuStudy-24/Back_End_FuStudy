@@ -13,7 +13,7 @@ public class AuthenticationService: IAuthenticationService
     private readonly IMapper _mapper;
     public AuthenticationService(UnitOfWork unitOfWork, IMapper mapper)
     {
-        _unitOfWork = unitOfWork;
+        _unitOfWork = unitOfWork; 
         _mapper = mapper; 
     }
     public async Task<User> Register(CreateAccountDTORequest createAccountDTORequest)
