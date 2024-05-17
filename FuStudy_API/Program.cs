@@ -19,11 +19,11 @@ builder.Services.AddScoped<UnitOfWork>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+
 // Service add o day
 //builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IQuestionService, QuestionService>();
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 
 //Mapper
@@ -50,8 +50,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-
 
 
 //Build CORS
