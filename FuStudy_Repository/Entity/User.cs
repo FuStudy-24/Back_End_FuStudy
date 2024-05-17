@@ -39,7 +39,7 @@ namespace FuStudy_Repository.Entity
         public string Avatar { get; set; }
 
         [Required]
-        public DateOnly Dob { get; set; }
+        public DateTime Dob { get; set; }
 
         [Required]
         public string Phone { get; set; }

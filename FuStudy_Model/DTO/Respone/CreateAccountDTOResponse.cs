@@ -1,13 +1,10 @@
-namespace FuStudy_Model.DTO.Request;
+namespace FuStudy_Model.DTO.Respone;
 
-public class CreateAccountDTORequest
+public class CreateAccountDTOResponse
 {
     public required string Fullname { get; set; }
     public required string Username { get; set; }
-    public required string Password { get; set; }
     public required string Email { get; set; }
-    public string Avatar { get; set; }
-    public string Gender { get; set; }
     public required DateTime dob { get; set; }
     public string IdentityCard { get; set; }
     public string phone { get; set; }

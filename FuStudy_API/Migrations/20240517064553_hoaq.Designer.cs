@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FuStudy_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240517055651_Kaneki")]
-    partial class Kaneki
+    [Migration("20240517064553_hoaq")]
+    partial class hoaq
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

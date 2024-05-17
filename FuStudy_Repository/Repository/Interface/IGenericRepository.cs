@@ -25,5 +25,6 @@ namespace FuStudy_Repository.Repository.Interface
         void Update(TEntity entityToUpdate);
         Task<IEnumerable<TEntity>> GetByFilterAsync(Expression<Func<TEntity, bool>> filterExpression);
         Task<TEntity> AddAsync(TEntity entity);
+        Task<TEntity> GetByIdAsync(long id);
     }
 }

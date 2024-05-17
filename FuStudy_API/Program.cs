@@ -19,9 +19,11 @@ builder.Services.AddScoped<UnitOfWork>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-
 // Service add o day
 //builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 
 //Mapper
@@ -51,11 +53,6 @@ builder.Services.AddSwaggerGen();
 
 
 
-
-// Service add o day
-//builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddScoped<IQuestionService, QuestionService>();
 
 //Build CORS
 /*builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
