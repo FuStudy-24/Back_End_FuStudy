@@ -103,6 +103,13 @@ namespace FuStudy_Repository.Repository
             return entity;
         }
 
+        public async Task<TEntity> UpdateAsync(TEntity entity)
+        {
+            context.Set<TEntity>().Update(entity);
+            await context.SaveChangesAsync(); // Save changes asynchronously
+            return entity;
+        }
+
         public virtual async Task<TEntity> GetByIdAsync(long id)
         {
             return await dbSet.FindAsync(id);
