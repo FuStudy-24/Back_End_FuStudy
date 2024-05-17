@@ -87,5 +87,20 @@ namespace FuStudy_Repository.Repository
             dbSet.Attach(entityToUpdate);
             context.Entry(entityToUpdate).State = EntityState.Modified;
         }
+
+        public async Task<IEnumerable<TEntity>> GetByFilterAsync(Expression<Func<TEntity, bool>> filterExpression)
+        {
+            var query = context.Set<TEntity>().Where(filterExpression);
+            var queryableType = query.GetType().GetProperty("ElementType");
+            // use queryableType here
+            return await query.ToListAsync();
+        }
+
+        public async Task<TEntity> AddAsync(TEntity entity)
+        {
+            context.Set<TEntity>().Add(entity);
+            await context.SaveChangesAsync(); // Save changes asynchronously
+            return entity;
+        }
     }
 }

@@ -23,5 +23,7 @@ namespace FuStudy_Repository.Repository.Interface
         void Delete(object id);
         void Delete(TEntity entityToDelete);
         void Update(TEntity entityToUpdate);
+        Task<IEnumerable<TEntity>> GetByFilterAsync(Expression<Func<TEntity, bool>> filterExpression);
+        Task<TEntity> AddAsync(TEntity entity);
     }
 }
