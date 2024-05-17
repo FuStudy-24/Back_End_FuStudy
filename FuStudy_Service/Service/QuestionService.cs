@@ -12,7 +12,6 @@ namespace FuStudy_Service.Service
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        
 
 
         public QuestionService(UnitOfWork unitOfWork, IMapper mapper)
@@ -23,9 +22,7 @@ namespace FuStudy_Service.Service
 
         public Task<IEnumerable<Question>> GetAllQuestions()
         {
-            var questions = _unitOfWork.QuestionRepository.Get();
-            return Task.FromResult(questions);
+            return null;
         }
-
     }
 }
