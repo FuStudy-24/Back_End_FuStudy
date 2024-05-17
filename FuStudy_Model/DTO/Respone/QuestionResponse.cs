@@ -8,14 +8,16 @@ namespace FuStudy_Model.DTO.Respone
 {
     public class QuestionResponse
     {
-        private long StudentId { get; set; }
+        public long Id;
+        
+        public long StudentId { get; set; }
 
-        private long CategoryId { get; set; }
+        public long CategoryId { get; set; }
 
-        private string Content { get; set; }
+        public string Content { get; set; }
 
-        private DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
 
-        private DateTime ModifiedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
     }
 }

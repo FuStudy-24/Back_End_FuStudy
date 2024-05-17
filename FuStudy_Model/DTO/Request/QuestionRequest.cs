@@ -9,13 +9,13 @@ namespace FuStudy_Model.DTO.Request
 {
     public class QuestionRequest
     {
-        private long StudentId { get; set; }
+        public long StudentId { get; set; }
 
-        private long CategoryId { get; set; }
+        public long CategoryId { get; set; }
 
-        private string Content { get; set; }
+        public string Content { get; set; }
 
-        private DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
 
     }
 }
