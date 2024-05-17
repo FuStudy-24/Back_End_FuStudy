@@ -11,17 +11,17 @@ namespace FuStudy_Repository.Repository.Interface
     public interface IGenericRepository<TEntity> where TEntity : class
     {
 
-        Task<IEnumerable<TEntity>> GetAllAsync();
-        Task<TEntity> GetById(long id);
-        Task<TEntity> GetByIdAsync(long id);
-        Task<TEntity> Add(TEntity entity);
-        Task<TEntity> Update(TEntity entity);
-        void AddRange(IEnumerable<TEntity> entities);
-        void Remove(TEntity entity);
-        Task<bool> Delete(long id);
-        void RemoveRange(IEnumerable<TEntity> entities);
-        Task<IEnumerable<TEntity>> GetByFilterAsync(Expression<Func<TEntity, bool>> filterExpression);
+        IEnumerable<TEntity> Get(
+    Expression<Func<TEntity, bool>> filter = null,
+    Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+    string includeProperties = "",
+    int? pageIndex = null,
+    int? pageSize = null);
 
-        Task<IEnumerable<TEntity>> GetAll();
+        TEntity GetByID(object id);
+        void Insert(TEntity entity);
+        void Delete(object id);
+        void Delete(TEntity entityToDelete);
+        void Update(TEntity entityToUpdate);
     }
 }

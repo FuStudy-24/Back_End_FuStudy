@@ -3,6 +3,7 @@ using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository.Interface;
 using System.Collections.ObjectModel;
 using System.Reflection.Metadata.Ecma335;
+using System.Linq.Expressions;
 
 namespace FuStudy_Repository.Repository
 {
@@ -17,60 +18,74 @@ namespace FuStudy_Repository.Repository
             this.context = context;
             this.dbSet = context.Set<TEntity>();
         }
-        public Task<TEntity> Add(TEntity entity)
+        // Updated Get method with pagination
+        public virtual IEnumerable<TEntity> Get(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "",
+            int? pageIndex = null,
+            int? pageSize = null)
         {
-            throw new NotImplementedException();
+            IQueryable<TEntity> query = dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            // Implementing pagination
+            if (pageIndex.HasValue && pageSize.HasValue)
+            {
+                // Ensure the pageIndex and pageSize are valid
+                int validPageIndex = pageIndex.Value > 0 ? pageIndex.Value - 1 : 0;
+                int validPageSize = pageSize.Value > 0 ? pageSize.Value : 10; // Assuming a default pageSize of 10 if an invalid value is passed
+
+                query = query.Skip(validPageIndex * validPageSize).Take(validPageSize);
+            }
+
+            return query.ToList();
         }
 
-        public void AddRange(IEnumerable<TEntity> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> Delete(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<TEntity>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<TEntity>> GetByFilterAsync(System.Linq.Expressions.Expression<Func<TEntity, bool>> filterExpression)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntity GetById(long id)
+        public virtual TEntity GetByID(object id)
         {
             return dbSet.Find(id);
         }
 
-        public Task<TEntity> GetByIdAsync(long id)
+        public virtual void Insert(TEntity entity)
         {
-            throw new NotImplementedException();
+            dbSet.Add(entity);
         }
 
-        public void Remove(TEntity entity)
+        public virtual void Delete(object id)
         {
-            throw new NotImplementedException();
+            TEntity entityToDelete = dbSet.Find(id);
+            Delete(entityToDelete);
         }
 
-        public void RemoveRange(IEnumerable<TEntity> entities)
+        public virtual void Delete(TEntity entityToDelete)
         {
-            throw new NotImplementedException();
+            if (context.Entry(entityToDelete).State == EntityState.Detached)
+            {
+                dbSet.Attach(entityToDelete);
+            }
+            dbSet.Remove(entityToDelete);
         }
 
-        public Task<TEntity> Update(TEntity entity)
+        public virtual void Update(TEntity entityToUpdate)
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TEntity> GetAll()
-        {
-
-            return dbSet.ToList();
+            dbSet.Attach(entityToUpdate);
+            context.Entry(entityToUpdate).State = EntityState.Modified;
         }
     }
 }
