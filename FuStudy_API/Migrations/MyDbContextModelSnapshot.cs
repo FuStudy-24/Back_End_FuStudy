@@ -733,6 +733,10 @@ namespace FuStudy_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Avatar")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime(6)");
 
@@ -744,6 +748,10 @@ namespace FuStudy_API.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Fullname")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("longtext");
 

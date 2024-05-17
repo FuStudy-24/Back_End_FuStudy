@@ -22,8 +22,7 @@ namespace FuStudy_Service.Service
 
         public Task<IEnumerable<Question>> GetAllQuestions()
         {
-
-            return _unitOfWork.QuestionRepository.GetAll();
+            return null;
         }
     }
 }

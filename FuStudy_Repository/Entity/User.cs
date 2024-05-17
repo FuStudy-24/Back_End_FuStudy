@@ -33,6 +33,12 @@ namespace FuStudy_Repository.Entity
         public string IdentityCard { get; set; }
 
         [Required]
+        public string Gender { get; set; }
+
+        [Required]
+        public string Avatar { get; set; }
+
+        [Required]
         public DateOnly Dob { get; set; }
 
         [Required]

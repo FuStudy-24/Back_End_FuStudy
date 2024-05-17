@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FuStudy_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240516163811_Kaneki")]
+    [Migration("20240517055651_Kaneki")]
     partial class Kaneki
     {
         /// <inheritdoc />
@@ -736,6 +736,10 @@ namespace FuStudy_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Avatar")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime(6)");
 
@@ -747,6 +751,10 @@ namespace FuStudy_API.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Fullname")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("longtext");
 
