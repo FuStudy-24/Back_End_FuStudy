@@ -14,7 +14,7 @@ public class AuthenticationService: IAuthenticationService
     public AuthenticationService(UnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
+        _mapper = mapper; 
     }
     public async Task<User> Register(CreateAccountDTORequest createAccountDTORequest)
     {
