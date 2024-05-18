@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FuStudy_Model.DTO.Respone
+namespace FuStudy_Model.DTO.Response
 {
-    public class BlogRespone
+    public class BlogResponse
     {
         public long UserId { get; set; }
         public string BlogContent { get; set; }

@@ -3,6 +3,7 @@ using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Repository;
 using FuStudy_Repository.Entity;
+using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,10 @@ namespace FuStudy_Service.Service
 {
     public class SubcriptionService : ISubcriptionService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public SubcriptionService(UnitOfWork unitOfWork, IMapper mapper)
+        public SubcriptionService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;  

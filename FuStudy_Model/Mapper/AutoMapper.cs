@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
-using FuStudy_Model.DTO.Respone;
+using FuStudy_Model.DTO.Response;
 
 namespace FuStudy_Model.Mapper
 {
@@ -21,7 +21,7 @@ namespace FuStudy_Model.Mapper
 
             #region Blog
             CreateMap<BlogRequest, Blog>();
-            CreateMap<Blog, BlogRespone>();
+            CreateMap<Blog, BlogResponse>();
             #endregion
 
             CreateMap<QuestionRequest, Question>().ReverseMap();

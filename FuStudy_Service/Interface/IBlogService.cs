@@ -1,5 +1,5 @@
 ﻿using FuStudy_Model.DTO.Request;
-using FuStudy_Model.DTO.Respone;
+using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace FuStudy_Service.Interface
     {
         Task<bool> CreateBlog(BlogRequest request);
         Task<bool> DeleteBlog(long id);
-        Task<BlogRespone> GetOneBlog(long id);
+        Task<BlogResponse> GetOneBlog(long id);
         Task<bool> UpdateBlog(BlogRequest request);
 
     }
