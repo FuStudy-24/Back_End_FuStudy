@@ -33,10 +33,10 @@ namespace FuStudy_Repository.Entity
         public bool Status { get; set; }
 
         [ForeignKey("StudentId")]
-        public required Student Student { get; set; }
+        public virtual Student Student { get; set; }
 
         [ForeignKey("CategoryId")]
-        public required Category Category { get; set; }
+        public virtual Category Category { get; set; }
 
     }
 }

@@ -30,9 +30,9 @@ namespace FuStudy_Repository.Entity
         public string Status { get; set; }
 
         [ForeignKey("UserId")]
-        public required User User { get; set; }
+        public virtual User User { get; set; }
 
         [ForeignKey("MentorId")]
-        public required Mentor Mentor { get; set; }
+        public virtual Mentor Mentor { get; set; }
     }
 }

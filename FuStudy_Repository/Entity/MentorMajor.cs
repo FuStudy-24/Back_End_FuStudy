@@ -20,9 +20,9 @@ namespace FuStudy_Repository.Entity
         public long MajorId { get; set; }
 
         [ForeignKey("MentorId")]
-        public required Mentor Mentor { get; set; }
+        public virtual Mentor Mentor { get; set; }
 
         [ForeignKey("MajorId")]
-        public required Major Major { get; set; }
+        public virtual Major Major { get; set; }
     }
 }

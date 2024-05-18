@@ -37,6 +37,9 @@ namespace FuStudy_Repository.Repository
         private IGenericRepository<User> _userRepository;
         private IGenericRepository<Wallet> _walletRepository;
 
+        public UnitOfWork()
+        {
+        }
         public IGenericRepository<Attachment> AttachmentRepository
         {
             get

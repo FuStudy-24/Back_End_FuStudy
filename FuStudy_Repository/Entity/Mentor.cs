@@ -34,9 +34,9 @@ namespace FuStudy_Repository.Entity
         public string Video { get; set; }
 
         [ForeignKey("UserId")]
-        public required User User { get; set; }
+        public virtual User User { get; set; }
 
         [ForeignKey("MajorId")]
-        public required Major Major { get; set; }
+        public virtual Major Major { get; set; }
     }
 }

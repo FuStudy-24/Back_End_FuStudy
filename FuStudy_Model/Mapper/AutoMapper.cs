@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
-using FuStudy_Model.DTO.Response;
 
 namespace FuStudy_Model.Mapper
 {

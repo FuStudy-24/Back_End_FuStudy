@@ -33,9 +33,9 @@ namespace FuStudy_Repository.Entity
         public bool IsClose { get; set; }
 
         [ForeignKey("User1Id")]
-        public required User User1 { get; set; }
+        public virtual User User1 { get; set; }
 
         [ForeignKey("User2Id")]
-        public required User User2 { get; set; }
+        public virtual User User2 { get; set; }
     }
 }

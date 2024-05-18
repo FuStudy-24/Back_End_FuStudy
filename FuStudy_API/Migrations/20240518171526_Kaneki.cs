@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FuStudy_API.Migrations
 {
     /// <inheritdoc />
-    public partial class Dante : Migration
+    public partial class Kaneki : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

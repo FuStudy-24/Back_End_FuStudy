@@ -30,10 +30,10 @@ namespace FuStudy_Repository.Entity
         public bool Status { get; set; }
 
         [ForeignKey("UserId")]
-        public required User User { get; set; }
+        public virtual User User { get; set; }
 
         [ForeignKey("QuestionId")]
-        public required Question Question { get; set; }
+        public virtual Question Question { get; set; }
 
     }
 }

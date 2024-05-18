@@ -25,6 +25,6 @@ namespace FuStudy_Repository.Entity
         public DateTime CreateDate { get; set; }
 
         [ForeignKey("UserId")]
-        public required User User { get; set; }
+        public virtual User User { get; set; }
     }
 }
