@@ -1,7 +1,8 @@
 using System.Net;
 using AutoMapper;
 using FuStudy_Model.DTO.Request;
-using FuStudy_Model.DTO.Respone;
+using FuStudy_Model.DTO.Response;
+using FuStudy_Repository;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;

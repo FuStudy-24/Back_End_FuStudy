@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FuStudy_Model.DTO.Request;
-using FuStudy_Model.DTO.Respone;
+using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
 using FuStudy_Model.DTO.Respone;
 
@@ -24,11 +24,13 @@ namespace FuStudy_Model.Mapper
             CreateMap<Blog, BlogRespone>();
             #endregion
 
+            CreateMap<QuestionRequest, Question>().ReverseMap();
+            CreateMap<CreateSubcriptionRequest, Subcription>().ReverseMap();
 
             //Reponse
             //CreateMap<FuStudyReponse, FuStudy>().ReverseMap();
             CreateMap<QuestionResponse, Question>().ReverseMap();
-
+            CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
 
         }
     }

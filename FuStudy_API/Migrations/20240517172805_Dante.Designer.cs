@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FuStudy_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240517064553_hoaq")]
-    partial class hoaq
+    [Migration("20240517172805_Dante")]
+    partial class Dante
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,7 +69,7 @@ namespace FuStudy_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("BlogContent")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -743,8 +743,8 @@ namespace FuStudy_API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateOnly>("Dob")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Dob")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Email")
                         .IsRequired()

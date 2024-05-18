@@ -1,4 +1,4 @@
-namespace FuStudy_Model.DTO.Respone;
+namespace FuStudy_Model.DTO.Response;
 
 public class LoginDTOResponse
 {
