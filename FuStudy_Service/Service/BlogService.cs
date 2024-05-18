@@ -27,6 +27,7 @@ namespace FuStudy_Service.Service
             request.CreateDate = DateTime.Now;
             var respone = _mapper.Map<Blog>(request);
             await _unitOfWork.BlogRepository.AddAsync(respone);
+            _unitOfWork.Save();
         }
 
 
@@ -36,6 +37,7 @@ namespace FuStudy_Service.Service
             if(getBlogById != null)
             {
                 _unitOfWork.BlogRepository.Delete(getBlogById);
+                _unitOfWork.Save();
             }
         }
 
@@ -55,6 +57,7 @@ namespace FuStudy_Service.Service
             request.CreateDate = DateTime.Now;
             var respone = _mapper.Map<Blog>(request);
             await _unitOfWork.BlogRepository.UpdateAsync(respone);
+            _unitOfWork.Save();
         }
     }
 }
