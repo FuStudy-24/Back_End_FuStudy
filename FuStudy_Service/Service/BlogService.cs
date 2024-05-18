@@ -22,29 +22,39 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public async Task CreateBlog(BlogRequest request)
+        public async Task<bool> CreateBlog(BlogRequest request)
         {
-            request.CreateDate = DateTime.Now;
-            var respone = _mapper.Map<Blog>(request);
-            await _unitOfWork.BlogRepository.AddAsync(respone);
-            _unitOfWork.Save();
+            try
+            {
+                request.CreateDate = DateTime.Now;
+                var respone = _mapper.Map<Blog>(request);
+                await _unitOfWork.BlogRepository.AddAsync(respone);
+                _unitOfWork.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
 
-        public async Task DeleteBlog(long id)
+        public async Task<bool> DeleteBlog(long id)
         {
             var getBlogById = GetOneBlog(id);
-            if(getBlogById != null)
+            if (getBlogById != null)
             {
                 _unitOfWork.BlogRepository.Delete(getBlogById);
                 _unitOfWork.Save();
+                return true;
             }
+            return false;
         }
 
         public async Task<BlogRespone> GetOneBlog(long id)
         {
             var getOneBlog = _unitOfWork.BlogRepository.GetByID(id);
-            if(getOneBlog == null)
+            if (getOneBlog == null)
             {
                 throw new InvalidDataException("Blog is error");
             }
@@ -52,12 +62,20 @@ namespace FuStudy_Service.Service
             return respone;
         }
 
-        public async Task UpdateBlog(BlogRequest request)
+        public async Task<bool> UpdateBlog(BlogRequest request)
         {
-            request.CreateDate = DateTime.Now;
-            var respone = _mapper.Map<Blog>(request);
-            await _unitOfWork.BlogRepository.UpdateAsync(respone);
-            _unitOfWork.Save();
+            try
+            {
+                request.CreateDate = DateTime.Now;
+                var respone = _mapper.Map<Blog>(request);
+                await _unitOfWork.BlogRepository.UpdateAsync(respone);
+                _unitOfWork.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
