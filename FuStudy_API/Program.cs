@@ -26,6 +26,7 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 //builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<ISubcriptionService, SubcriptionService>();
 
 
 //Mapper

@@ -17,12 +17,12 @@ namespace FuStudy_Model.Mapper
             //Request
             //CreateMap<FuStudyRequest, FuStudy>().ReverseMap();
             CreateMap<QuestionRequest, Question>().ReverseMap();
-
+            CreateMap<CreateSubcriptionRequest, Subcription>().ReverseMap();
 
             //Reponse
             //CreateMap<FuStudyReponse, FuStudy>().ReverseMap();
             CreateMap<QuestionResponse, Question>().ReverseMap();
-
+            CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
 
         }
     }
