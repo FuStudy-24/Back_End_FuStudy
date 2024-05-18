@@ -11,6 +11,7 @@ namespace FuStudy_Service.Interface
 {
     public interface ISubcriptionService
     {
+        Task<SubcriptionResponse> CreateSubcription(CreateSubcriptionRequest subcriptionRequest);
         Task<SubcriptionResponse> DeleteSubcription(long id);
         Task<IEnumerable<Subcription>> GetAllSubcriptions();
         Task<Subcription> GetSubCriptionById(long id);
