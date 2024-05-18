@@ -2,7 +2,7 @@
 using System;
 using FuStudy_Service.Interface;
 using FuStudy_Repository.Entity;
-using FuStudy_Model.DTO.Respone;
+using FuStudy_Model.DTO.Response;
 using FuStudy_Model.DTO.Request;
 
 
