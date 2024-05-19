@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
-using FuStudy_Repository.Repository.Interface;
 using FuStudy_Repository.Repository;
-using FuStudy_Repository;
 using FuStudy_Model.Mapper;
 using AutoMapper;
 using FuStudy_Service.Interface;
@@ -15,18 +13,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 
 // Service add o day
 //builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
-
+builder.Services.AddScoped<ISubcriptionService, SubcriptionService>();
 
 //Mapper
 var config = new MapperConfiguration(cfg =>
@@ -44,9 +42,6 @@ builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseMySql(connectionString, serverVersion, options => options.MigrationsAssembly("FuStudy_API"));
 }
 );
-
-
-
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

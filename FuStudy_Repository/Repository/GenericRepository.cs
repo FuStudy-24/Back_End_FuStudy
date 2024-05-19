@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
-using FuStudy_Repository.Repository.Interface;
 using System.Collections.ObjectModel;
 using System.Reflection.Metadata.Ecma335;
 using System.Linq.Expressions;
@@ -99,6 +98,13 @@ namespace FuStudy_Repository.Repository
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             context.Set<TEntity>().Add(entity);
+            await context.SaveChangesAsync(); // Save changes asynchronously
+            return entity;
+        }
+
+        public async Task<TEntity> UpdateAsync(TEntity entity)
+        {
+            context.Set<TEntity>().Update(entity);
             await context.SaveChangesAsync(); // Save changes asynchronously
             return entity;
         }

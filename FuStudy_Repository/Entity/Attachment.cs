@@ -32,6 +32,6 @@ namespace FuStudy_Repository.Entity
         public DateTime CreateAt { get; set; }
 
         [ForeignKey("ConversationMessageId")]
-        public required ConversationMessage ConversationMessage { get; set; }
+        public virtual ConversationMessage ConversationMessage { get; set; }
     }
 }

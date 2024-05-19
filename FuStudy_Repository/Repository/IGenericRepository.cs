@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FuStudy_Repository.Entity;
 
-namespace FuStudy_Repository.Repository.Interface
+namespace FuStudy_Repository.Repository
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
@@ -24,6 +24,7 @@ namespace FuStudy_Repository.Repository.Interface
         void Delete(object id);
         void Delete(TEntity entityToDelete);
         void Update(TEntity entityToUpdate);
+        Task<TEntity> UpdateAsync(TEntity entity);
         Task<IEnumerable<TEntity>> GetByFilterAsync(Expression<Func<TEntity, bool>> filterExpression);
         Task<TEntity> AddAsync(TEntity entity);
         Task<TEntity> GetByIdAsync(long id);

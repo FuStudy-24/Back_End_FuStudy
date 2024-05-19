@@ -29,6 +29,6 @@ namespace FuStudy_Repository.Entity
         public string Description { get; set; }
 
         [ForeignKey("WalletId")]
-        public required Wallet Wallet { get; set; }
+        public virtual Wallet Wallet { get; set; }
     }
 }

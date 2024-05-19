@@ -1,9 +1,10 @@
 using System.Net;
 using AutoMapper;
 using FuStudy_Model.DTO.Request;
-using FuStudy_Model.DTO.Respone;
+using FuStudy_Model.DTO.Response;
 using FuStudy_Repository;
 using FuStudy_Repository.Entity;
+using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
 using Microsoft.Extensions.Configuration;
 using Tools;
@@ -12,10 +13,10 @@ namespace FuStudy_Service.Service;
 
 public class AuthenticationService: IAuthenticationService
 {
-    private readonly UnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
-    public AuthenticationService(UnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+    public AuthenticationService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
     {
         _unitOfWork = unitOfWork; 
         _mapper = mapper;

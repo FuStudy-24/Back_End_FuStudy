@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FuStudy_API.Migrations
 {
     /// <inheritdoc />
-    public partial class hoaq : Migration
+    public partial class Kaneki : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -140,7 +140,7 @@ namespace FuStudy_API.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Avatar = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Dob = table.Column<DateOnly>(type: "date", nullable: false),
+                    Dob = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Phone = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -165,7 +165,7 @@ namespace FuStudy_API.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    BlogContent = table.Column<string>(type: "longtext", nullable: false)
+                    Content = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Image = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),

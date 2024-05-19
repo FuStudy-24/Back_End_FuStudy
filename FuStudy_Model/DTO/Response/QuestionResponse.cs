@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FuStudy_Model.DTO.Request
+namespace FuStudy_Model.DTO.Response
 {
-    public class QuestionRequest
+    public class QuestionResponse
     {
+        public long Id;
+        
         public long StudentId { get; set; }
 
         public long CategoryId { get; set; }
@@ -17,5 +18,6 @@ namespace FuStudy_Model.DTO.Request
 
         public DateTime CreateDate { get; set; }
 
+        public DateTime ModifiedDate { get; set; }
     }
 }

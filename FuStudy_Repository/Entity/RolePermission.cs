@@ -20,10 +20,10 @@ namespace FuStudy_Repository.Entity
         public long PermissionId { get; set; }
 
         [ForeignKey("RoleId")]
-        public required Role Role { get; set; }
+        public virtual Role Role { get; set; }
 
         [ForeignKey("PermissionId")]
-        public required Permission Permission { get; set; }
+        public virtual Permission Permission { get; set; }
 
     }
 }

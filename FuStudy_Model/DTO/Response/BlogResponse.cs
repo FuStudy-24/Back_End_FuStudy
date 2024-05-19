@@ -5,17 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FuStudy_Model.DTO.Request
+namespace FuStudy_Model.DTO.Response
 {
-    public class QuestionRequest
+    public class BlogResponse
     {
-        public long StudentId { get; set; }
-
-        public long CategoryId { get; set; }
-
-        public string Content { get; set; }
-
+        public long UserId { get; set; }
+        public string BlogContent { get; set; }
+        public string Image { get; set; }
         public DateTime CreateDate { get; set; }
-
     }
 }

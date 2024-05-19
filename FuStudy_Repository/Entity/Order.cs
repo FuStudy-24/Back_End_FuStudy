@@ -34,9 +34,9 @@ namespace FuStudy_Repository.Entity
         public bool Status { get; set; }
 
         [ForeignKey("SubcriptionId")]
-        public required Subcription Subcription { get; set; }
+        public virtual Subcription Subcription { get; set; }
 
         [ForeignKey("StudentId")]
-        public required Student Student { get; set; }
+        public virtual Student Student { get; set; }
     }
 }

@@ -50,6 +50,6 @@ namespace FuStudy_Repository.Entity
         public bool Status { get; set; }
 
         [ForeignKey("RoleId")]
-        public required Role Role { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

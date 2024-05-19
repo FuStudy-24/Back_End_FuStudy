@@ -18,6 +18,6 @@ namespace FuStudy_Repository.Entity
         public long UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public required User User { get; set; }
+        public virtual User User { get; set; }
     }
 }

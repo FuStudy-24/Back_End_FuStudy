@@ -1,8 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using FuStudy_Repository;
 using FuStudy_Repository.Entity;
+using FuStudy_Repository.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -12,9 +12,9 @@ namespace Tools;
 public class Authentication
 {
     private readonly IConfiguration _configuration;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public Authentication(IConfiguration configuration, UnitOfWork unitOfWork)
+        public Authentication(IConfiguration configuration, IUnitOfWork unitOfWork)
         {
             _configuration = configuration;
             _unitOfWork = unitOfWork;

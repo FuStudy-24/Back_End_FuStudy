@@ -1,30 +1,23 @@
-﻿using System;
+﻿using FuStudy_Repository.Entity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FuStudy_Repository.Entity
+namespace FuStudy_Model.DTO.Request
 {
-    [Table("Blog")]
-    public class Blog
+    public class BlogRequest
     {
-        [Key]
-        public long Id { get; set; }
-
-        public long UserId { get; set; }
-
         [Required]
-        public string Content { get; set; }
-
+        public long UserId { get; set; }
+        [Required]
+        [RegularExpression("^[A-Z][a-zA-Z0-9@#$&()_]*$")]
+        public string BlogContent { get; set; }
         [Required]
         public string Image { get; set; }
-
+        [Required]
         public DateTime CreateDate { get; set; }
-
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; }
     }
 }

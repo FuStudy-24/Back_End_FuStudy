@@ -33,9 +33,9 @@ namespace FuStudy_Repository.Entity
         public bool IsSeen { get; set; }
 
         [ForeignKey("ConversationId")]
-        public required Conversation Conversation { get; set; }
+        public virtual Conversation Conversation { get; set; }
 
         [ForeignKey("SenderId")]
-        public required User User { get; set; }
+        public virtual User User { get; set; }
     }
 }
