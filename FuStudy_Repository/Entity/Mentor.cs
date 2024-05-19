@@ -16,8 +16,7 @@ namespace FuStudy_Repository.Entity
         public long Id { get; set; }
 
         public long UserId { get; set; }
-
-        public long MajorId {  get; set; }
+        
 
         [Required]
         public string AcademicLevel { get; set; }
@@ -35,8 +34,6 @@ namespace FuStudy_Repository.Entity
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
-
-        [ForeignKey("MajorId")]
-        public virtual Major Major { get; set; }
+        
     }
 }
