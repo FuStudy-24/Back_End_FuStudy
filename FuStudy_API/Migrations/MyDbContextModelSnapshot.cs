@@ -85,6 +85,16 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Blog");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Content = "How to be a better mentor",
+                            CreateDate = new DateTime(2024, 5, 19, 10, 52, 54, 450, DateTimeKind.Local).AddTicks(8696),
+                            Image = "ahihi",
+                            UserId = 2L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.BlogComment", b =>
@@ -121,6 +131,18 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("BlogComment");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            BlogId = 1L,
+                            Content = "Great post!",
+                            CreateDate = new DateTime(2024, 5, 19, 10, 52, 54, 450, DateTimeKind.Local).AddTicks(8751),
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = false,
+                            UserId = 1L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.BlogLike", b =>
@@ -150,6 +172,16 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("BlogLike");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2L,
+                            BlogId = 1L,
+                            Status = true,
+                            TotalLike = 1,
+                            UserId = 1L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Booking", b =>
@@ -203,6 +235,23 @@ namespace FuStudy_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CategoryName = "Programming"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            CategoryName = "Algorithms"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            CategoryName = "Data Structures"
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Conversation", b =>
@@ -242,6 +291,19 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("User2Id");
 
                     b.ToTable("Conversation");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreateAt = new DateTime(2024, 5, 19, 10, 52, 54, 450, DateTimeKind.Local).AddTicks(8844),
+                            Duration = new TimeSpan(0, 0, 0, 0, 0),
+                            EndTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsClose = false,
+                            LastMessage = "Hello!",
+                            User1Id = 1L,
+                            User2Id = 2L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.ConversationMessage", b =>
@@ -281,6 +343,19 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("SenderId");
 
                     b.ToTable("ConversationMessage");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Content = "Hello!",
+                            ConversationId = 1L,
+                            CreateTime = new DateTime(2024, 5, 19, 10, 52, 54, 450, DateTimeKind.Local).AddTicks(8899),
+                            DeleteAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDelete = false,
+                            IsSeen = false,
+                            SenderId = 1L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Major", b =>
@@ -298,6 +373,18 @@ namespace FuStudy_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Major");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            MajorName = "Computer Science"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            MajorName = "Mathematics"
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.MeetingHistory", b =>
@@ -354,9 +441,6 @@ namespace FuStudy_API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<long>("MajorId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("OnlineStatus")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -378,11 +462,52 @@ namespace FuStudy_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MajorId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Mentor");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            AcademicLevel = "Master's",
+                            OnlineStatus = "offline",
+                            Skill = "Ahihi",
+                            UserId = 3L,
+                            Video = "ahihi",
+                            WorkPlace = "Tech Company"
+                        });
+                });
+
+            modelBuilder.Entity("FuStudy_Repository.Entity.MentorMajor", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("MajorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MentorId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MajorId");
+
+                    b.HasIndex("MentorId");
+
+                    b.ToTable("MentorMajor");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            MajorId = 1L,
+                            MentorId = 1L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.MessageReaction", b =>
@@ -413,6 +538,16 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("MessageReaction");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            ConversationMessageId = 1L,
+                            CreateAt = new DateTime(2024, 5, 19, 10, 52, 54, 450, DateTimeKind.Local).AddTicks(8943),
+                            ReactionType = "like",
+                            UserId = 2L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Order", b =>
@@ -453,6 +588,19 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("SubcriptionId");
 
                     b.ToTable("Order");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreateDate = new DateTime(2024, 5, 19, 10, 52, 54, 450, DateTimeKind.Local).AddTicks(8611),
+                            Description = "Payment for Basic subscription",
+                            Money = 9.9900000000000002,
+                            PaymentCode = "PAY12345",
+                            Status = true,
+                            StudentId = 1L,
+                            SubcriptionId = 1L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Permission", b =>
@@ -470,6 +618,28 @@ namespace FuStudy_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Permission");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            PermissionName = "ViewQuestions"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            PermissionName = "AskQuestions"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            PermissionName = "AnswerQuestions"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            PermissionName = "CreateBlogs"
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Question", b =>
@@ -510,6 +680,19 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("Question");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CategoryId = 1L,
+                            Content = "How to sort an array in C#?",
+                            CreateDate = new DateTime(2024, 5, 19, 10, 52, 54, 450, DateTimeKind.Local).AddTicks(8441),
+                            Image = "ahihi",
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = false,
+                            StudentId = 1L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.QuestionComment", b =>
@@ -546,6 +729,18 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("QuestionComment");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Content = "Good question!",
+                            CreateDate = new DateTime(2024, 5, 19, 10, 52, 54, 450, DateTimeKind.Local).AddTicks(8808),
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            QuestionId = 1L,
+                            Status = false,
+                            UserId = 2L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.QuestionRating", b =>
@@ -575,6 +770,16 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("QuestionRating");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            QuestionId = 1L,
+                            Status = true,
+                            TotalRating = 5,
+                            UserId = 2L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Role", b =>
@@ -592,6 +797,28 @@ namespace FuStudy_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            RoleName = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            RoleName = "Moderator"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            RoleName = "Student"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            RoleName = "Mentor"
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.RolePermission", b =>
@@ -615,6 +842,26 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("RolePermission");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            PermissionId = 1L,
+                            RoleId = 1L
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            PermissionId = 1L,
+                            RoleId = 2L
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            PermissionId = 3L,
+                            RoleId = 2L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Student", b =>
@@ -633,6 +880,13 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Student");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            UserId = 1L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.StudentSubcription", b =>
@@ -668,6 +922,18 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("SubcriptionId");
 
                     b.ToTable("StudentSubcription");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CurrentQuestion = 0,
+                            EndDate = new DateTime(2024, 6, 19, 10, 52, 54, 450, DateTimeKind.Local).AddTicks(8553),
+                            LimitQuestion = 10,
+                            StartDate = new DateTime(2024, 5, 19, 10, 52, 54, 450, DateTimeKind.Local).AddTicks(8552),
+                            StudentId = 1L,
+                            SubcriptionId = 1L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Subcription", b =>
@@ -691,6 +957,22 @@ namespace FuStudy_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Subcription");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Status = true,
+                            SubcriptionName = "Basic",
+                            SubcriptionPrice = 9.9900000000000002
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Status = true,
+                            SubcriptionName = "Premium",
+                            SubcriptionPrice = 19.989999999999998
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Transaction", b =>
@@ -723,6 +1005,17 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("WalletId");
 
                     b.ToTable("Transaction");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Ammount = -9.9900000000000002,
+                            CreateTime = new DateTime(2024, 5, 19, 10, 52, 54, 450, DateTimeKind.Local).AddTicks(8681),
+                            Description = "Subscription payment",
+                            Type = "Payment",
+                            WalletId = 1L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.User", b =>
@@ -782,6 +1075,56 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Avatar = "ahihi",
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Dob = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "johndoe@example.com",
+                            Fullname = "John Doe",
+                            Gender = "male",
+                            IdentityCard = "ahihi",
+                            Password = "hashedPassword1",
+                            Phone = "123123",
+                            RoleId = 3L,
+                            Status = true,
+                            Username = "student1"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Avatar = "ahihi",
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Dob = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "janesmith@example.com",
+                            Fullname = "Jane Smith",
+                            Gender = "Gay",
+                            IdentityCard = "Ahihi",
+                            Password = "hashedPassword2",
+                            Phone = "12312321",
+                            RoleId = 4L,
+                            Status = true,
+                            Username = "mentor1"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Avatar = "ahihi",
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Dob = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "alicejohnson@example.com",
+                            Fullname = "Alice Johnson",
+                            Gender = "Female",
+                            IdentityCard = "Ahihi",
+                            Password = "hashedPassword3",
+                            Phone = "123123",
+                            RoleId = 1L,
+                            Status = true,
+                            Username = "admin1"
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Wallet", b =>
@@ -806,6 +1149,22 @@ namespace FuStudy_API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Wallet");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Balance = 100.0,
+                            Status = true,
+                            UserId = 1L
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Balance = 200.0,
+                            Status = false,
+                            UserId = 2L
+                        });
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Attachment", b =>
@@ -946,21 +1305,32 @@ namespace FuStudy_API.Migrations
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Mentor", b =>
                 {
-                    b.HasOne("FuStudy_Repository.Entity.Major", "Major")
-                        .WithMany()
-                        .HasForeignKey("MajorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("FuStudy_Repository.Entity.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FuStudy_Repository.Entity.MentorMajor", b =>
+                {
+                    b.HasOne("FuStudy_Repository.Entity.Major", "Major")
+                        .WithMany()
+                        .HasForeignKey("MajorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FuStudy_Repository.Entity.Mentor", "Mentor")
+                        .WithMany()
+                        .HasForeignKey("MentorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Major");
 
-                    b.Navigation("User");
+                    b.Navigation("Mentor");
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.MessageReaction", b =>
