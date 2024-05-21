@@ -21,15 +21,14 @@ namespace FuStudy_Repository.Entity
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<BlogComment> BlogsComments { get; set; }
         public DbSet<BlogLike> BlogsLikes { get; set; }
+        public DbSet<CommentImage> CommentImages { get; set; }
 
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<ConversationMessage> ConversationMessages { get; set; }
         public DbSet<Major> Majors { get; set; }
-
         public DbSet<MentorMajor> MentorMajors { get; set; }
-
         public DbSet<MeetingHistory> MeetingHistories { get; set; }
         public DbSet<Mentor> Mentors { get; set; }
         public DbSet<MessageReaction> MessageReactions { get; set; }
@@ -85,7 +84,7 @@ namespace FuStudy_Repository.Entity
                 new Permission {Id = 4, PermissionName = "CreateBlogs" }
             };
 
-
+            modelBuilder.Entity<Permission>().HasData(permissions);
             // Assign permissions to roles (e.g., ViewQuestions to both Student and Mentor)
             modelBuilder.Entity<RolePermission>().HasData(
                 new RolePermission { Id = 1, RoleId = roles[0].Id, PermissionId = permissions[0].Id }, // Student - ViewQuestions
@@ -93,7 +92,7 @@ namespace FuStudy_Repository.Entity
                 new RolePermission { Id = 3, RoleId = roles[1].Id, PermissionId = permissions[2].Id } // Mentor - AnswerQuestions
                 // ... Add more RolePermission instances as needed
             );
-            modelBuilder.Entity<Permission>().HasData(permissions);
+           
 
             // -- Users --
             var users = new List<User>
@@ -140,12 +139,6 @@ namespace FuStudy_Repository.Entity
             modelBuilder.Entity<Mentor>().HasData(mentors);
             modelBuilder.Entity<MentorMajor>().HasData(mentorMajor);
             
-
-
-            // ... (Continue adding data for other entities) ...
-
-
-            // ... (Continuing from the previous code) ...
 
             // -- Categories --
             var categories = new List<Category>
@@ -195,19 +188,6 @@ namespace FuStudy_Repository.Entity
                 EndDate = DateTime.Now.AddMonths(1)
             });
 
-            // -- Orders --
-            /*modelBuilder.Entity<Order>().HasData(new Order
-            {
-                Id = 1,
-                StudentId = students[0].Id,
-                SubcriptionId = subscriptions[0].Id,
-                PaymentCode = "PAY12345",
-                Description = "Payment for Basic subscription",
-                CreateDate = DateTime.Now,
-                Money = 9.99,
-                Status = true
-            });*/
-
             // -- Wallets --
             var wallets = new List<Wallet>
             {
@@ -217,29 +197,70 @@ namespace FuStudy_Repository.Entity
             modelBuilder.Entity<Wallet>().HasData(wallets);
 
             // -- Transactions --
-            modelBuilder.Entity<Transaction>().HasData(new Transaction
+            var transactions = new List<Transaction>
+            {
+                new Transaction
+                {
+                    Id = 1,
+                    WalletId = wallets[0].Id,
+                    Type = "Deposit",
+                    Ammount = 9.99,
+                    CreateTime = DateTime.Now,
+                    Description = "Subscription payment"}
+            };
+            modelBuilder.Entity<Transaction>().HasData(transactions);
+            
+            
+            // -- Orders --
+            modelBuilder.Entity<Order>().HasData(new Order
             {
                 Id = 1,
-                WalletId = wallets[0].Id,
-                Type = "Payment",
-                Ammount = -9.99,
-                CreateTime = DateTime.Now,
-                Description = "Subscription payment"
+                TransactionId = transactions[0].Id,
+                PaymentCode = "PAY12345",
+                Description = "Payment for Basic subscription",
+                CreateDate = DateTime.Now,
+                Money = 9.99,
+                Status = true
             });
 
+            
             // -- Blogs --
-            /*var blogs = new List<Blog>
+            var blogs = new List<Blog>
             {
-                new Blog { Id = 1 ,UserId = users[1].Id, Content = "How to be a better mentor", CreateDate = DateTime.Now, Image = "ahihi"}
+                new Blog { Id = 1 ,UserId = users[1].Id, BlogContent = "How to be a better mentor", CreateDate = DateTime.Now, Image = "ahihi"}
             };
-            modelBuilder.Entity<Blog>().HasData(blogs);*/
+            modelBuilder.Entity<Blog>().HasData(blogs);
 
 
             // -- BlogComments & BlogLikes --
-            /*modelBuilder.Entity<BlogComment>().HasData(new BlogComment
-                { Id = 1, UserId = users[0].Id, BlogId = 1, Content = "Great post!", CreateDate = DateTime.Now });
-            modelBuilder.Entity<BlogLike>().HasData(new BlogLike
-                {Id = 2, UserId = users[0].Id, BlogId = 1, TotalLike = 1, Status = true });*/
+            var blogComments = new List<BlogComment>
+            {
+                new BlogComment
+                    { Id = 1, UserId = users[0].Id, BlogId = 1, Comment = "Great post!", CreateDate = DateTime.Now }
+            };
+            modelBuilder.Entity<BlogComment>().HasData(blogComments);
+
+            var blogLikes = new List<BlogLike>
+            {
+                new BlogLike
+                    { Id = 2, UserId = users[0].Id, BlogId = 1, TotalLike = 1, Status = true }
+            };
+            modelBuilder.Entity<BlogLike>().HasData(blogLikes);
+
+
+            var commentImages = new List<CommentImage>
+            {
+                new CommentImage
+                {
+                    Id = 1,
+                    Image = "Ahihi do ngoc",
+                    BlogCommentId = blogComments[0].Id
+                }
+                    
+                
+            };
+            modelBuilder.Entity<CommentImage>().HasData(commentImages);
+            
 
             // -- QuestionComments & QuestionRatings --
             modelBuilder.Entity<QuestionComment>().HasData(new QuestionComment
