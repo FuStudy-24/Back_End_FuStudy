@@ -6,6 +6,7 @@ using FuStudy_Service.Interface;
 using FuStudy_Repository.Entity;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Model.DTO.Request;
+using Tools;
 
 
 namespace FuStudy_API.Controllers.Question
@@ -54,7 +55,7 @@ namespace FuStudy_API.Controllers.Question
                 {
                     return CustomResult(ModelState, HttpStatusCode.BadRequest);
                 }
-            
+
 
                 var createdQuestion = await _questionService.CreateQuestionAsync(questionRequest);
 
@@ -62,11 +63,16 @@ namespace FuStudy_API.Controllers.Question
 
                 return CustomResult("Created successfully", createdQuestion);
             }
-            catch (Exception e)
+            catch (CustomException.DataNotFoundException e)
             {
-                return CustomResult(e.Message, HttpStatusCode.InternalServerError);
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
 
             }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
+                
             
         }
 
@@ -83,9 +89,14 @@ namespace FuStudy_API.Controllers.Question
                 var updateQuestion = await _questionService.UpdateQuestionAsync(questionRequest, questionId);
                 return CustomResult("Update successfully", updateQuestion);
             }
-            catch (Exception e)
+            catch (CustomException.DataNotFoundException e)
             {
-                return CustomResult(e.Message, HttpStatusCode.InternalServerError);
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
             }
 
             
@@ -99,9 +110,14 @@ namespace FuStudy_API.Controllers.Question
                 await _questionService.DeleteQuestionAsync(questionId);
                 return CustomResult("Delete question successfully", HttpStatusCode.NoContent);
             }
-            catch (Exception e)
+            catch (CustomException.DataNotFoundException e)
             {
-                return CustomResult(e.Message, HttpStatusCode.InternalServerError);
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
             }
 
         }
