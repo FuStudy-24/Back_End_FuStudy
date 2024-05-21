@@ -20,7 +20,7 @@ namespace FuStudy_Repository.Entity
         public long BlogId { get; set; }
 
         [Required]
-        public string Content { get; set; }
+        public string Comment { get; set; }
 
         public DateTime CreateDate { get; set; }
 

@@ -15,9 +15,7 @@ namespace FuStudy_Repository.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        public long SubcriptionId { get; set; }
-
-        public long StudentId { get; set; }
+        public long TransactionId { get; set; }
 
         [Required]
         public string PaymentCode { get; set; }
@@ -33,10 +31,7 @@ namespace FuStudy_Repository.Entity
         [Required]
         public bool Status { get; set; }
 
-        [ForeignKey("SubcriptionId")]
-        public virtual Subcription Subcription { get; set; }
-
-        [ForeignKey("StudentId")]
-        public virtual Student Student { get; set; }
+        [ForeignKey("TransactionId")]
+        public virtual Transaction Transaction { get; set; }
     }
 }

@@ -196,7 +196,7 @@ namespace FuStudy_Repository.Entity
             });
 
             // -- Orders --
-            modelBuilder.Entity<Order>().HasData(new Order
+            /*modelBuilder.Entity<Order>().HasData(new Order
             {
                 Id = 1,
                 StudentId = students[0].Id,
@@ -206,7 +206,7 @@ namespace FuStudy_Repository.Entity
                 CreateDate = DateTime.Now,
                 Money = 9.99,
                 Status = true
-            });
+            });*/
 
             // -- Wallets --
             var wallets = new List<Wallet>
@@ -228,18 +228,18 @@ namespace FuStudy_Repository.Entity
             });
 
             // -- Blogs --
-            var blogs = new List<Blog>
+            /*var blogs = new List<Blog>
             {
                 new Blog { Id = 1 ,UserId = users[1].Id, Content = "How to be a better mentor", CreateDate = DateTime.Now, Image = "ahihi"}
             };
-            modelBuilder.Entity<Blog>().HasData(blogs);
+            modelBuilder.Entity<Blog>().HasData(blogs);*/
 
 
             // -- BlogComments & BlogLikes --
-            modelBuilder.Entity<BlogComment>().HasData(new BlogComment
+            /*modelBuilder.Entity<BlogComment>().HasData(new BlogComment
                 { Id = 1, UserId = users[0].Id, BlogId = 1, Content = "Great post!", CreateDate = DateTime.Now });
             modelBuilder.Entity<BlogLike>().HasData(new BlogLike
-                {Id = 2, UserId = users[0].Id, BlogId = 1, TotalLike = 1, Status = true });
+                {Id = 2, UserId = users[0].Id, BlogId = 1, TotalLike = 1, Status = true });*/
 
             // -- QuestionComments & QuestionRatings --
             modelBuilder.Entity<QuestionComment>().HasData(new QuestionComment
