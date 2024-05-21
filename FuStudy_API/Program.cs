@@ -7,6 +7,7 @@ using FuStudy_Service.Interface;
 using FuStudy_Service.Service;
 using Microsoft.Extensions.Hosting;
 using System.Runtime.CompilerServices;
+using FuStudy_Service.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<ISubcriptionService, SubcriptionService>();
+builder.Services.AddScoped<IStudentSubcriptionService, StudentSubcriptionService>();
 
 //Mapper
 var config = new MapperConfiguration(cfg =>
