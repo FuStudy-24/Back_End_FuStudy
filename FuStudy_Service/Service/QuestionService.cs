@@ -63,6 +63,7 @@ namespace FuStudy_Service.Service
             }
 
             _mapper.Map(questionRequest, question);
+            question.ModifiedDate = DateTime.Now;
             _unitOfWork.QuestionRepository.Update(question);
             _unitOfWork.Save();
 

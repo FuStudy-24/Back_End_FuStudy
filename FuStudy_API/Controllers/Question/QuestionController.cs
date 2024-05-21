@@ -52,7 +52,7 @@ namespace FuStudy_API.Controllers.Question
             {
                 if (!ModelState.IsValid)
                 {
-                    return CustomResult("Bad request", HttpStatusCode.BadRequest);
+                    return CustomResult(ModelState, HttpStatusCode.BadRequest);
                 }
             
 
@@ -75,7 +75,7 @@ namespace FuStudy_API.Controllers.Question
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return CustomResult(ModelState, HttpStatusCode.BadRequest);
             }
 
             try
