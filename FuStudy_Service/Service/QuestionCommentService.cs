@@ -51,13 +51,34 @@ public class QuestionCommentService : IQuestionCommentService
         return _mapper.Map<QuestionCommentResponse>(questionComment);
     }
 
-    public async Task<QuestionCommentResponse> UpdateQuestionComment(QuestionCommentRequest questionRequest, long questionId)
+    public async Task<QuestionCommentResponse> UpdateQuestionComment(QuestionCommentRequest questionCommentRequest, long questionCommentId)
     {
-        throw new NotImplementedException();
+        var questionComment = _unitOfWork.QuestionCommentRepository.GetByID(questionCommentId);
+
+        if (questionComment == null)
+        {
+            throw new CustomException.DataNotFoundException($"Question Comment with ID: {questionCommentId} not found");
+        }
+
+        _mapper.Map(questionCommentRequest, questionComment);
+        questionComment.ModifiedDate = DateTime.Now;
+        _unitOfWork.QuestionCommentRepository.Update(questionComment);
+        _unitOfWork.Save();
+
+        return _mapper.Map<QuestionCommentResponse>(questionComment);
     }
 
-    public async Task<bool> DeleteQuestionComment(long questionId)
+    public async Task<bool> DeleteQuestionComment(long questionCommentId)
     {
-        throw new NotImplementedException();
+        var deletedQuestionComment = _unitOfWork.QuestionCommentRepository.GetByID(questionCommentId);
+
+        if (deletedQuestionComment == null)
+        {
+            throw new CustomException.DataNotFoundException($"Question Comment with ID: {questionCommentId} not found");
+        }
+            
+        _unitOfWork.QuestionCommentRepository.Delete(deletedQuestionComment);
+        _unitOfWork.Save();
+        return true;
     }
 }

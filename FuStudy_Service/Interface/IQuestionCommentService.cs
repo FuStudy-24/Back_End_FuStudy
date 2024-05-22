@@ -12,7 +12,7 @@ public interface IQuestionCommentService
 
     Task<QuestionCommentResponse> CreateQuestionComment(QuestionCommentRequest questionCommentRequest);
         
-    Task<QuestionCommentResponse> UpdateQuestionComment(QuestionCommentRequest questionRequest, long questionId);
+    Task<QuestionCommentResponse> UpdateQuestionComment(QuestionCommentRequest questionRequest, long questionCommentId);
         
     Task<bool> DeleteQuestionComment(long questionId);
 }
