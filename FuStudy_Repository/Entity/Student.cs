@@ -19,5 +19,6 @@ namespace FuStudy_Repository.Entity
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
+
     }
 }

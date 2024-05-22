@@ -1,13 +1,44 @@
+using AutoMapper;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Repository.Entity;
+using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
+using Tools;
 
 namespace FuStudy_Service.Service;
 
 public class UserService : IUserService
 {
-    public Task<User> CreateUser(CreateAccountDTORequest createAccountRequest)
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+
+    public UserService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        throw new NotImplementedException();
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+    }
+    public async Task<User> CreateUser(CreateAccountDTORequest createAccountRequest)
+    {
+        IEnumerable<User> checkEmail =
+            await _unitOfWork.UserRepository.GetByFilterAsync(x => x.Email.Equals(createAccountRequest.Email));
+        IEnumerable<User> checkUsername =
+            await _unitOfWork.UserRepository.GetByFilterAsync(x => x.Username.Equals(createAccountRequest.Username));
+        if (checkEmail.Count() != 0)
+        {
+            throw new InvalidDataException($"Email is exist");
+        }
+
+        if (checkUsername.Count() != 0)
+        {
+            throw new InvalidDataException($"Username is exist");
+        }
+
+        var user = _mapper.Map<User>(createAccountRequest);
+        user.Password = EncryptPassword.Encrypt(createAccountRequest.Password);
+        user.Status = true;
+        user.CreateDate = DateTime.Now;
+        user.Avatar = null;
+        await _unitOfWork.UserRepository.AddAsync(user);
+        return user;
     }
 }
