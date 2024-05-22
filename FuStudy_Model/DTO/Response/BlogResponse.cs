@@ -12,6 +12,7 @@ namespace FuStudy_Model.DTO.Response
         public long UserId { get; set; }
         public string BlogContent { get; set; }
         public string Image { get; set; }
+        public int TotalLike {  get; set; }
         public DateTime CreateDate { get; set; }
     }
 }
