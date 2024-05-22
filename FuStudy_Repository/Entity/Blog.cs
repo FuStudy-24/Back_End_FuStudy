@@ -22,6 +22,9 @@ namespace FuStudy_Repository.Entity
         [Required]
         public string Image { get; set; }
 
+        [Required]
+        public int TotalLike { get; set; }
+
         public DateTime CreateDate { get; set; }
 
         [ForeignKey("UserId")]
