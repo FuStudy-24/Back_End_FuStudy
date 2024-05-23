@@ -20,6 +20,9 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<ISubcriptionService, SubcriptionService>();
+builder.Services.AddScoped<IStudentSubcriptionService, StudentSubcriptionService>();
+builder.Services.AddScoped<IBlogService,BlogService>();
+builder.Services.AddScoped<IBlogLikeService, BlogLikeService>();
 
 // AutoMapper configuration
 var config = new MapperConfiguration(cfg =>

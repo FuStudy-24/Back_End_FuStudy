@@ -4,6 +4,7 @@ using FuStudy_Repository.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FuStudy_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240521084423_Dante")]
+    partial class Dante
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,7 +69,7 @@ namespace FuStudy_API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("BlogContent")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -91,7 +94,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             Content = "How to be a better mentor",
-                            CreateDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7740),
+                            CreateDate = new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(766),
                             Image = "ahihi",
                             UserId = 2L
                         });
@@ -108,7 +111,7 @@ namespace FuStudy_API.Migrations
                     b.Property<long>("BlogId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Comment")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -138,7 +141,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             BlogId = 1L,
                             Content = "Great post!",
-                            CreateDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7810),
+                            CreateDate = new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(806),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = false,
                             UserId = 1L
@@ -254,36 +257,6 @@ namespace FuStudy_API.Migrations
                         });
                 });
 
-            modelBuilder.Entity("FuStudy_Repository.Entity.CommentImage", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("BlogCommentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlogCommentId");
-
-                    b.ToTable("CommentImage");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            BlogCommentId = 1L,
-                            Image = "Ahihi do ngoc"
-                        });
-                });
-
             modelBuilder.Entity("FuStudy_Repository.Entity.Conversation", b =>
                 {
                     b.Property<long>("Id")
@@ -326,7 +299,7 @@ namespace FuStudy_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateAt = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7860),
+                            CreateAt = new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(873),
                             Duration = new TimeSpan(0, 0, 0, 0, 0),
                             EndTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsClose = false,
@@ -380,7 +353,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             Content = "Hello!",
                             ConversationId = 1L,
-                            CreateTime = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7880),
+                            CreateTime = new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(894),
                             DeleteAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDelete = false,
                             IsSeen = false,
@@ -574,7 +547,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             ConversationMessageId = 1L,
-                            CreateAt = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7900),
+                            CreateAt = new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(923),
                             ReactionType = "like",
                             UserId = 2L
                         });
@@ -605,12 +578,17 @@ namespace FuStudy_API.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<long>("TransactionId")
+                    b.Property<long>("StudentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SubcriptionId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TransactionId");
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("SubcriptionId");
 
                     b.ToTable("Order");
 
@@ -618,12 +596,13 @@ namespace FuStudy_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7700),
+                            CreateDate = new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(708),
                             Description = "Payment for Basic subscription",
                             Money = 9.9900000000000002,
                             PaymentCode = "PAY12345",
                             Status = true,
-                            TransactionId = 1L
+                            StudentId = 1L,
+                            SubcriptionId = 1L
                         });
                 });
 
@@ -711,7 +690,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             CategoryId = 1L,
                             Content = "How to sort an array in C#?",
-                            CreateDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7500),
+                            CreateDate = new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(562),
                             Image = "ahihi",
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = false,
@@ -759,7 +738,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             Content = "Good question!",
-                            CreateDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7840),
+                            CreateDate = new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(844),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             QuestionId = 1L,
                             Status = false,
@@ -952,9 +931,9 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             CurrentQuestion = 0,
-                            EndDate = new DateTime(2024, 6, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7680),
+                            EndDate = new DateTime(2024, 6, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(686),
                             LimitQuestion = 10,
-                            StartDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7680),
+                            StartDate = new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(683),
                             StudentId = 1L,
                             SubcriptionId = 1L
                         });
@@ -1035,9 +1014,9 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             Ammount = -9.9900000000000002,
-                            CreateTime = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7730),
+                            CreateTime = new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(756),
                             Description = "Subscription payment",
-                            Type = "Deposit",
+                            Type = "Payment",
                             WalletId = 1L
                         });
                 });
@@ -1270,17 +1249,6 @@ namespace FuStudy_API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FuStudy_Repository.Entity.CommentImage", b =>
-                {
-                    b.HasOne("FuStudy_Repository.Entity.BlogComment", "BlogComment")
-                        .WithMany()
-                        .HasForeignKey("BlogCommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BlogComment");
-                });
-
             modelBuilder.Entity("FuStudy_Repository.Entity.Conversation", b =>
                 {
                     b.HasOne("FuStudy_Repository.Entity.User", "User1")
@@ -1389,13 +1357,21 @@ namespace FuStudy_API.Migrations
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Order", b =>
                 {
-                    b.HasOne("FuStudy_Repository.Entity.Transaction", "Transaction")
+                    b.HasOne("FuStudy_Repository.Entity.Student", "Student")
                         .WithMany()
-                        .HasForeignKey("TransactionId")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Transaction");
+                    b.HasOne("FuStudy_Repository.Entity.Subcription", "Subcription")
+                        .WithMany()
+                        .HasForeignKey("SubcriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Subcription");
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Question", b =>

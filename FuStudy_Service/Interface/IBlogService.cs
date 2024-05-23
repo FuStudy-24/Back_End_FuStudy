@@ -11,10 +11,10 @@ namespace FuStudy_Service.Interface
 {
     public interface IBlogService
     {
-        Task<bool> CreateBlog(BlogRequest request);
+        Task<BlogResponse> CreateBlog(BlogRequest request);
         Task<bool> DeleteBlog(long id);
         Task<BlogResponse> GetOneBlog(long id);
-        Task<bool> UpdateBlog(BlogRequest request);
+        Task<BlogResponse> UpdateBlog(BlogRequest request);
 
     }
 }

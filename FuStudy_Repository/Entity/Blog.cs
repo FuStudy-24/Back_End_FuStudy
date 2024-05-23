@@ -17,10 +17,13 @@ namespace FuStudy_Repository.Entity
         public long UserId { get; set; }
 
         [Required]
-        public string Content { get; set; }
+        public string BlogContent { get; set; }
 
         [Required]
         public string Image { get; set; }
+
+        [Required]
+        public int TotalLike { get; set; }
 
         public DateTime CreateDate { get; set; }
 
