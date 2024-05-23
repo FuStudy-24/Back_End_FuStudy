@@ -27,6 +27,8 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<ISubcriptionService, SubcriptionService>();
 builder.Services.AddScoped<IStudentSubcriptionService, StudentSubcriptionService>();
+builder.Services.AddScoped<IBlogService,BlogService>();
+builder.Services.AddScoped<IBlogLikeService, BlogLikeService>();
 
 //Mapper
 var config = new MapperConfiguration(cfg =>

@@ -34,6 +34,11 @@ namespace FuStudy_Model.Mapper
             CreateMap<QuestionResponse, Question>().ReverseMap();
             CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
 
+
+            #region BlogLike
+            CreateMap<BlogLikeRequest, BlogLike>().ReverseMap();
+            CreateMap<BlogLike, BlogLikeResponse>().ReverseMap();
+            #endregion
         }
     }
 }
