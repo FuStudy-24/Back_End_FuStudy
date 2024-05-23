@@ -29,6 +29,8 @@ namespace FuStudy_Service.Service
                                     .Get(filter: x => x.Blog.Id == request.BlogId
                                         && x.User.Id == request.UserId, includeProperties: "Blog,BlogLike")
                                     .FirstOrDefault();
+            //check lai
+
 
             if (checkBlogLike != null)
             {
