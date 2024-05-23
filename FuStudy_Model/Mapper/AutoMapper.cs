@@ -20,7 +20,10 @@ namespace FuStudy_Model.Mapper
 
             #region Blog
             CreateMap<BlogRequest, Blog>();
-            CreateMap<Blog, BlogResponse>();
+            CreateMap<Blog, BlogResponse>()
+                .ForMember(dst => dst.Fullname, src => src.MapFrom(x => x.User.Fullname))
+                .ForMember(dst => dst.Avatar, src => src.MapFrom(x => x.User.Avatar))
+                .ReverseMap();
             #endregion
 
             CreateMap<QuestionRequest, Question>().ReverseMap();
