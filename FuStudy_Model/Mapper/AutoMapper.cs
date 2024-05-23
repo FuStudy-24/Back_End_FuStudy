@@ -25,6 +25,9 @@ namespace FuStudy_Model.Mapper
 
             CreateMap<QuestionRequest, Question>().ReverseMap();
             CreateMap<CreateSubcriptionRequest, Subcription>().ReverseMap();
+            CreateMap<CreateAccountDTORequest, User>().ReverseMap();
+            CreateMap<UpdateAccountDTORequest, User>().ReverseMap();
+            
 
             //Reponse
             //CreateMap<FuStudyReponse, FuStudy>().ReverseMap();

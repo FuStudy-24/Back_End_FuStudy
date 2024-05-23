@@ -1,0 +1,34 @@
+﻿version: '3.8'
+
+services:
+  fustudy_api:
+    build:
+      context: .
+      dockerfile: FUStudy_API/Dockerfile
+    image: fustudy_api
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=fustudy_db
+      - DB_USER=user
+      - DB_PASSWORD=12345
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./store:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: fustudy_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 12345
+
+volumes:
+  mysql_data:
