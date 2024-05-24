@@ -18,6 +18,8 @@ namespace FuStudy_Model.DTO.Request
         [Required]
         public string Image { get; set; }
         [Required]
+        public int TotalLike { get; set; }
+        [Required]
         public DateTime CreateDate { get; set; }
     }
 }

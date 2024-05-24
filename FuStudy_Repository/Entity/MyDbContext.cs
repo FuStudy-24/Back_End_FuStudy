@@ -132,7 +132,7 @@ namespace FuStudy_Repository.Entity
             modelBuilder.Entity<Major>().HasData(majors);
             var mentors = new List<Mentor>
                 { new Mentor {Id = 1, UserId = users[2].Id, AcademicLevel = "Master's"
-                    , WorkPlace = "Tech Company", OnlineStatus = "offline", Skill = "Ahihi", Video = "ahihi"} };
+                    , WorkPlace = "Tech Company", Status = "offline", Skill = "Ahihi", Video = "ahihi"} };
 
             var mentorMajor = new MentorMajor {Id = 1, MentorId = mentors[0].Id, MajorId = majors[0].Id };
 
@@ -227,7 +227,7 @@ namespace FuStudy_Repository.Entity
             // -- Blogs --
             var blogs = new List<Blog>
             {
-                new Blog { Id = 1 ,UserId = users[1].Id, BlogContent = "How to be a better mentor", CreateDate = DateTime.Now, Image = "ahihi"}
+                new Blog { Id = 1 ,UserId = users[1].Id, BlogContent = "How to be a better mentor", TotalLike = 1, CreateDate = DateTime.Now, Image = "ahihi"}
             };
             modelBuilder.Entity<Blog>().HasData(blogs);
 
@@ -243,7 +243,7 @@ namespace FuStudy_Repository.Entity
             var blogLikes = new List<BlogLike>
             {
                 new BlogLike
-                    { Id = 2, UserId = users[0].Id, BlogId = 1, TotalLike = 1, Status = true }
+                    { Id = 2, UserId = users[0].Id, BlogId = 1, Status = true }
             };
             modelBuilder.Entity<BlogLike>().HasData(blogLikes);
 

@@ -30,7 +30,7 @@ namespace FuStudy_API.Controllers.Blog
         public async Task<IActionResult> CreateBlog([FromBody] BlogRequest request)
         {
             var reponse = await _blogService.CreateBlog(request);
-            if(!reponse)
+            if(reponse == null)
             {
                 return CustomResult("Create is not success !", System.Net.HttpStatusCode.BadRequest);
             }
@@ -41,7 +41,7 @@ namespace FuStudy_API.Controllers.Blog
         public async Task<IActionResult> UpdateBlog([FromBody]BlogRequest request)
         {
             var reponse = await _blogService.UpdateBlog(request);
-            if (!reponse)
+            if (reponse == null)
             {
                 return CustomResult("Update is not success !", System.Net.HttpStatusCode.BadRequest);
             }
