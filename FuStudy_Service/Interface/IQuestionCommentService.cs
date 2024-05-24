@@ -6,7 +6,7 @@ namespace FuStudy_Service.Interface;
 
 public interface IQuestionCommentService
 {
-    Task<QuestionCommentResponse> GetAllQuestionComments();
+    Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionComments();
     
     Task<QuestionCommentResponse> GetQuestionCommentById(long id);
 

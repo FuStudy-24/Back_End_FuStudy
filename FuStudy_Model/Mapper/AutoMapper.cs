@@ -27,6 +27,7 @@ namespace FuStudy_Model.Mapper
             #endregion
 
             CreateMap<QuestionRequest, Question>().ReverseMap();
+            CreateMap<QuestionCommentRequest, QuestionComment>().ReverseMap();
             CreateMap<CreateSubcriptionRequest, Subcription>().ReverseMap();
             CreateMap<CreateAccountDTORequest, User>().ReverseMap();
             CreateMap<UpdateAccountDTORequest, User>().ReverseMap();
@@ -35,6 +36,7 @@ namespace FuStudy_Model.Mapper
             //Reponse
             //CreateMap<FuStudyReponse, FuStudy>().ReverseMap();
             CreateMap<QuestionResponse, Question>().ReverseMap();
+            CreateMap<QuestionCommentResponse, QuestionComment>().ReverseMap();
             CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
 
 

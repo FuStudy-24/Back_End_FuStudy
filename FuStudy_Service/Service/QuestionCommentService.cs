@@ -20,10 +20,10 @@ public class QuestionCommentService : IQuestionCommentService
         _mapper = mapper;
     }
     
-    public async Task<QuestionCommentResponse> GetAllQuestionComments()
+    public async Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionComments()
     {
         var questionComments =  _unitOfWork.QuestionCommentRepository.Get();
-        return _mapper.Map<QuestionCommentResponse>(questionComments);
+        return _mapper.Map<IEnumerable<QuestionCommentResponse>>(questionComments);
 
     }
 
@@ -37,14 +37,16 @@ public class QuestionCommentService : IQuestionCommentService
     {
         if (_unitOfWork.QuestionRepository.GetByID(questionCommentRequest.QuestionId) == null)
         {
-            throw new CustomException.DataNotFoundException($"Question with this {questionCommentRequest.QuestionId} not found!");
+            throw new CustomException.DataNotFoundException($"Question with this ID: {questionCommentRequest.QuestionId} not found!");
         }
         if (_unitOfWork.UserRepository.GetByID(questionCommentRequest.UserId) == null)
         {
-            throw new CustomException.DataNotFoundException($"User with this {questionCommentRequest.UserId} not found!");
+            throw new CustomException.DataNotFoundException($"User with this ID: {questionCommentRequest.UserId} not found!");
         }
 
         var questionComment = _mapper.Map<QuestionComment>(questionCommentRequest);
+        questionComment.CreateDate = DateTime.Now;
+        questionComment.Status = true;
         _unitOfWork.QuestionCommentRepository.Insert(questionComment);
         _unitOfWork.Save();
 
@@ -58,6 +60,15 @@ public class QuestionCommentService : IQuestionCommentService
         if (questionComment == null)
         {
             throw new CustomException.DataNotFoundException($"Question Comment with ID: {questionCommentId} not found");
+        }
+        
+        if (_unitOfWork.QuestionRepository.GetByID(questionCommentRequest.QuestionId) == null)
+        {
+            throw new CustomException.DataNotFoundException($"Question with this ID: {questionCommentRequest.QuestionId} not found!");
+        }
+        if (_unitOfWork.UserRepository.GetByID(questionCommentRequest.UserId) == null)
+        {
+            throw new CustomException.DataNotFoundException($"User with this ID: {questionCommentRequest.UserId} not found!");
         }
 
         _mapper.Map(questionCommentRequest, questionComment);

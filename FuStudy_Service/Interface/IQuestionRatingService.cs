@@ -6,7 +6,7 @@ namespace FuStudy_Service.Interface;
 
 public interface IQuestionRatingService
 {
-    Task<QuestionRatingResponse> GetAllQuestionsRatings();
+    Task<IEnumerable<QuestionRatingResponse>> GetAllQuestionsRatings();
     Task<QuestionRatingResponse> GetQuestionCommentById(long id);
     Task<QuestionRatingResponse> CreateQuestionRating(QuestionRatingRequest questionRatingRequest);
     Task<QuestionRatingResponse> UpdateQuestionRating(QuestionRequest questionRequest, long questionId);

@@ -21,7 +21,6 @@ namespace FuStudy_Model.DTO.Response
         public DateTime CreateDate { get; set; }
 
         public DateTime ModifiedDate { get; set; }
-
-        public QuestionCommentResponse QuestionCommentResponse { get; set; }
+        
     }
 }

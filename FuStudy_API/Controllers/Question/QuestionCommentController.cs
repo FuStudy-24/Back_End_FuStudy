@@ -72,8 +72,8 @@ public class QuestionCommentController : BaseController
             
         }
 
-        [HttpPost("UpdateQuestionComment/{questionId}")]
-        public async Task<IActionResult> UpdateQuestion(long questionId, [FromBody] QuestionCommentRequest questionRequest)
+        [HttpPost("UpdateQuestionComment/{questionCommentId}")]
+        public async Task<IActionResult> UpdateQuestion(long questionCommentId, [FromBody] QuestionCommentRequest questionRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ public class QuestionCommentController : BaseController
 
             try
             {
-                var updateQuestionComment = await _questionCommentService.UpdateQuestionComment(questionRequest, questionId);
+                var updateQuestionComment = await _questionCommentService.UpdateQuestionComment(questionRequest, questionCommentId);
                 return CustomResult("Update successfully", updateQuestionComment);
             }
             catch (CustomException.DataNotFoundException e)
