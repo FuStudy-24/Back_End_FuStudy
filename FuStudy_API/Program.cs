@@ -4,6 +4,7 @@ using FuStudy_Repository.Repository;
 using FuStudy_Model.Mapper;
 using AutoMapper;
 using FuStudy_Service.Interface;
+using FuStudy_Service.Interfaces;
 using FuStudy_Service.Service;
 using Microsoft.Extensions.Hosting;
 
@@ -57,8 +58,17 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<MyDbContext>();
-    db.Database.Migrate();
+
+    // Check if there are any pending migrations
+    var pendingMigrations = db.Database.GetPendingMigrations();
+
+    if (pendingMigrations.Any())
+    {
+        // Apply migrations if there are any pending migrations
+        db.Database.Migrate();
+    }
 }
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
