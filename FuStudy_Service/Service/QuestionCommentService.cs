@@ -22,7 +22,7 @@ public class QuestionCommentService : IQuestionCommentService
     
     public async Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionComments()
     {
-        var questionComments =  _unitOfWork.QuestionCommentRepository.Get();
+        var questionComments =  _unitOfWork.QuestionCommentRepository.Get(includeProperties: "Question");
         return _mapper.Map<IEnumerable<QuestionCommentResponse>>(questionComments);
 
     }
