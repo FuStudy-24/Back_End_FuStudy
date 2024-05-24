@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   fustudy_api:
     build:
@@ -11,8 +9,8 @@ services:
     environment:
       - DB_HOST=mysql
       - DB_PORT=3306
-      - DB_NAME=fustudy_db
-      - DB_USER=user
+      - DB_NAME=FuStudy
+      - DB_USER=root
       - DB_PASSWORD=12345
     depends_on:
       - mysql
@@ -26,9 +24,4 @@ services:
       - ./store:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: 12345
-      MYSQL_DATABASE: fustudy_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: 12345
-
-volumes:
-  mysql_data:
+      MYSQL_DATABASE: FuStudy
