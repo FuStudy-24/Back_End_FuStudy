@@ -6,6 +6,7 @@
 **/.settings
 **/.toolstarget
 **/.vs
+**/.store
 **/.vscode
 **/.idea
 **/*.*proj.user

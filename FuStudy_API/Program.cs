@@ -68,7 +68,7 @@ using (var scope = app.Services.CreateScope())
     if (pendingMigrations.Any())
     {
         // Apply migrations if there are any pending migrations
-        db.Database.Migrate();
+        //db.Database.Migrate();
     }
 }
 

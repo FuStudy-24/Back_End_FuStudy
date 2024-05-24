@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <UserSecretsId>a17dcd08-391b-43a7-ac4b-368256c98a49</UserSecretsId>
 
   </PropertyGroup>
 
@@ -16,6 +17,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
 
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
@@ -32,7 +34,6 @@
   <ItemGroup>
     <Folder Include="Controllers\Admin\" />
     <Folder Include="Controllers\Authentication\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>
