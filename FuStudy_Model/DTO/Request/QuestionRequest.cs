@@ -19,6 +19,8 @@ namespace FuStudy_Model.DTO.Request
         public string Content { get; set; }
         
         public string Image { get; set; }
+        
+        public int TotalRating { get; set; }
 
         [Required(ErrorMessage = "CreateDate is required!")]
         public DateTime CreateDate { get; set; }
