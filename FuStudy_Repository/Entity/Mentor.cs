@@ -25,7 +25,7 @@ namespace FuStudy_Repository.Entity
         public string WorkPlace { get; set; }
 
         [Required]
-        public string OnlineStatus { get; set; }
+        public string Status { get; set; }
 
         [Required]
         public string Skill { get; set; }

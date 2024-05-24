@@ -39,11 +39,16 @@ public class AuthenticationService: IAuthenticationService
         }
         var user = _mapper.Map<User>(createAccountDTORequest);
 /*			user.permission_id = (await _userPermissionRepository.GetByFilterAsync(r => r.role.Equals("Customer"))).First().id;
-*/			
+*/
+        if (user.RoleId < 4)
+        {
+            throw new InvalidDataException("You dont have permission to create this role");
+        }
         user.Password = EncryptPassword.Encrypt(createAccountDTORequest.Password);
         user.Status = true;
         user.CreateDate = DateTime.Now.Date;
-        user.RoleId = 1;
+        
+        
         
 			
 			
