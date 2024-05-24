@@ -24,7 +24,7 @@ namespace FuStudy_Service.Service
 
         public async Task<IEnumerable<QuestionResponse>> GetAllQuestionsAsync()
         {
-            var questions = _unitOfWork.QuestionRepository.Get();
+            var questions = _unitOfWork.QuestionRepository.Get(includeProperties:"QuestionComment");
             return _mapper.Map<IEnumerable<QuestionResponse>>(questions);
         }
 
