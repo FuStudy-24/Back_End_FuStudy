@@ -93,8 +93,8 @@ namespace FuStudy_API.Migrations
                         new
                         {
                             Id = 1L,
-                            BlogContent = "How to be a better mentor",
-                            CreateDate = new DateTime(2024, 5, 24, 13, 56, 26, 361, DateTimeKind.Local).AddTicks(8049),
+                            Content = "How to be a better mentor",
+                            CreateDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7740),
                             Image = "ahihi",
                             TotalLike = 1,
                             UserId = 2L
@@ -141,8 +141,8 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             BlogId = 1L,
-                            Comment = "Great post!",
-                            CreateDate = new DateTime(2024, 5, 24, 13, 56, 26, 361, DateTimeKind.Local).AddTicks(8097),
+                            Content = "Great post!",
+                            CreateDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7810),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = false,
                             UserId = 1L
@@ -326,7 +326,7 @@ namespace FuStudy_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateAt = new DateTime(2024, 5, 24, 13, 56, 26, 361, DateTimeKind.Local).AddTicks(8311),
+                            CreateAt = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7860),
                             Duration = new TimeSpan(0, 0, 0, 0, 0),
                             EndTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsClose = false,
@@ -380,7 +380,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             Content = "Hello!",
                             ConversationId = 1L,
-                            CreateTime = new DateTime(2024, 5, 24, 13, 56, 26, 361, DateTimeKind.Local).AddTicks(8347),
+                            CreateTime = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7880),
                             DeleteAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDelete = false,
                             IsSeen = false,
@@ -574,7 +574,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             ConversationMessageId = 1L,
-                            CreateAt = new DateTime(2024, 5, 24, 13, 56, 26, 361, DateTimeKind.Local).AddTicks(8413),
+                            CreateAt = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7900),
                             ReactionType = "like",
                             UserId = 2L
                         });
@@ -618,7 +618,7 @@ namespace FuStudy_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 5, 24, 13, 56, 26, 361, DateTimeKind.Local).AddTicks(8032),
+                            CreateDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7700),
                             Description = "Payment for Basic subscription",
                             Money = 9.9900000000000002,
                             PaymentCode = "PAY12345",
@@ -711,7 +711,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             CategoryId = 1L,
                             Content = "How to sort an array in C#?",
-                            CreateDate = new DateTime(2024, 5, 24, 13, 56, 26, 361, DateTimeKind.Local).AddTicks(7704),
+                            CreateDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7500),
                             Image = "ahihi",
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = false,
@@ -759,7 +759,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             Content = "Good question!",
-                            CreateDate = new DateTime(2024, 5, 24, 13, 56, 26, 361, DateTimeKind.Local).AddTicks(8249),
+                            CreateDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7840),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             QuestionId = 1L,
                             Status = false,
@@ -952,9 +952,9 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             CurrentQuestion = 0,
-                            EndDate = new DateTime(2024, 6, 24, 13, 56, 26, 361, DateTimeKind.Local).AddTicks(7853),
+                            EndDate = new DateTime(2024, 6, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7680),
                             LimitQuestion = 10,
-                            StartDate = new DateTime(2024, 5, 24, 13, 56, 26, 361, DateTimeKind.Local).AddTicks(7851),
+                            StartDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7680),
                             StudentId = 1L,
                             SubcriptionId = 1L
                         });
@@ -1034,8 +1034,8 @@ namespace FuStudy_API.Migrations
                         new
                         {
                             Id = 1L,
-                            Ammount = 9.9900000000000002,
-                            CreateTime = new DateTime(2024, 5, 24, 13, 56, 26, 361, DateTimeKind.Local).AddTicks(7957),
+                            Ammount = -9.9900000000000002,
+                            CreateTime = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7730),
                             Description = "Subscription payment",
                             Type = "Deposit",
                             WalletId = 1L

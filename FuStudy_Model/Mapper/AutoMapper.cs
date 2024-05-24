@@ -20,11 +20,17 @@ namespace FuStudy_Model.Mapper
 
             #region Blog
             CreateMap<BlogRequest, Blog>();
-            CreateMap<Blog, BlogResponse>();
+            CreateMap<Blog, BlogResponse>()
+                .ForMember(dst => dst.Fullname, src => src.MapFrom(x => x.User.Fullname))
+                .ForMember(dst => dst.Avatar, src => src.MapFrom(x => x.User.Avatar))
+                .ReverseMap();
             #endregion
 
             CreateMap<QuestionRequest, Question>().ReverseMap();
             CreateMap<CreateSubcriptionRequest, Subcription>().ReverseMap();
+            CreateMap<CreateAccountDTORequest, User>().ReverseMap();
+            CreateMap<UpdateAccountDTORequest, User>().ReverseMap();
+            
 
             //Reponse
             //CreateMap<FuStudyReponse, FuStudy>().ReverseMap();
@@ -39,6 +45,11 @@ namespace FuStudy_Model.Mapper
 
             CreateMap<Wallet, WalletResponse>().ReverseMap();
             CreateMap<WalletRequest, Wallet>().ReverseMap();
+
+            #region BlogLike
+            CreateMap<BlogLikeRequest, BlogLike>().ReverseMap();
+            CreateMap<BlogLike, BlogLikeResponse>().ReverseMap();
+            #endregion
         }
     }
 }
