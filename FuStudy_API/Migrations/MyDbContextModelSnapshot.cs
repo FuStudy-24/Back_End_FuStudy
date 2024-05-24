@@ -77,6 +77,9 @@ namespace FuStudy_API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("TotalLike")
+                        .HasColumnType("int");
+
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -93,6 +96,7 @@ namespace FuStudy_API.Migrations
                             Content = "How to be a better mentor",
                             CreateDate = new DateTime(2024, 5, 24, 2, 8, 2, 21, DateTimeKind.Local).AddTicks(7740),
                             Image = "ahihi",
+                            TotalLike = 1,
                             UserId = 2L
                         });
                 });
@@ -159,9 +163,6 @@ namespace FuStudy_API.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("TotalLike")
-                        .HasColumnType("int");
-
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -179,7 +180,6 @@ namespace FuStudy_API.Migrations
                             Id = 2L,
                             BlogId = 1L,
                             Status = true,
-                            TotalLike = 1,
                             UserId = 1L
                         });
                 });
@@ -471,11 +471,11 @@ namespace FuStudy_API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("OnlineStatus")
+                    b.Property<string>("Skill")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Skill")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -501,8 +501,8 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             AcademicLevel = "Master's",
-                            OnlineStatus = "offline",
                             Skill = "Ahihi",
+                            Status = "offline",
                             UserId = 3L,
                             Video = "ahihi",
                             WorkPlace = "Tech Company"

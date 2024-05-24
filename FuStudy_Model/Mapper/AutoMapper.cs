@@ -37,6 +37,14 @@ namespace FuStudy_Model.Mapper
             CreateMap<QuestionResponse, Question>().ReverseMap();
             CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
 
+            CreateMap<TransactionRequest, Transaction>().ReverseMap();
+            CreateMap<Transaction, TransactionResponse>().ReverseMap();
+
+            CreateMap<OrderRequest, Order>().ReverseMap();
+            CreateMap<Order, OrderResponse>().ReverseMap();
+
+            CreateMap<Wallet, WalletResponse>().ReverseMap();
+            CreateMap<WalletRequest, Wallet>().ReverseMap();
 
             #region BlogLike
             CreateMap<BlogLikeRequest, BlogLike>().ReverseMap();
