@@ -4,6 +4,7 @@ using FuStudy_Repository.Repository;
 using FuStudy_Model.Mapper;
 using AutoMapper;
 using FuStudy_Service.Interface;
+using FuStudy_Service.Interfaces;
 using FuStudy_Service.Service;
 using Microsoft.Extensions.Hosting;
 
