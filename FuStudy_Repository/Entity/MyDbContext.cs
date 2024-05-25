@@ -185,7 +185,8 @@ namespace FuStudy_Repository.Entity
                 LimitQuestion = 10,
                 CurrentQuestion = 0,
                 StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddMonths(1)
+                EndDate = DateTime.Now.AddMonths(1),
+                Status = true
             });
 
             // -- Wallets --

@@ -167,10 +167,11 @@ namespace FuStudy_API.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    Content = table.Column<string>(type: "longtext", nullable: false)
+                    BlogContent = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Image = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    TotalLike = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
@@ -298,7 +299,7 @@ namespace FuStudy_API.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     BlogId = table.Column<long>(type: "bigint", nullable: false),
-                    Content = table.Column<string>(type: "longtext", nullable: false)
+                    Comment = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -330,7 +331,6 @@ namespace FuStudy_API.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     BlogId = table.Column<long>(type: "bigint", nullable: false),
-                    TotalLike = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
@@ -478,40 +478,6 @@ namespace FuStudy_API.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Order",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    SubcriptionId = table.Column<long>(type: "bigint", nullable: false),
-                    StudentId = table.Column<long>(type: "bigint", nullable: false),
-                    PaymentCode = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Money = table.Column<double>(type: "double", nullable: false),
-                    Status = table.Column<bool>(type: "tinyint(1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Order", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Order_Student_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Student",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Order_Subcription_SubcriptionId",
-                        column: x => x.SubcriptionId,
-                        principalTable: "Subcription",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Question",
                 columns: table => new
                 {
@@ -556,7 +522,8 @@ namespace FuStudy_API.Migrations
                     LimitQuestion = table.Column<int>(type: "int", nullable: false),
                     CurrentQuestion = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Status = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -597,6 +564,28 @@ namespace FuStudy_API.Migrations
                         name: "FK_Transaction_Wallet_WalletId",
                         column: x => x.WalletId,
                         principalTable: "Wallet",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "CommentImage",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    BlogCommentId = table.Column<long>(type: "bigint", nullable: false),
+                    Image = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommentImage", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CommentImage_BlogComment_BlogCommentId",
+                        column: x => x.BlogCommentId,
+                        principalTable: "BlogComment",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -721,6 +710,33 @@ namespace FuStudy_API.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    TransactionId = table.Column<long>(type: "bigint", nullable: false),
+                    PaymentCode = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Money = table.Column<double>(type: "double", nullable: false),
+                    Status = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Order_Transaction_TransactionId",
+                        column: x => x.TransactionId,
+                        principalTable: "Transaction",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.InsertData(
                 table: "Category",
                 columns: new[] { "Id", "CategoryName" },
@@ -793,13 +809,13 @@ namespace FuStudy_API.Migrations
 
             migrationBuilder.InsertData(
                 table: "Blog",
-                columns: new[] { "Id", "Content", "CreateDate", "Image", "UserId" },
-                values: new object[] { 1L, "How to be a better mentor", new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(766), "ahihi", 2L });
+                columns: new[] { "Id", "BlogContent", "CreateDate", "Image", "TotalLike", "UserId" },
+                values: new object[] { 1L, "How to be a better mentor", new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9329), "ahihi", 1, 2L });
 
             migrationBuilder.InsertData(
                 table: "Conversation",
                 columns: new[] { "Id", "CreateAt", "Duration", "EndTime", "IsClose", "LastMessage", "User1Id", "User2Id" },
-                values: new object[] { 1L, new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(873), new TimeSpan(0, 0, 0, 0, 0), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Hello!", 1L, 2L });
+                values: new object[] { 1L, new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9510), new TimeSpan(0, 0, 0, 0, 0), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Hello!", 1L, 2L });
 
             migrationBuilder.InsertData(
                 table: "Mentor",
@@ -822,18 +838,18 @@ namespace FuStudy_API.Migrations
 
             migrationBuilder.InsertData(
                 table: "BlogComment",
-                columns: new[] { "Id", "BlogId", "Content", "CreateDate", "ModifiedDate", "Status", "UserId" },
-                values: new object[] { 1L, 1L, "Great post!", new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(806), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1L });
+                columns: new[] { "Id", "BlogId", "Comment", "CreateDate", "ModifiedDate", "Status", "UserId" },
+                values: new object[] { 1L, 1L, "Great post!", new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9366), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1L });
 
             migrationBuilder.InsertData(
                 table: "BlogLike",
-                columns: new[] { "Id", "BlogId", "Status", "TotalLike", "UserId" },
-                values: new object[] { 2L, 1L, true, 1, 1L });
+                columns: new[] { "Id", "BlogId", "Status", "UserId" },
+                values: new object[] { 2L, 1L, true, 1L });
 
             migrationBuilder.InsertData(
                 table: "ConversationMessage",
                 columns: new[] { "Id", "Content", "ConversationId", "CreateTime", "DeleteAt", "IsDelete", "IsSeen", "SenderId" },
-                values: new object[] { 1L, "Hello!", 1L, new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(894), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 1L });
+                values: new object[] { 1L, "Hello!", 1L, new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9533), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 1L });
 
             migrationBuilder.InsertData(
                 table: "MentorMajor",
@@ -841,34 +857,39 @@ namespace FuStudy_API.Migrations
                 values: new object[] { 1L, 1L, 1L });
 
             migrationBuilder.InsertData(
-                table: "Order",
-                columns: new[] { "Id", "CreateDate", "Description", "Money", "PaymentCode", "Status", "StudentId", "SubcriptionId" },
-                values: new object[] { 1L, new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(708), "Payment for Basic subscription", 9.9900000000000002, "PAY12345", true, 1L, 1L });
-
-            migrationBuilder.InsertData(
                 table: "Question",
                 columns: new[] { "Id", "CategoryId", "Content", "CreateDate", "Image", "ModifiedDate", "Status", "StudentId" },
-                values: new object[] { 1L, 1L, "How to sort an array in C#?", new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(562), "ahihi", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1L });
+                values: new object[] { 1L, 1L, "How to sort an array in C#?", new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9045), "ahihi", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1L });
 
             migrationBuilder.InsertData(
                 table: "StudentSubcription",
-                columns: new[] { "Id", "CurrentQuestion", "EndDate", "LimitQuestion", "StartDate", "StudentId", "SubcriptionId" },
-                values: new object[] { 1L, 0, new DateTime(2024, 6, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(686), 10, new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(683), 1L, 1L });
+                columns: new[] { "Id", "CurrentQuestion", "EndDate", "LimitQuestion", "StartDate", "Status", "StudentId", "SubcriptionId" },
+                values: new object[] { 1L, 0, new DateTime(2024, 6, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9157), 10, new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9154), true, 1L, 1L });
 
             migrationBuilder.InsertData(
                 table: "Transaction",
                 columns: new[] { "Id", "Ammount", "CreateTime", "Description", "Type", "WalletId" },
-                values: new object[] { 1L, -9.9900000000000002, new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(756), "Subscription payment", "Payment", 1L });
+                values: new object[] { 1L, 9.9900000000000002, new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9258), "Subscription payment", "Deposit", 1L });
+
+            migrationBuilder.InsertData(
+                table: "CommentImage",
+                columns: new[] { "Id", "BlogCommentId", "Image" },
+                values: new object[] { 1L, 1L, "Ahihi do ngoc" });
 
             migrationBuilder.InsertData(
                 table: "MessageReaction",
                 columns: new[] { "Id", "ConversationMessageId", "CreateAt", "ReactionType", "UserId" },
-                values: new object[] { 1L, 1L, new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(923), "like", 2L });
+                values: new object[] { 1L, 1L, new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9578), "like", 2L });
+
+            migrationBuilder.InsertData(
+                table: "Order",
+                columns: new[] { "Id", "CreateDate", "Description", "Money", "PaymentCode", "Status", "TransactionId" },
+                values: new object[] { 1L, new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9314), "Payment for Basic subscription", 9.9900000000000002, "PAY12345", true, 1L });
 
             migrationBuilder.InsertData(
                 table: "QuestionComment",
                 columns: new[] { "Id", "Content", "CreateDate", "ModifiedDate", "QuestionId", "Status", "UserId" },
-                values: new object[] { 1L, "Good question!", new DateTime(2024, 5, 21, 1, 44, 21, 727, DateTimeKind.Local).AddTicks(844), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1L, false, 2L });
+                values: new object[] { 1L, "Good question!", new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9477), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1L, false, 2L });
 
             migrationBuilder.InsertData(
                 table: "QuestionRating",
@@ -914,6 +935,11 @@ namespace FuStudy_API.Migrations
                 name: "IX_Booking_UserId",
                 table: "Booking",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CommentImage_BlogCommentId",
+                table: "CommentImage",
+                column: "BlogCommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Conversation_User1Id",
@@ -971,14 +997,9 @@ namespace FuStudy_API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_StudentId",
+                name: "IX_Order_TransactionId",
                 table: "Order",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Order_SubcriptionId",
-                table: "Order",
-                column: "SubcriptionId");
+                column: "TransactionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Question_CategoryId",
@@ -1058,13 +1079,13 @@ namespace FuStudy_API.Migrations
                 name: "Attachment");
 
             migrationBuilder.DropTable(
-                name: "BlogComment");
-
-            migrationBuilder.DropTable(
                 name: "BlogLike");
 
             migrationBuilder.DropTable(
                 name: "Booking");
+
+            migrationBuilder.DropTable(
+                name: "CommentImage");
 
             migrationBuilder.DropTable(
                 name: "MeetingHistory");
@@ -1091,10 +1112,7 @@ namespace FuStudy_API.Migrations
                 name: "StudentSubcription");
 
             migrationBuilder.DropTable(
-                name: "Transaction");
-
-            migrationBuilder.DropTable(
-                name: "Blog");
+                name: "BlogComment");
 
             migrationBuilder.DropTable(
                 name: "Major");
@@ -1106,6 +1124,9 @@ namespace FuStudy_API.Migrations
                 name: "ConversationMessage");
 
             migrationBuilder.DropTable(
+                name: "Transaction");
+
+            migrationBuilder.DropTable(
                 name: "Question");
 
             migrationBuilder.DropTable(
@@ -1115,10 +1136,13 @@ namespace FuStudy_API.Migrations
                 name: "Subcription");
 
             migrationBuilder.DropTable(
-                name: "Wallet");
+                name: "Blog");
 
             migrationBuilder.DropTable(
                 name: "Conversation");
+
+            migrationBuilder.DropTable(
+                name: "Wallet");
 
             migrationBuilder.DropTable(
                 name: "Category");

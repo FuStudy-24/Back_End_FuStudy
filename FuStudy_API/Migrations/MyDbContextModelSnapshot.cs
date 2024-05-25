@@ -77,6 +77,9 @@ namespace FuStudy_API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("TotalLike")
+                        .HasColumnType("int");
+
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -91,8 +94,9 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             BlogContent = "How to be a better mentor",
-                            CreateDate = new DateTime(2024, 5, 21, 16, 15, 24, 719, DateTimeKind.Local).AddTicks(7189),
+                            CreateDate = new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9329),
                             Image = "ahihi",
+                            TotalLike = 1,
                             UserId = 2L
                         });
                 });
@@ -138,7 +142,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             BlogId = 1L,
                             Comment = "Great post!",
-                            CreateDate = new DateTime(2024, 5, 21, 16, 15, 24, 719, DateTimeKind.Local).AddTicks(7208),
+                            CreateDate = new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9366),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = false,
                             UserId = 1L
@@ -159,9 +163,6 @@ namespace FuStudy_API.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("TotalLike")
-                        .HasColumnType("int");
-
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -179,7 +180,6 @@ namespace FuStudy_API.Migrations
                             Id = 2L,
                             BlogId = 1L,
                             Status = true,
-                            TotalLike = 1,
                             UserId = 1L
                         });
                 });
@@ -326,7 +326,7 @@ namespace FuStudy_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateAt = new DateTime(2024, 5, 21, 16, 15, 24, 719, DateTimeKind.Local).AddTicks(7295),
+                            CreateAt = new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9510),
                             Duration = new TimeSpan(0, 0, 0, 0, 0),
                             EndTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsClose = false,
@@ -380,7 +380,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             Content = "Hello!",
                             ConversationId = 1L,
-                            CreateTime = new DateTime(2024, 5, 21, 16, 15, 24, 719, DateTimeKind.Local).AddTicks(7313),
+                            CreateTime = new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9533),
                             DeleteAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDelete = false,
                             IsSeen = false,
@@ -574,7 +574,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             ConversationMessageId = 1L,
-                            CreateAt = new DateTime(2024, 5, 21, 16, 15, 24, 719, DateTimeKind.Local).AddTicks(7341),
+                            CreateAt = new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9578),
                             ReactionType = "like",
                             UserId = 2L
                         });
@@ -618,7 +618,7 @@ namespace FuStudy_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 5, 21, 16, 15, 24, 719, DateTimeKind.Local).AddTicks(7181),
+                            CreateDate = new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9314),
                             Description = "Payment for Basic subscription",
                             Money = 9.9900000000000002,
                             PaymentCode = "PAY12345",
@@ -711,7 +711,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             CategoryId = 1L,
                             Content = "How to sort an array in C#?",
-                            CreateDate = new DateTime(2024, 5, 21, 16, 15, 24, 719, DateTimeKind.Local).AddTicks(7001),
+                            CreateDate = new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9045),
                             Image = "ahihi",
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = false,
@@ -759,7 +759,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             Content = "Good question!",
-                            CreateDate = new DateTime(2024, 5, 21, 16, 15, 24, 719, DateTimeKind.Local).AddTicks(7273),
+                            CreateDate = new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9477),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             QuestionId = 1L,
                             Status = false,
@@ -933,6 +933,9 @@ namespace FuStudy_API.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<long>("StudentId")
                         .HasColumnType("bigint");
 
@@ -952,9 +955,10 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             CurrentQuestion = 0,
-                            EndDate = new DateTime(2024, 6, 21, 16, 15, 24, 719, DateTimeKind.Local).AddTicks(7072),
+                            EndDate = new DateTime(2024, 6, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9157),
                             LimitQuestion = 10,
-                            StartDate = new DateTime(2024, 5, 21, 16, 15, 24, 719, DateTimeKind.Local).AddTicks(7072),
+                            StartDate = new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9154),
+                            Status = true,
                             StudentId = 1L,
                             SubcriptionId = 1L
                         });
@@ -1035,7 +1039,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             Ammount = 9.9900000000000002,
-                            CreateTime = new DateTime(2024, 5, 21, 16, 15, 24, 719, DateTimeKind.Local).AddTicks(7146),
+                            CreateTime = new DateTime(2024, 5, 25, 23, 20, 38, 702, DateTimeKind.Local).AddTicks(9258),
                             Description = "Subscription payment",
                             Type = "Deposit",
                             WalletId = 1L

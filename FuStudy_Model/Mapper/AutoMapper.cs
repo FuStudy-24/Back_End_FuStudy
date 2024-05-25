@@ -24,13 +24,21 @@ namespace FuStudy_Model.Mapper
             #endregion
 
             CreateMap<QuestionRequest, Question>().ReverseMap();
+
+            #region Subcription Request
             CreateMap<CreateSubcriptionRequest, Subcription>().ReverseMap();
+            CreateMap<CreateStudentSubcriptionRequest,  StudentSubcription>().ReverseMap();
+            CreateMap<UpdateStudentSubcriptionRequest, StudentSubcription>().ReverseMap();
+            #endregion
 
             //Reponse
             //CreateMap<FuStudyReponse, FuStudy>().ReverseMap();
             CreateMap<QuestionResponse, Question>().ReverseMap();
-            CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
 
+            #region Subcription Response
+            CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
+            CreateMap<StudentSubcriptionResponse,  StudentSubcription>().ReverseMap();
+            #endregion
         }
     }
 }

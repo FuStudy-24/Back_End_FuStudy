@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FuStudy_Repository.Entity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,35 +7,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FuStudy_Repository.Entity
+namespace FuStudy_Model.DTO.Response
 {
-    [Table("StudentSubcription")]
-    public class StudentSubcription
+    public class StudentSubcriptionResponse
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         public long StudentId { get; set; }
 
         public long SubcriptionId { get; set; }
 
-        [Required]
         public int LimitQuestion { get; set; }
 
-        [Required]
         public int CurrentQuestion { get; set; }
 
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
-        public bool Status { get; set; }
+        public bool Status {  get; set; }
 
-        [ForeignKey("StudentId")]
         public virtual Student Student { get; set; }
 
-        [ForeignKey("SubcriptionId")]
         public virtual Subcription Subcription { get; set; }
     }
 }
