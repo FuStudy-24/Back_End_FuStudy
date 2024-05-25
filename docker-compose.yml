@@ -1,8 +1,8 @@
-services:
+﻿services:
   fustudy_api:
     build:
       context: .
-      dockerfile: FUStudy_API/Dockerfile
+      dockerfile: FuStudy_API/Dockerfile
     image: fustudy_api
     ports:
       - "8080:8080"
@@ -21,7 +21,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./store:/var/lib/mysql
+      - /var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: 12345
       MYSQL_DATABASE: FuStudy

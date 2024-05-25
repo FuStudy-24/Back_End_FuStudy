@@ -378,4 +378,8 @@ Tools/bin/
 .idea/
 
 # store - generate code
+<<<<<<< HEAD
 .store/
+=======
+.store/
+>>>>>>> Hoang
