@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
@@ -6,6 +8,9 @@ using AutoMapper;
 using FuStudy_Service.Interface;
 using FuStudy_Service.Interfaces;
 using FuStudy_Service.Service;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);

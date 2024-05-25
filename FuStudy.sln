@@ -1,11 +1,10 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuStudy_API", "FUStudy_API\FuStudy_API.csproj", "{F067A8F8-0B01-4FE1-928E-9DCD15F94889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuStudy_API", "FuStudy_API\FuStudy_API.csproj", "{F067A8F8-0B01-4FE1-928E-9DCD15F94889}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuStudy_Repository", "FUStudy_Repository\FuStudy_Repository.csproj", "{4FB9DA12-C758-4A9C-928A-0E03BEA53A76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuStudy_Repository", "FuStudy_Repository\FuStudy_Repository.csproj", "{4FB9DA12-C758-4A9C-928A-0E03BEA53A76}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools", "Tools\Tools.csproj", "{02840D7A-24F6-4FD6-B6B5-770E645BE5F8}"
 EndProject

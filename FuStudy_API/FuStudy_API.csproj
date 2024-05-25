@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FuStudy_Model\FuStudy_Model.csproj" />
-    <ProjectReference Include="..\FUStudy_Repository\FuStudy_Repository.csproj" />
+    <ProjectReference Include="..\FuStudy_Repository\FuStudy_Repository.csproj" />
     <ProjectReference Include="..\FuStudy_Service\FuStudy_Service.csproj" />
     <ProjectReference Include="..\Tools\Tools.csproj" />
   </ItemGroup>
@@ -35,12 +35,6 @@
   <ItemGroup>
     <Folder Include="Controllers\Admin\" />
     <Folder Include="Controllers\Authentication\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="..\.dockerignore">
-      <Link>.dockerignore</Link>
-    </Content>
   </ItemGroup>
 
 </Project>

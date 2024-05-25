@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
 using Microsoft.Extensions.Configuration;
 using System.Runtime.Intrinsics.X86;
