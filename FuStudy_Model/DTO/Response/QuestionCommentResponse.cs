@@ -1,4 +1,6 @@
-﻿namespace FuStudy_Model.DTO.Response;
+﻿using System;
+
+namespace FuStudy_Model.DTO.Response;
 
 public class QuestionCommentResponse
 {

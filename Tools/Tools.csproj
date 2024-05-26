@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FUStudy_Repository\FuStudy_Repository.csproj" />
+    <ProjectReference Include="..\FuStudy_Repository\FuStudy_Repository.csproj" />
   </ItemGroup>
 
 </Project>

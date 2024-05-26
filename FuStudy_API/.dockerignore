@@ -1,4 +1,4 @@
-**/.dockerignore
+﻿**/.dockerignore
 **/.env
 **/.git
 **/.gitignore
@@ -6,7 +6,6 @@
 **/.settings
 **/.toolstarget
 **/.vs
-**/.store
 **/.vscode
 **/.idea
 **/*.*proj.user
@@ -24,4 +23,3 @@
 **/values.dev.yaml
 LICENSE
 README.md
-

@@ -1,3 +1,5 @@
+using System;
+
 namespace FuStudy_Model.DTO.Response;
 
 public class CreateAccountDTOResponse
