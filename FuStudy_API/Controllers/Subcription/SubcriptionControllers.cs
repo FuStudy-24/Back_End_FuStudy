@@ -40,10 +40,10 @@ namespace FuStudy_API.Controllers.Contact
             try
             {
                 var subcriptions = await _subcriptionService.GetSubCriptionById(id);
-                if (subcriptions == null)
-                {
-                    return CustomResult("Id is not exist", subcriptions, HttpStatusCode.NotFound);
-                }
+                //if (subcriptions == null)
+                //{
+                //    return CustomResult("Id is not exist", subcriptions, HttpStatusCode.NotFound);
+                //}
                 return CustomResult("ID found: ", subcriptions, HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -57,7 +57,7 @@ namespace FuStudy_API.Controllers.Contact
         {
             try
             {
-                SubcriptionResponse subcription = await _subcriptionService.CreateSubcription(subcriptionRequest);
+                SubcriptionResponse  subcription = await _subcriptionService.CreateSubcription(subcriptionRequest);
                 return CustomResult("Created Successful", subcription, HttpStatusCode.OK);
             } catch (Exception ex)
             {
