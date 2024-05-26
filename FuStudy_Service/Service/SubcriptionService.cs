@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
 namespace FuStudy_Service.Service
 {
@@ -26,13 +27,23 @@ namespace FuStudy_Service.Service
 
         public async Task<IEnumerable<Subcription>> GetAllSubcriptions()
         {
-            var subcriptions = _unitOfWork.SubcriptionRepository.Get();
+            var subcriptions = _unitOfWork.SubcriptionRepository.Get(
+                filter:p => p.Status == true);
             return subcriptions;
         }
 
         public async Task<Subcription> GetSubCriptionById(long id)
         {
-            return await _unitOfWork.SubcriptionRepository.GetByIdAsync(id);
+            
+            var subcriptionById =  await _unitOfWork.SubcriptionRepository.GetByIdAsync(id);
+            if (subcriptionById == null)
+            {
+                throw new CustomException.DataNotFoundException("ID doesn't exist");
+            }else if (subcriptionById.Status == false)
+            {
+                throw new CustomException.DataNotFoundException("Data doens't exist");
+            }
+            return subcriptionById;
         }
 
         public async Task<SubcriptionResponse> CreateSubcription(CreateSubcriptionRequest subcriptionRequest)
