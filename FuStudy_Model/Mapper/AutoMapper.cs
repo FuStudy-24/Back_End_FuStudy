@@ -26,11 +26,16 @@ namespace FuStudy_Model.Mapper
                 .ReverseMap();
             #endregion
 
+            #region Question Request
             CreateMap<QuestionRequest, Question>().ReverseMap();
             CreateMap<QuestionCommentRequest, QuestionComment>().ReverseMap();
+            #endregion
 
             #region Subcription Request
             CreateMap<CreateSubcriptionRequest, Subcription>().ReverseMap();
+            #endregion
+
+            #region Account(Create, Update) RQ, Response
             CreateMap<CreateAccountDTORequest, User>().ReverseMap();
             CreateMap<UpdateAccountDTORequest, User>().ReverseMap();
             
@@ -40,26 +45,34 @@ namespace FuStudy_Model.Mapper
 
             //Reponse
             //CreateMap<FuStudyReponse, FuStudy>().ReverseMap();
+            #region Question
             CreateMap<QuestionResponse, Question>().ReverseMap();
             CreateMap<QuestionCommentResponse, QuestionComment>().ReverseMap();
+            #endregion
 
-            #region Subcription Response
-            CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
-
+            #region Transaction
             CreateMap<TransactionRequest, Transaction>().ReverseMap();
             CreateMap<Transaction, TransactionResponse>().ReverseMap();
+            #endregion
 
+            #region Order
             CreateMap<OrderRequest, Order>().ReverseMap();
             CreateMap<Order, OrderResponse>().ReverseMap();
+            #endregion
 
+            #region Wallet 
             CreateMap<Wallet, WalletResponse>().ReverseMap();
             CreateMap<WalletRequest, Wallet>().ReverseMap();
+            #endregion
 
             #region BlogLike
             CreateMap<BlogLikeRequest, BlogLike>().ReverseMap();
             CreateMap<BlogLike, BlogLikeResponse>().ReverseMap();
             #endregion
+
+            #region Subcription Response
             CreateMap<StudentSubcriptionResponse,  StudentSubcription>().ReverseMap();
+            CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
             #endregion
         }
     }
