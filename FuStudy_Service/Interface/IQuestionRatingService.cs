@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
 

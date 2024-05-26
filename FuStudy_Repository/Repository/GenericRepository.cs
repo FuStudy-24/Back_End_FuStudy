@@ -1,8 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace FuStudy_Repository.Repository
 {

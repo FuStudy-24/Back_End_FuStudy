@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
 using Microsoft.Extensions.Configuration;
 using System.Runtime.Intrinsics.X86;
@@ -186,7 +189,8 @@ namespace FuStudy_Repository.Entity
                 LimitQuestion = 10,
                 CurrentQuestion = 0,
                 StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddMonths(1)
+                EndDate = DateTime.Now.AddMonths(1),
+                Status = true
             });
 
             // -- Wallets --

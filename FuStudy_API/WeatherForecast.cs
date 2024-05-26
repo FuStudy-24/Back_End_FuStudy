@@ -1,3 +1,5 @@
+using System;
+
 namespace FUStudy_API
 {
     public class WeatherForecast
