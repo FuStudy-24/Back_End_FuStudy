@@ -82,6 +82,7 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     
@@ -90,16 +91,24 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
         c.RoutePrefix = string.Empty; // Serve the Swagger UI at the app's root
     });
-    
+    app.UseRouting();
+
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 // Use CORS (uncomment if needed)
 // app.UseCors("MyCors");
-
+app.UseRouting();
+app.UseEndpoints(
+    endpoints =>
+    {
+        endpoints.MapControllers();
+    }
+);
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGet("/", () => Results.Redirect("/swagger", true, true));
 
 app.Run();
