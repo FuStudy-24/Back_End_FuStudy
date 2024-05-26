@@ -29,7 +29,7 @@ public class QuestionCommentService : IQuestionCommentService
 
     public async Task<QuestionCommentResponse> GetQuestionCommentById(long id)
     {
-        var questionComments = _unitOfWork.QuestionCommentRepository.GetByID(id);
+        var questionComments = await _unitOfWork.QuestionCommentRepository.GetByIdWithInlcude(id, includeProperties:"Question");
         return _mapper.Map<QuestionCommentResponse>(questionComments);
     }
 

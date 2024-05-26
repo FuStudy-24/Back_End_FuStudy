@@ -16,6 +16,6 @@ public class QuestionCommentResponse
 
     public bool Status { get; set; }
 
-    public Question Question { get; set; } 
+    public QuestionResponse QuestionResponse { get; set; } 
 
 }

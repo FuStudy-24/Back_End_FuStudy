@@ -168,5 +168,17 @@ namespace FuStudy_Repository.Repository
         {
             await context.SaveChangesAsync();
         }
+
+        public async Task<TEntity> GetByIdWithInlcude(long id, string includeProperties = "")
+        {
+            IQueryable<TEntity> query = dbSet;
+            foreach (var includeProperty in includeProperties.Split
+                         (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+            return await query.FirstOrDefaultAsync(entity => EF.Property<long>(entity, "Id") == id);
+
+        }
     }
 }
