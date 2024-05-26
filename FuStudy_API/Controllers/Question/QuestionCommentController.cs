@@ -1,42 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
 using CoreApiResponse;
-using FuStudy_Service.Interface;
-using FuStudy_Repository.Entity;
-using FuStudy_Model.DTO.Response;
 using FuStudy_Model.DTO.Request;
+using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Tools;
 
+namespace FuStudy_API.Controllers.Question;
 
-namespace FuStudy_API.Controllers.Question
 
+[Route("api/[controller]")]
+[ApiController]
+public class QuestionCommentController : BaseController
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class QuestionController : BaseController
+    private readonly IQuestionCommentService _questionCommentService;
+    
+    public QuestionCommentController (IQuestionCommentService questionCommentServiceService)
     {
-        private readonly IQuestionService _questionService;
-
-        public QuestionController(IQuestionService questionService)
-        {
-            this._questionService = questionService;
-        }
-
-
-        [HttpGet("GetAllQuestions")]
-        public async Task<IActionResult> GetAllQuestions()
-        {
-            var questions = await _questionService.GetAllQuestionsAsync();
-            return CustomResult("Data loaded!", questions);
-        }
-
-
-        [HttpGet("GetQuestionById/{id}")]
+        this._questionCommentService = questionCommentServiceService;
+    } 
+    
+    
+    [HttpGet("GetAllQuestionComments")]
+    public async Task<IActionResult> GetAllQuestionComments()
+    {
+        var questionsComments = await _questionCommentService.GetAllQuestionComments();
+        return CustomResult("Data Loaded!", questionsComments);
+    }
+    
+      [HttpGet("GetQuestionCommentById/{id}")]
         public async Task<IActionResult> GetQuestionById(long id)
         {
-            var question = await _questionService.GetQuestionByIdAsync(id);
+            var question = await _questionCommentService.GetQuestionCommentById(id);
 
             if (question == null)
             {
@@ -47,8 +44,8 @@ namespace FuStudy_API.Controllers.Question
 
         }
 
-    [HttpPost("CreateQuestion")]
-        public async Task<IActionResult> CreateQuestion([FromBody] QuestionRequest questionRequest)
+    [HttpPost("CreateQuestionComment")]
+        public async Task<IActionResult> CreateQuestion([FromBody] QuestionCommentRequest questionCommentRequest)
         {
             try
             {
@@ -58,11 +55,11 @@ namespace FuStudy_API.Controllers.Question
                 }
 
 
-                var createdQuestion = await _questionService.CreateQuestionAsync(questionRequest);
+                var createdQuestionComment = await _questionCommentService.CreateQuestionComment(questionCommentRequest);
 
 
 
-                return CustomResult("Created successfully", createdQuestion);
+                return CustomResult("Created successfully", createdQuestionComment);
             }
             catch (CustomException.DataNotFoundException e)
             {
@@ -77,8 +74,8 @@ namespace FuStudy_API.Controllers.Question
             
         }
 
-        [HttpPost("UpdateQuestion/{questionId}")]
-        public async Task<IActionResult> UpdateQuestion(long questionId, [FromBody] QuestionRequest questionRequest)
+        [HttpPost("UpdateQuestionComment/{questionCommentId}")]
+        public async Task<IActionResult> UpdateQuestion(long questionCommentId, [FromBody] QuestionCommentRequest questionRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -87,8 +84,8 @@ namespace FuStudy_API.Controllers.Question
 
             try
             {
-                var updateQuestion = await _questionService.UpdateQuestionAsync(questionRequest, questionId);
-                return CustomResult("Update successfully", updateQuestion);
+                var updateQuestionComment = await _questionCommentService.UpdateQuestionComment(questionRequest, questionCommentId);
+                return CustomResult("Update successfully", updateQuestionComment);
             }
             catch (CustomException.DataNotFoundException e)
             {
@@ -103,12 +100,12 @@ namespace FuStudy_API.Controllers.Question
             
         }
 
-        [HttpDelete("DeleteQuestion/{questionId}")]
+        [HttpDelete("DeleteQuestionComment/{questionId}")]
         public async Task<IActionResult> DeleteQuestion(long questionId)
         {
             try
             {
-                await _questionService.DeleteQuestionAsync(questionId);
+                await _questionCommentService.DeleteQuestionComment(questionId);
                 return CustomResult("Delete question successfully", HttpStatusCode.NoContent);
             }
             catch (CustomException.DataNotFoundException e)
@@ -122,11 +119,6 @@ namespace FuStudy_API.Controllers.Question
             }
 
         }
-
-        
-
-    }
-
 
 
 }

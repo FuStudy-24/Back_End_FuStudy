@@ -25,6 +25,9 @@ namespace FuStudy_Repository.Entity
         public DateTime CreateDate { get; set; }
 
         public DateTime ModifiedDate { get; set; }
+        
+        [Required]
+        public int TotalRating { get; set; }
 
         [Required]
         public string Image { get; set; }

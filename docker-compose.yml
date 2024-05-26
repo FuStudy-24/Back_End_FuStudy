@@ -1,19 +1,25 @@
-version: '3.8'
+﻿version: '3.7'
 
 services:
   fustudy_api:
     build:
       context: .
-      dockerfile: FUStudy_API/Dockerfile
+      dockerfile: FuStudy_API/Dockerfile
     image: fustudy_api
     ports:
       - "8080:8080"
     environment:
       - DB_HOST=mysql
       - DB_PORT=3306
-      - DB_NAME=fustudy_db
-      - DB_USER=user
+      - DB_NAME=FuStudy
+      - DB_USER=root
       - DB_PASSWORD=12345
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORTS=8001
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ${HOME}/.aspnet/https:/https/
     depends_on:
       - mysql
 
@@ -23,12 +29,18 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./store:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: 12345
-      MYSQL_DATABASE: fustudy_db
+      MYSQL_DATABASE: FuStudy
       MYSQL_USER: user
       MYSQL_PASSWORD: 12345
+    networks:
+      - my_network
+
 
 volumes:
   mysql_data:
+networks:
+  my_network:
+

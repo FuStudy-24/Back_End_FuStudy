@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
@@ -6,6 +8,9 @@ using AutoMapper;
 using FuStudy_Service.Interface;
 using FuStudy_Service.Interfaces;
 using FuStudy_Service.Service;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +25,8 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 // Service registrations
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IQuestionCommentService, QuestionCommentService>();
+builder.Services.AddScoped<IQuestionRatingService, QuestionRatingService>();
 builder.Services.AddScoped<ISubcriptionService, SubcriptionService>();
 builder.Services.AddScoped<IStudentSubcriptionService, StudentSubcriptionService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
@@ -75,6 +82,7 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     
@@ -83,16 +91,24 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
         c.RoutePrefix = string.Empty; // Serve the Swagger UI at the app's root
     });
-    
+    app.UseRouting();
+
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 // Use CORS (uncomment if needed)
 // app.UseCors("MyCors");
-
+app.UseRouting();
+app.UseEndpoints(
+    endpoints =>
+    {
+        endpoints.MapControllers();
+    }
+);
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGet("/", () => Results.Redirect("/swagger", true, true));
 
 app.Run();

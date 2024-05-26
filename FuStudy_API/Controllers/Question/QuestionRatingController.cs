@@ -1,42 +1,38 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
 using CoreApiResponse;
-using FuStudy_Service.Interface;
-using FuStudy_Repository.Entity;
-using FuStudy_Model.DTO.Response;
 using FuStudy_Model.DTO.Request;
+using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Tools;
 
+namespace FuStudy_API.Controllers.Question;
 
-namespace FuStudy_API.Controllers.Question
 
+[Route("api/[controller]")]
+[ApiController]
+public class QuestionRatingController : BaseController
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class QuestionController : BaseController
+    private readonly IQuestionRatingService _questionRatingService;
+    
+    public QuestionRatingController (IQuestionRatingService questionRatingService)
     {
-        private readonly IQuestionService _questionService;
-
-        public QuestionController(IQuestionService questionService)
+        this._questionRatingService = questionRatingService;
+    } 
+    
+    [HttpGet("GetAllQuestions")]
+        public async Task<IActionResult> GetAllQuestionRatings()
         {
-            this._questionService = questionService;
-        }
-
-
-        [HttpGet("GetAllQuestions")]
-        public async Task<IActionResult> GetAllQuestions()
-        {
-            var questions = await _questionService.GetAllQuestionsAsync();
-            return CustomResult("Data loaded!", questions);
+            var questionRatings = await _questionRatingService.GetAllQuestionsRatings();
+            return CustomResult("Data loaded!", questionRatings);
         }
 
 
         [HttpGet("GetQuestionById/{id}")]
         public async Task<IActionResult> GetQuestionById(long id)
         {
-            var question = await _questionService.GetQuestionByIdAsync(id);
+            var question = await _questionRatingService.GetQuestionCommentById(id);
 
             if (question == null)
             {
@@ -48,7 +44,7 @@ namespace FuStudy_API.Controllers.Question
         }
 
     [HttpPost("CreateQuestion")]
-        public async Task<IActionResult> CreateQuestion([FromBody] QuestionRequest questionRequest)
+        public async Task<IActionResult> CreateQuestion([FromBody] QuestionRatingRequest questionRatingRequest)
         {
             try
             {
@@ -58,7 +54,7 @@ namespace FuStudy_API.Controllers.Question
                 }
 
 
-                var createdQuestion = await _questionService.CreateQuestionAsync(questionRequest);
+                var createdQuestion = await _questionRatingService.CreateQuestionRating(questionRatingRequest);
 
 
 
@@ -87,7 +83,7 @@ namespace FuStudy_API.Controllers.Question
 
             try
             {
-                var updateQuestion = await _questionService.UpdateQuestionAsync(questionRequest, questionId);
+                var updateQuestion = await _questionRatingService.UpdateQuestionRating(questionRequest, questionId);
                 return CustomResult("Update successfully", updateQuestion);
             }
             catch (CustomException.DataNotFoundException e)
@@ -108,7 +104,7 @@ namespace FuStudy_API.Controllers.Question
         {
             try
             {
-                await _questionService.DeleteQuestionAsync(questionId);
+                await _questionRatingService.DeleteQuestionRating(questionId);
                 return CustomResult("Delete question successfully", HttpStatusCode.NoContent);
             }
             catch (CustomException.DataNotFoundException e)
@@ -122,11 +118,5 @@ namespace FuStudy_API.Controllers.Question
             }
 
         }
-
-        
-
-    }
-
-
-
+    
 }

@@ -376,3 +376,7 @@ Tools/bin/
 
 # idea - generate code
 .idea/
+
+# store - generate code
+.store/
+

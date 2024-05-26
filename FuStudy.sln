@@ -1,24 +1,16 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuStudy_API", "FUStudy_API\FuStudy_API.csproj", "{F067A8F8-0B01-4FE1-928E-9DCD15F94889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuStudy_API", "FuStudy_API\FuStudy_API.csproj", "{F067A8F8-0B01-4FE1-928E-9DCD15F94889}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuStudy_Repository", "FUStudy_Repository\FuStudy_Repository.csproj", "{4FB9DA12-C758-4A9C-928A-0E03BEA53A76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuStudy_Repository", "FuStudy_Repository\FuStudy_Repository.csproj", "{4FB9DA12-C758-4A9C-928A-0E03BEA53A76}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools", "Tools\Tools.csproj", "{02840D7A-24F6-4FD6-B6B5-770E645BE5F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuStudy_Model", "FuStudy_Model\FuStudy_Model.csproj", "{61E5ED72-B79E-4C0F-9122-CE5A0AAE1192}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuStudy_Service", "FuStudy_Service\FuStudy_Service.csproj", "{C58A10CF-9BF1-42C4-A6BA-018C2EB907D8}"
-EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{5B0EFF6B-9C43-49B0-94F2-8BE7DAB51089}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{76BECEA6-4B1C-4FBA-9058-80EC0CD0D2B0}"
-	ProjectSection(SolutionItems) = preProject
-		docker-compose.yml = docker-compose.yml
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,10 +38,6 @@ Global
 		{C58A10CF-9BF1-42C4-A6BA-018C2EB907D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C58A10CF-9BF1-42C4-A6BA-018C2EB907D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C58A10CF-9BF1-42C4-A6BA-018C2EB907D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B0EFF6B-9C43-49B0-94F2-8BE7DAB51089}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5B0EFF6B-9C43-49B0-94F2-8BE7DAB51089}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5B0EFF6B-9C43-49B0-94F2-8BE7DAB51089}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5B0EFF6B-9C43-49B0-94F2-8BE7DAB51089}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
