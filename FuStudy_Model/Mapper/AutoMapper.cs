@@ -18,7 +18,7 @@ namespace FuStudy_Model.Mapper
             //CreateMap<FuStudyRequest, FuStudy>().ReverseMap();
             CreateMap<CreateAccountDTORequest, User>().ReverseMap();
 
-            #region Blog
+            #region Blog 
             CreateMap<BlogRequest, Blog>();
             CreateMap<Blog, BlogResponse>()
                 .ForMember(dst => dst.Fullname, src => src.MapFrom(x => x.User.Fullname))
