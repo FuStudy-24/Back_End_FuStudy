@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using AutoMapper;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
@@ -39,11 +44,14 @@ public class AuthenticationService: IAuthenticationService
         }
         var user = _mapper.Map<User>(createAccountDTORequest);
 /*			user.permission_id = (await _userPermissionRepository.GetByFilterAsync(r => r.role.Equals("Customer"))).First().id;
-*/			
+*/
+        
         user.Password = EncryptPassword.Encrypt(createAccountDTORequest.Password);
         user.Status = true;
         user.CreateDate = DateTime.Now.Date;
-        user.RoleId = 1;
+        user.RoleId = 3;
+        
+        
         
 			
 			

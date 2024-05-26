@@ -6,9 +6,11 @@ using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
 namespace FuStudy_Service.Service
 {
@@ -22,20 +24,13 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<bool> CreateBlog(BlogRequest request)
+        public async Task<BlogResponse> CreateBlog(BlogRequest request)
         {
-            try
-            {
-                request.CreateDate = DateTime.Now;
-                var respone = _mapper.Map<Blog>(request);
-                await _unitOfWork.BlogRepository.AddAsync(respone);
-                _unitOfWork.Save();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            request.CreateDate = DateTime.Now;
+            var respone = _mapper.Map<Blog>(request);
+            await _unitOfWork.BlogRepository.AddAsync(respone);
+            _unitOfWork.Save();
+            return _mapper.Map<BlogResponse>(respone);
         }
 
 
@@ -62,20 +57,12 @@ namespace FuStudy_Service.Service
             return respone;
         }
 
-        public async Task<bool> UpdateBlog(BlogRequest request)
+        public async Task<BlogResponse> UpdateBlog(BlogRequest request)
         {
-            try
-            {
-                request.CreateDate = DateTime.Now;
-                var respone = _mapper.Map<Blog>(request);
-                await _unitOfWork.BlogRepository.UpdateAsync(respone);
-                _unitOfWork.Save();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            var respone = _mapper.Map<Blog>(request);
+            await _unitOfWork.BlogRepository.UpdateAsync(respone);
+            _unitOfWork.Save();
+            return _mapper.Map<BlogResponse>(respone);
         }
     }
 }

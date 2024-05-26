@@ -6,7 +6,9 @@ using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Tools;
 
 namespace FuStudy_Service.Service
@@ -24,7 +26,7 @@ namespace FuStudy_Service.Service
 
         public async Task<IEnumerable<QuestionResponse>> GetAllQuestionsAsync()
         {
-            var questions = _unitOfWork.QuestionRepository.Get();
+            var questions = _unitOfWork.QuestionRepository.Get(includeProperties:"QuestionComment");
             return _mapper.Map<IEnumerable<QuestionResponse>>(questions);
         }
 

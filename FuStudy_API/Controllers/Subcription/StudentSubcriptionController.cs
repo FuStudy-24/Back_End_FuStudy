@@ -1,4 +1,5 @@
-﻿using CoreApiResponse;
+﻿using System;
+using CoreApiResponse;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
@@ -6,6 +7,7 @@ using FuStudy_Service.Interfaces;
 using FuStudy_Service.Service;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace FuStudy_API.Controllers.Subcription
 {

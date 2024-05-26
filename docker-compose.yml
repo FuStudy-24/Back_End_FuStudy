@@ -1,34 +1,46 @@
-# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
-
-
-#create a volume for the my sql container.To ensure Data persists after my sql container is stopped
-volumes:
-  mysql-volume:
+﻿version: '3.7'
 
 services:
-  #DataBase Service
-  database:
-    #Pull the latest mysql image
-    image: mysql:8.0.22
-    #Map port 3306 on the mysql container to port 3306 in the host
-    ports:
-      - "3306:3306"
-    #Specify where the persisted Data should be stored
-    volumes:
-      - mysql-volume:/var/lib/mysql
-    #Specify Environment Variables for mysql
-    environment: 
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 12345
-      MYSQL_DATABASE: FuStudy
-  #Api  Service
   fustudy_api:
     build:
-      context: ./FUStudy_API
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: FuStudy_API/Dockerfile
+    image: fustudy_api
     ports:
-      - "8080:8080"  # Example: Map port 8080 in the container to port 8080 on the host
+      - "8080:8080"
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=FuStudy
+      - DB_USER=root
+      - DB_PASSWORD=12345
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORTS=8001
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=12345
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ${HOME}/.aspnet/https:/https/
     depends_on:
-      - redis # Wait for the redis service to start before starting the fustudy_api service
-  redis:
-    image: redis:alpine
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: FuStudy
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 12345
+    networks:
+      - my_network
+
+
+volumes:
+  mysql_data:
+networks:
+  my_network:
+

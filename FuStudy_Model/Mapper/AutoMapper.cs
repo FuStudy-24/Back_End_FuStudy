@@ -20,13 +20,20 @@ namespace FuStudy_Model.Mapper
 
             #region Blog
             CreateMap<BlogRequest, Blog>();
-            CreateMap<Blog, BlogResponse>();
+            CreateMap<Blog, BlogResponse>()
+                .ForMember(dst => dst.Fullname, src => src.MapFrom(x => x.User.Fullname))
+                .ForMember(dst => dst.Avatar, src => src.MapFrom(x => x.User.Avatar))
+                .ReverseMap();
             #endregion
 
             CreateMap<QuestionRequest, Question>().ReverseMap();
+            CreateMap<QuestionCommentRequest, QuestionComment>().ReverseMap();
 
             #region Subcription Request
             CreateMap<CreateSubcriptionRequest, Subcription>().ReverseMap();
+            CreateMap<CreateAccountDTORequest, User>().ReverseMap();
+            CreateMap<UpdateAccountDTORequest, User>().ReverseMap();
+            
             CreateMap<CreateStudentSubcriptionRequest,  StudentSubcription>().ReverseMap();
             CreateMap<UpdateStudentSubcriptionRequest, StudentSubcription>().ReverseMap();
             #endregion
@@ -34,9 +41,24 @@ namespace FuStudy_Model.Mapper
             //Reponse
             //CreateMap<FuStudyReponse, FuStudy>().ReverseMap();
             CreateMap<QuestionResponse, Question>().ReverseMap();
+            CreateMap<QuestionCommentResponse, QuestionComment>().ReverseMap();
 
             #region Subcription Response
             CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
+
+            CreateMap<TransactionRequest, Transaction>().ReverseMap();
+            CreateMap<Transaction, TransactionResponse>().ReverseMap();
+
+            CreateMap<OrderRequest, Order>().ReverseMap();
+            CreateMap<Order, OrderResponse>().ReverseMap();
+
+            CreateMap<Wallet, WalletResponse>().ReverseMap();
+            CreateMap<WalletRequest, Wallet>().ReverseMap();
+
+            #region BlogLike
+            CreateMap<BlogLikeRequest, BlogLike>().ReverseMap();
+            CreateMap<BlogLike, BlogLikeResponse>().ReverseMap();
+            #endregion
             CreateMap<StudentSubcriptionResponse,  StudentSubcription>().ReverseMap();
             #endregion
         }

@@ -29,6 +29,15 @@ namespace FuStudy_Repository.Repository
         Task<TEntity> AddAsync(TEntity entity);
         Task<TEntity> GetByIdAsync(long id);
         Task<IEnumerable<RolePermission>> GetRolePermissionsByRoleIdAsync(long roleId);
+        Task<IEnumerable<TEntity>> GetAsync(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "",
+            int? pageIndex = null,
+            int? pageSize = null);
+        Task SaveChangesAsync();
+
+        
 
     }
 }

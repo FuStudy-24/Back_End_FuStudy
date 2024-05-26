@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
 using Microsoft.Extensions.Configuration;
 using System.Runtime.Intrinsics.X86;
@@ -132,7 +135,7 @@ namespace FuStudy_Repository.Entity
             modelBuilder.Entity<Major>().HasData(majors);
             var mentors = new List<Mentor>
                 { new Mentor {Id = 1, UserId = users[2].Id, AcademicLevel = "Master's"
-                    , WorkPlace = "Tech Company", OnlineStatus = "offline", Skill = "Ahihi", Video = "ahihi"} };
+                    , WorkPlace = "Tech Company", Status = "offline", Skill = "Ahihi", Video = "ahihi"} };
 
             var mentorMajor = new MentorMajor {Id = 1, MentorId = mentors[0].Id, MajorId = majors[0].Id };
 
@@ -159,6 +162,7 @@ namespace FuStudy_Repository.Entity
                     StudentId = students[0].Id,
                     CategoryId = categories[0].Id,
                     Content = "How to sort an array in C#?",
+                    TotalRating = 1,
                     CreateDate = DateTime.Now,
                     Image = "ahihi"
                     
@@ -267,7 +271,7 @@ namespace FuStudy_Repository.Entity
             modelBuilder.Entity<QuestionComment>().HasData(new QuestionComment
                 {Id = 1, UserId = users[1].Id, QuestionId = questions[0].Id, Content = "Good question!", CreateDate = DateTime.Now });
             modelBuilder.Entity<QuestionRating>().HasData(new QuestionRating
-                {Id = 1, UserId = users[1].Id, QuestionId = questions[0].Id, TotalRating = 5, Status = true });
+                {Id = 1, UserId = users[1].Id, QuestionId = questions[0].Id, Status = true });
 
 
             // -- Conversations & ConversationMessages --

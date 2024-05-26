@@ -1,78 +1,114 @@
-﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Model.Mapper;
 using AutoMapper;
 using FuStudy_Service.Interface;
-using FuStudy_Service.Service;
-using Microsoft.Extensions.Hosting;
-using System.Runtime.CompilerServices;
 using FuStudy_Service.Interfaces;
+using FuStudy_Service.Service;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+// Add services to the container.
 builder.Services.AddControllers();
 
+// Registering services
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-
-
-// Service add o day
-//builder.Services.AddScoped<IUserService, UserService>();
-
+// Service registrations
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IQuestionCommentService, QuestionCommentService>();
+builder.Services.AddScoped<IQuestionRatingService, QuestionRatingService>();
 builder.Services.AddScoped<ISubcriptionService, SubcriptionService>();
 builder.Services.AddScoped<IStudentSubcriptionService, StudentSubcriptionService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IWalletService, WalletService>();
+builder.Services.AddScoped<IBlogService,BlogService>();
+builder.Services.AddScoped<IBlogLikeService, BlogLikeService>();
 
-//Mapper
+// AutoMapper configuration
 var config = new MapperConfiguration(cfg =>
 {
     cfg.AddProfile(new AutoMapperProfile());
 });
 builder.Services.AddSingleton<IMapper>(config.CreateMapper());
 
-
-// Add services to the container.
+// Database context configuration
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 23)); // Replace with your actual MySQL server version
 builder.Services.AddDbContext<MyDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("MyDB");
     options.UseMySql(connectionString, serverVersion, options => options.MigrationsAssembly("FuStudy_API"));
-}
-);
+});
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Swagger configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-//Build CORS
+// CORS configuration (uncomment if needed)
 /*builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
 {
-    // Dòng ở dưới là đường cứng
-    //build.WithOrigins("https:localhost:3000", "https:localhost:7022");
+    // Allow specific origins
+    //build.WithOrigins("https://localhost:3000", "https://localhost:7022");
 
-    //Dòng dưới là nhận hết
+    // Allow all origins
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));*/
+
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<MyDbContext>();
+
+    // Check if there are any pending migrations
+    var pendingMigrations = db.Database.GetPendingMigrations();
+
+    if (pendingMigrations.Any())
+    {
+        // Apply migrations if there are any pending migrations
+        db.Database.Migrate();
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = string.Empty; // Serve the Swagger UI at the app's root
+    });
+    app.UseRouting();
+
 }
 
-app.UseHttpsRedirection();
-//app.UseCors("MyCors");
+// app.UseHttpsRedirection();
+
+// Use CORS (uncomment if needed)
+// app.UseCors("MyCors");
+app.UseRouting();
+app.UseEndpoints(
+    endpoints =>
+    {
+        endpoints.MapControllers();
+    }
+);
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGet("/", () => Results.Redirect("/swagger", true, true));
 
 app.Run();
