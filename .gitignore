@@ -378,15 +378,7 @@ Tools/bin/
 .idea/
 
 # store - generate code
-<<<<<<< HEAD
-<<<<<<< HEAD
-.store/
-=======
-.store/
->>>>>>> Hoang
-=======
 .store/
 
 # migrations - generate code
 ./FuStudy_API/Migrations/
->>>>>>> main
