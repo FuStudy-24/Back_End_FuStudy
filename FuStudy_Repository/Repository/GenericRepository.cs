@@ -173,7 +173,7 @@ namespace FuStudy_Repository.Repository
             await context.SaveChangesAsync();
         }
 
-        public async Task<TEntity> GetByIdWithInlcude(long id, string includeProperties = "")
+        public async Task<TEntity> GetByIdWithInclude(long id, string includeProperties = "")
         {
             IQueryable<TEntity> query = dbSet;
             foreach (var includeProperty in includeProperties.Split
@@ -183,6 +183,11 @@ namespace FuStudy_Repository.Repository
             }
             return await query.FirstOrDefaultAsync(entity => EF.Property<long>(entity, "Id") == id);
 
+        }
+        
+        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await dbSet.AnyAsync(predicate);
         }
     }
 }

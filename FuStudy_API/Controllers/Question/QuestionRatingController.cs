@@ -35,7 +35,7 @@ public class QuestionRatingController : BaseController
                 }
 
 
-                var createdQuestion = await _questionRatingService.CreateQuestionRating(questionRatingRequest);
+                var createdQuestion = await _questionRatingService.LikeQuestion(questionRatingRequest);
 
 
 
@@ -54,12 +54,12 @@ public class QuestionRatingController : BaseController
             
         }
 
-        [HttpDelete("Unlike/{questionId}")]
-        public async Task<IActionResult> Unlike(long questionId)
+        [HttpDelete("Unlike")]
+        public async Task<IActionResult> Unlike([FromBody] QuestionRatingRequest questionRatingRequest)
         {
             try
             {
-                await _questionRatingService.DeleteQuestionRating(questionId);
+                await _questionRatingService.UnlikeQuestion(questionRatingRequest);
                 return CustomResult("Delete question successfully", HttpStatusCode.NoContent);
             }
             catch (CustomException.DataNotFoundException e)
