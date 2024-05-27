@@ -380,3 +380,5 @@ Tools/bin/
 # store - generate code
 .store/
 
+# migrations - generate code
+./FuStudy_API/Migrations/
