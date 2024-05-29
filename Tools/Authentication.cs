@@ -82,7 +82,7 @@ public class Authentication
             string jwtToken = authorizationHeader["Bearer ".Length..];
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.ReadJwtToken(jwtToken);
-            var idClaim = token.Claims.FirstOrDefault(claim => claim.Type == "Id");
+            var idClaim = token.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Sid);
             return idClaim?.Value ??
                    throw new CustomException.InternalServerErrorException($"Can not get userId from token");
 

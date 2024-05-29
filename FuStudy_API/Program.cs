@@ -1,114 +1,148 @@
-using System;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Model.Mapper;
 using AutoMapper;
 using FuStudy_Service.Interface;
-using FuStudy_Service.Interfaces;
 using FuStudy_Service.Service;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using FuStudy_Service.Interfaces;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Quartz.Impl;
+using Quartz;
+using Tools.Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddInfrastructure();
+
+/*builder.Services.AddTransient<UpdateConversationIsCloseJob>();
+
+// Cấu hình lịch trình
+builder.Services.AddSingleton(provider =>
+{
+    var schedulerFactory = new StdSchedulerFactory();
+    var scheduler = schedulerFactory.GetScheduler().Result;
+
+    // Đăng ký công việc lập lịch
+    var updateConversationJob = new JobDetailImpl("UpdateConversationIsCloseJob", typeof(UpdateConversationIsCloseJob));
+    var trigger = TriggerBuilder.Create()
+        .WithIdentity("UpdateConversationIsCloseTrigger")
+        .StartNow()
+        .WithSimpleSchedule(x => x
+            .WithIntervalInMinutes(1)
+            .RepeatForever())
+        .Build();
+
+    scheduler.ScheduleJob(updateConversationJob, trigger).Wait();
+    scheduler.Start().Wait();
+
+    return scheduler;
+});*/
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddControllers();
 
-// Registering services
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-// Service registrations
+
+
+// Service add o day
+//builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
-builder.Services.AddScoped<IQuestionCommentService, QuestionCommentService>();
-builder.Services.AddScoped<IQuestionRatingService, QuestionRatingService>();
 builder.Services.AddScoped<ISubcriptionService, SubcriptionService>();
 builder.Services.AddScoped<IStudentSubcriptionService, StudentSubcriptionService>();
-builder.Services.AddScoped<ITransactionService, TransactionService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<IBlogService,BlogService>();
 builder.Services.AddScoped<IBlogLikeService, BlogLikeService>();
+builder.Services.AddScoped<IConversationService, ConversationService>();
 
-// AutoMapper configuration
+builder.Services.AddScoped<IConversationMessageService, ConversationMessageService>();
+builder.Services.AddScoped<IMessageReactionService, MessageReactionService>();
+builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+
+builder.Services.AddScoped<Tools.Firebase>();
+
+
+//Mapper
 var config = new MapperConfiguration(cfg =>
 {
     cfg.AddProfile(new AutoMapperProfile());
 });
 builder.Services.AddSingleton<IMapper>(config.CreateMapper());
 
-// Database context configuration
+
+// Add services to the container.
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 23)); // Replace with your actual MySQL server version
 builder.Services.AddDbContext<MyDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("MyDB");
     options.UseMySql(connectionString, serverVersion, options => options.MigrationsAssembly("FuStudy_API"));
-});
+}
+);
 
-// Swagger configuration
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// CORS configuration (uncomment if needed)
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = "Standard Authorization header using the Bearer scheme (\"Bearer {token}\")",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+{
+    option.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value)),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+    };
+});
+
+
+
+//Build CORS
 /*builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
 {
-    // Allow specific origins
-    //build.WithOrigins("https://localhost:3000", "https://localhost:7022");
+    // Dòng ở dưới là đường cứng
+    //build.WithOrigins("https:localhost:3000", "https:localhost:7022");
 
-    // Allow all origins
+    //Dòng dưới là nhận hết
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));*/
-
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<MyDbContext>();
-
-    // Check if there are any pending migrations
-    var pendingMigrations = db.Database.GetPendingMigrations();
-
-    if (pendingMigrations.Any())
-    {
-        // Apply migrations if there are any pending migrations
-        //db.Database.Migrate();
-    }
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    
-    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        c.RoutePrefix = string.Empty; // Serve the Swagger UI at the app's root
-    });
-    app.UseRouting();
-
+    app.UseSwaggerUI();
 }
-
-// app.UseHttpsRedirection();
-
-// Use CORS (uncomment if needed)
-// app.UseCors("MyCors");
-app.UseRouting();
-app.UseEndpoints(
-    endpoints =>
-    {
-        endpoints.MapControllers();
-    }
-);
+app.UseAuthentication();
+app.UseHttpsRedirection();
+//app.UseCors("MyCors");
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGet("/", () => Results.Redirect("/swagger", true, true));
 
 app.Run();
