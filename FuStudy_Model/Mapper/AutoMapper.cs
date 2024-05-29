@@ -44,6 +44,10 @@ namespace FuStudy_Model.Mapper
             CreateMap<UpdateStudentSubcriptionRequest, StudentSubcription>().ReverseMap();
             #endregion
 
+            #region Category Request
+            CreateMap<CategoryRequest, Category>().ReverseMap();
+            #endregion
+
             //Reponse
             //CreateMap<FuStudyReponse, FuStudy>().ReverseMap();
             #region Question Response
@@ -81,6 +85,10 @@ namespace FuStudy_Model.Mapper
             #region Subcription Response
             CreateMap<StudentSubcriptionResponse,  StudentSubcription>().ReverseMap();
             CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
+            #endregion
+            
+            #region Category Response
+            CreateMap<CategoryResponse, Category>().ReverseMap();
             #endregion
         }
     }

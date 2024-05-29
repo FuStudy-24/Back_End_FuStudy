@@ -34,6 +34,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<IBlogService,BlogService>();
 builder.Services.AddScoped<IBlogLikeService, BlogLikeService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // AutoMapper configuration
 var config = new MapperConfiguration(cfg =>

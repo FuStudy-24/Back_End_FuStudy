@@ -51,7 +51,7 @@ public class QuestionRatingService : IQuestionRatingService
         bool isExist = await RatingExists(questionRating.QuestionId, questionRatingRequest.UserId);
         if (isExist)
         {
-            throw new InvalidCastException($"QuestionRating can not duplicated!");
+            throw new CustomException.InvalidDataException("500", "This Rating is duplicated!");
         }
         questionRating.Status = true;
         _unitOfWork.QuestionRatingRepository.Insert(questionRating);
