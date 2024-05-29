@@ -25,14 +25,14 @@ public class QuestionCommentService : IQuestionCommentService
     
     public async Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionComments()
     {
-        var questionComments =  _unitOfWork.QuestionCommentRepository.Get();
+        var questionComments =  _unitOfWork.QuestionCommentRepository.Get(includeProperties: "Question");
         return _mapper.Map<IEnumerable<QuestionCommentResponse>>(questionComments);
 
     }
 
     public async Task<QuestionCommentResponse> GetQuestionCommentById(long id)
     {
-        var questionComments = _unitOfWork.QuestionCommentRepository.GetByID(id);
+        var questionComments = await _unitOfWork.QuestionCommentRepository.GetByIdWithInclude(id, includeProperties:"Question");
         return _mapper.Map<QuestionCommentResponse>(questionComments);
     }
 

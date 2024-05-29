@@ -45,7 +45,7 @@ public class QuestionCommentController : BaseController
         }
 
     [HttpPost("CreateQuestionComment")]
-        public async Task<IActionResult> CreateQuestion([FromBody] QuestionCommentRequest questionCommentRequest)
+        public async Task<IActionResult> CreateQuestionComment([FromBody] QuestionCommentRequest questionCommentRequest)
         {
             try
             {
@@ -75,7 +75,7 @@ public class QuestionCommentController : BaseController
         }
 
         [HttpPost("UpdateQuestionComment/{questionCommentId}")]
-        public async Task<IActionResult> UpdateQuestion(long questionCommentId, [FromBody] QuestionCommentRequest questionRequest)
+        public async Task<IActionResult> UpdateQuestionComment(long questionCommentId, [FromBody] QuestionCommentRequest questionRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -101,7 +101,7 @@ public class QuestionCommentController : BaseController
         }
 
         [HttpDelete("DeleteQuestionComment/{questionId}")]
-        public async Task<IActionResult> DeleteQuestion(long questionId)
+        public async Task<IActionResult> DeleteQuestionComment(long questionId)
         {
             try
             {

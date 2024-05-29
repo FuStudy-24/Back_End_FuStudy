@@ -9,6 +9,5 @@ public class QuestionRatingRequest
     
     [Required (ErrorMessage = "Question Id is required!")]
     public long QuestionId { get; set; }
-
-    public bool Status { get; set; } = true;
+    
 }

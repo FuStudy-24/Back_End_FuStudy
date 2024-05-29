@@ -28,13 +28,13 @@ public class QuestionRatingService : IQuestionRatingService
         return _mapper.Map<IEnumerable<QuestionRatingResponse>>(questionRatings);
     }
 
-    public async Task<QuestionRatingResponse> GetQuestionCommentById(long id)
+    public async Task<QuestionRatingResponse> GetQuestionRatingById(long id)
     {
         var question = _unitOfWork.QuestionRatingRepository.GetByID(id);
         return _mapper.Map<QuestionRatingResponse>(question);
     }
 
-    public async Task<QuestionRatingResponse> CreateQuestionRating(QuestionRatingRequest questionRatingRequest)
+    public async Task<QuestionRatingResponse> LikeQuestion(QuestionRatingRequest questionRatingRequest)
     {
         if (_unitOfWork.UserRepository.GetByID(questionRatingRequest.UserId) == null)
         {
@@ -45,20 +45,59 @@ public class QuestionRatingService : IQuestionRatingService
             throw new CustomException.DataNotFoundException($"Category with this {questionRatingRequest.QuestionId} not found!");
         }
 
-        var question = _mapper.Map<QuestionRating>(questionRatingRequest);
-        _unitOfWork.QuestionRatingRepository.Insert(question);
+        //create question rating
+        var questionRating = _mapper.Map<QuestionRating>(questionRatingRequest);
+        //check if rating is exist
+        bool isExist = await RatingExists(questionRating.QuestionId, questionRatingRequest.UserId);
+        if (isExist)
+        {
+            throw new InvalidCastException($"QuestionRating can not duplicated!");
+        }
+        questionRating.Status = true;
+        _unitOfWork.QuestionRatingRepository.Insert(questionRating);
+        var question = _unitOfWork.QuestionRepository.GetByID(questionRating.QuestionId);
+        //add total like into question
+        question.TotalRating++;
+        _unitOfWork.QuestionRepository.Update(question);
         _unitOfWork.Save();
 
-        return _mapper.Map<QuestionRatingResponse>(question);
+        return _mapper.Map<QuestionRatingResponse>(questionRating);
     }
 
-    public async Task<QuestionRatingResponse> UpdateQuestionRating(QuestionRequest questionRequest, long questionId)
+    public async Task UnlikeQuestion(QuestionRatingRequest questionRatingRequest)
     {
-        throw new NotImplementedException();
-    }
+        if (_unitOfWork.UserRepository.GetByID(questionRatingRequest.UserId) == null)
+        {
+            throw new CustomException.DataNotFoundException($"Student with this {questionRatingRequest.UserId} not found!");
+        }
+        if (_unitOfWork.QuestionRepository.GetByID(questionRatingRequest.QuestionId) == null)
+        {
+            throw new CustomException.DataNotFoundException($"Category with this {questionRatingRequest.QuestionId} not found!");
+        }
 
-    public async Task DeleteQuestionRating(long questionId)
+        var questionRating = _mapper.Map<QuestionRating>(questionRatingRequest);
+        
+        //check if rating is exist
+        bool isExist = await RatingExists(questionRating.QuestionId, questionRatingRequest.UserId);
+        if (!isExist)
+        {
+            throw new CustomException.DataNotFoundException($"This QuestionRating not found!");
+
+        }
+        //delete question rating
+        _unitOfWork.QuestionRatingRepository.Delete(questionRating);
+        
+        //subtract question total rating
+        var question = _unitOfWork.QuestionRepository.GetByID(questionRatingRequest.QuestionId);
+        question.TotalRating--;
+        _unitOfWork.QuestionRepository.Update(question);
+        _unitOfWork.Save();
+
+    }
+    
+    public async Task<bool> RatingExists(long questionId, long userId)
     {
-        throw new NotImplementedException();
+        return await _unitOfWork.QuestionRatingRepository.ExistsAsync(r => 
+            r.QuestionId == questionId && r.UserId == userId);
     }
 }

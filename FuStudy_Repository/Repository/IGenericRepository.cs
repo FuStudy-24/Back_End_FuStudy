@@ -37,7 +37,9 @@ namespace FuStudy_Repository.Repository
             int? pageSize = null);
         Task SaveChangesAsync();
 
-        
+        Task<TEntity> GetByIdWithInclude(long id, string includeProperties = "");
+
+        Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate);
 
     }
 }
