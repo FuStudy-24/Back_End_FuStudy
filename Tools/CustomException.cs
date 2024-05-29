@@ -4,7 +4,8 @@ public class CustomException
 {
     public class InvalidDataException : Exception
     {
-        public InvalidDataException(): base(){}
+        public InvalidDataException() : base(){}
+        public InvalidDataException(string message) : base(message) { }
         public InvalidDataException(string statuscode,string message) : base(message){}
         public InvalidDataException(string message, Exception innerException):base(message, innerException){}
         
@@ -22,5 +23,12 @@ public class CustomException
         public DataNotFoundException() : base() { }
         public DataNotFoundException(string message) : base(message) { }
         public DataNotFoundException(string message, Exception innerException) : base(message, innerException) { }
+    }
+
+    public class UnauthorizedAccessException : Exception
+    {
+        public UnauthorizedAccessException(string message) : base(message)
+        {
+        }
     }
 }

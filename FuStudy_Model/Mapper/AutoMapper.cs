@@ -17,6 +17,9 @@ namespace FuStudy_Model.Mapper
             //Request
             //CreateMap<FuStudyRequest, FuStudy>().ReverseMap();
             CreateMap<CreateAccountDTORequest, User>().ReverseMap();
+            CreateMap<LoginDTORequest, User>().ReverseMap();
+            CreateMap<User, UserDTOResponse>().ReverseMap();
+            CreateMap<User, LoginDTOResponse>().ReverseMap();
 
             #region Blog
             CreateMap<BlogRequest, Blog>();
@@ -39,6 +42,20 @@ namespace FuStudy_Model.Mapper
             CreateMap<BlogLikeRequest, BlogLike>().ReverseMap();
             CreateMap<BlogLike, BlogLikeResponse>().ReverseMap();
             #endregion
+
+            //Conversation
+            CreateMap<ConversationRequest, Conversation>().ForMember(dest => dest.Duration, opt => opt.Ignore());
+
+            CreateMap<Conversation, ConversationResponse>();
+
+            CreateMap<ConversationMessageRequest, ConversationMessage>();
+            CreateMap<ConversationMessage, ConversationMessageResponse>().ReverseMap();
+
+            CreateMap<MessageReactionRequest, MessageReaction>();
+
+            CreateMap<MessageReaction, MessageReactionResponse>().ReverseMap();
+
+            CreateMap<Attachment, AttachmentResponse>();
         }
     }
 }

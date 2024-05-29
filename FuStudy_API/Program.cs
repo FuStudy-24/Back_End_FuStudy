@@ -5,12 +5,47 @@ using FuStudy_Model.Mapper;
 using AutoMapper;
 using FuStudy_Service.Interface;
 using FuStudy_Service.Service;
-using Microsoft.Extensions.Hosting;
-using System.Runtime.CompilerServices;
 using FuStudy_Service.Interfaces;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Quartz.Impl;
+using Quartz;
+using Tools.Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddInfrastructure();
+
+/*builder.Services.AddTransient<UpdateConversationIsCloseJob>();
+
+// Cấu hình lịch trình
+builder.Services.AddSingleton(provider =>
+{
+    var schedulerFactory = new StdSchedulerFactory();
+    var scheduler = schedulerFactory.GetScheduler().Result;
+
+    // Đăng ký công việc lập lịch
+    var updateConversationJob = new JobDetailImpl("UpdateConversationIsCloseJob", typeof(UpdateConversationIsCloseJob));
+    var trigger = TriggerBuilder.Create()
+        .WithIdentity("UpdateConversationIsCloseTrigger")
+        .StartNow()
+        .WithSimpleSchedule(x => x
+            .WithIntervalInMinutes(1)
+            .RepeatForever())
+        .Build();
+
+    scheduler.ScheduleJob(updateConversationJob, trigger).Wait();
+    scheduler.Start().Wait();
+
+    return scheduler;
+});*/
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddControllers();
 
@@ -29,6 +64,14 @@ builder.Services.AddScoped<ISubcriptionService, SubcriptionService>();
 builder.Services.AddScoped<IStudentSubcriptionService, StudentSubcriptionService>();
 builder.Services.AddScoped<IBlogService,BlogService>();
 builder.Services.AddScoped<IBlogLikeService, BlogLikeService>();
+builder.Services.AddScoped<IConversationService, ConversationService>();
+
+builder.Services.AddScoped<IConversationMessageService, ConversationMessageService>();
+builder.Services.AddScoped<IMessageReactionService, MessageReactionService>();
+builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+
+builder.Services.AddScoped<Tools.Firebase>();
+
 
 //Mapper
 var config = new MapperConfiguration(cfg =>
@@ -52,6 +95,31 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = "Standard Authorization header using the Bearer scheme (\"Bearer {token}\")",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+{
+    option.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value)),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+    };
+});
+
+
 
 //Build CORS
 /*builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
@@ -70,7 +138,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseAuthentication();
 app.UseHttpsRedirection();
 //app.UseCors("MyCors");
 app.UseAuthorization();
