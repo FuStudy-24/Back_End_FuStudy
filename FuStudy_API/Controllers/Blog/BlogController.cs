@@ -37,7 +37,7 @@ namespace FuStudy_API.Controllers.Blog
             return CustomResult("Data loaded", response);
         }
 
-        [HttpPost("/create-blog")]
+        [HttpPost("/CreateBlog")]
         public async Task<IActionResult> CreateBlog([FromBody] BlogRequest request)
         {
             var reponse = await _blogService.CreateBlog(request);
@@ -48,7 +48,7 @@ namespace FuStudy_API.Controllers.Blog
             return CustomResult("Create successfully", reponse);
         }
 
-        [HttpPost("/update-blog/{id}")]
+        [HttpPost("/UpdateBlog/{id}")]
         public async Task<IActionResult> UpdateBlog(long id, [FromBody]BlogRequest request)
         {
             var reponse = await _blogService.UpdateBlog(id, request);
