@@ -37,5 +37,8 @@ namespace FuStudy_Repository.Entity
 
         [ForeignKey("SenderId")]
         public virtual User User { get; set; }
+
+        public virtual ICollection<Attachment> Attachments { get; set; }
+        public virtual ICollection<MessageReaction> MessageReactions { get; set; }
     }
 }
