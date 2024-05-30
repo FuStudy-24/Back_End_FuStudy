@@ -13,12 +13,9 @@ namespace FuStudy_Model.DTO.Request
         [Required]
         public long UserId { get; set; }
         [Required]
-        [RegularExpression("^[A-Z][a-zA-Z0-9@#$&()_]*$")]
         public string BlogContent { get; set; }
         [Required]
         public string Image { get; set; }
-        [Required]
-        public int TotalLike { get; set; }
         [Required]
         public DateTime CreateDate { get; set; }
     }

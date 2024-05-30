@@ -16,11 +16,21 @@ namespace FuStudy_API.Controllers.Blog
         {
             _blogService = blogService;
         }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetOneBlog(long id)
+        [HttpGet]
+        public async Task<IActionResult> GetAllBlog()
         {
-            var response = await _blogService.GetOneBlog(id);
+            var response = await _blogService.GetAllBlog();
+            if (response == null)
+            {
+                return CustomResult("Data not found", System.Net.HttpStatusCode.NotFound);
+            }
+            return CustomResult("Data loaded", response);
+        }
+
+        [HttpGet("{id}/{userId}")]
+        public async Task<IActionResult> GetOneBlog(long id, long userId)
+        {
+            var response = await _blogService.GetOneBlog(id, userId);
             if(response == null) { 
                 return CustomResult("Data not found", System.Net.HttpStatusCode.NotFound);
             }
@@ -38,10 +48,10 @@ namespace FuStudy_API.Controllers.Blog
             return CustomResult("Create successfully", reponse);
         }
 
-        [HttpPost("/update-blog")]
-        public async Task<IActionResult> UpdateBlog([FromBody]BlogRequest request)
+        [HttpPost("/update-blog/{id}")]
+        public async Task<IActionResult> UpdateBlog(long id, [FromBody]BlogRequest request)
         {
-            var reponse = await _blogService.UpdateBlog(request);
+            var reponse = await _blogService.UpdateBlog(id, request);
             if (reponse == null)
             {
                 return CustomResult("Update is not success !", System.Net.HttpStatusCode.BadRequest);
@@ -49,10 +59,10 @@ namespace FuStudy_API.Controllers.Blog
             return CustomResult("Update successfully", reponse);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOneBlog(long id)
+        [HttpDelete("{id}/{userId}")]
+        public async Task<IActionResult> DeleteOneBlog(long id, long userId)
         {
-            var reponse = await _blogService.DeleteBlog(id);
+            var reponse = await _blogService.DeleteBlog(id, userId);
             if (!reponse)
             {
                 return CustomResult("Delete is not success !", System.Net.HttpStatusCode.BadRequest);

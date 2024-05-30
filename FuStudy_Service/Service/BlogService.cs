@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
@@ -28,41 +29,61 @@ namespace FuStudy_Service.Service
         {
             request.CreateDate = DateTime.Now;
             var respone = _mapper.Map<Blog>(request);
+            respone.TotalLike = 0;
             await _unitOfWork.BlogRepository.AddAsync(respone);
             _unitOfWork.Save();
             return _mapper.Map<BlogResponse>(respone);
         }
 
 
-        public async Task<bool> DeleteBlog(long id)
+        public async Task<bool> DeleteBlog(long id, long userId)
         {
-            var getBlogById = GetOneBlog(id);
-            if (getBlogById != null)
+            var getOneBlog = _unitOfWork.BlogRepository
+                                .Get(filter: x =>
+                                    x.UserId == userId && x.Id == id)
+                                .FirstOrDefault();
+            if (getOneBlog != null)
             {
-                _unitOfWork.BlogRepository.Delete(getBlogById);
+                _unitOfWork.BlogRepository.Delete(getOneBlog.Id);
                 _unitOfWork.Save();
                 return true;
             }
             return false;
         }
 
-        public async Task<BlogResponse> GetOneBlog(long id)
+        public async Task<IEnumerable<BlogResponse>> GetAllBlog()
         {
-            var getOneBlog = _unitOfWork.BlogRepository.GetByID(id);
+            var listBlog = _unitOfWork.BlogRepository.Get(includeProperties:"User");
+            return _mapper.Map<IEnumerable<BlogResponse>>(listBlog);
+        }
+
+        public async Task<BlogResponse> GetOneBlog(long id, long userId)
+        {
+            var getOneBlog = _unitOfWork.BlogRepository
+                                .Get(filter: x => 
+                                    x.UserId == userId && x.Id == id,includeProperties: "User")
+                                .FirstOrDefault();
+
             if (getOneBlog == null)
             {
-                throw new InvalidDataException("Blog is error");
+                return null;
             }
             var respone = _mapper.Map<BlogResponse>(getOneBlog);
             return respone;
         }
 
-        public async Task<BlogResponse> UpdateBlog(BlogRequest request)
+        public async Task<BlogResponse> UpdateBlog(long id, BlogRequest request)
         {
-            var respone = _mapper.Map<Blog>(request);
-            await _unitOfWork.BlogRepository.UpdateAsync(respone);
-            _unitOfWork.Save();
-            return _mapper.Map<BlogResponse>(respone);
+            var existBlog = _unitOfWork.BlogRepository
+                                .Get(x => x.Id == id 
+                                    && x.UserId == request.UserId).FirstOrDefault();
+            if (existBlog == null)
+            {
+                return null;
+            }
+            var response = _mapper.Map(request, existBlog);
+            await _unitOfWork.BlogRepository.UpdateAsync(response);
+            return _mapper.Map<BlogResponse>(response);
         }
     }
 }
