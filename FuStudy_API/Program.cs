@@ -73,6 +73,8 @@ builder.Services.AddScoped<IAttachmentService, AttachmentService>();
 builder.Services.AddScoped<Tools.Firebase>();
 
 
+builder.Services.AddScoped<IBlogCommentService, BlogCommentService>();
+
 //Mapper
 var config = new MapperConfiguration(cfg =>
 {
