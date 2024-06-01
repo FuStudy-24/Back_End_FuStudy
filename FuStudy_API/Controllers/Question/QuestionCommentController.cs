@@ -26,8 +26,21 @@ public class QuestionCommentController : BaseController
     [HttpGet("GetAllQuestionComments")]
     public async Task<IActionResult> GetAllQuestionComments()
     {
-        var questionsComments = await _questionCommentService.GetAllQuestionComments();
-        return CustomResult("Data Loaded!", questionsComments);
+        try
+        {
+            var questionsComments = await _questionCommentService.GetAllQuestionComments();
+            return CustomResult("Data Loaded!", questionsComments);
+        }
+        catch (CustomException.DataNotFoundException e)
+        {
+            return CustomResult(e.Message, HttpStatusCode.NotFound);
+
+        }
+        catch (Exception exception)
+        {
+            return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+        }
+        
     }
     
       [HttpGet("GetQuestionCommentById/{id}")]

@@ -24,6 +24,10 @@ public class CategoryService : ICategoryService
     public async Task<IEnumerable<CategoryResponse>> GetAllCategories()
     {
         var categories = _unitOfWork.CategoryRepository.Get();
+        if (categories == null)
+        {
+            throw new CustomException.DataNotFoundException("The category list is empty!");
+        }
         return _mapper.Map<IEnumerable<CategoryResponse>>(categories);
     }
 
@@ -57,6 +61,14 @@ public class CategoryService : ICategoryService
         {
             throw new CustomException.DataNotFoundException($"Category with ID: {categoryId} not found!");
         }
+        
+        bool isExist = await _unitOfWork.CategoryRepository.ExistsAsync(
+            category => category.CategoryName.ToLower() == categoryRequest.CategoryName.ToLower());
+        if (isExist)
+        {
+            throw new CustomException.InvalidDataException("500", "This category is duplicated!");
+        }
+        
         
         _mapper.Map(categoryRequest, category);
         _unitOfWork.CategoryRepository.Update(category);

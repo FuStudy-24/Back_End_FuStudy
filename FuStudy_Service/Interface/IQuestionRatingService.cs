@@ -12,4 +12,5 @@ public interface IQuestionRatingService
     Task<QuestionRatingResponse> GetQuestionRatingById(long id);
     Task<QuestionRatingResponse> LikeQuestion(QuestionRatingRequest questionRatingRequest);
     Task UnlikeQuestion(QuestionRatingRequest questionRatingRequest);
+    Task<IEnumerable<QuestionRatingResponse>> GetAllQuestionRatingByQuestionId(long questionId);
 }

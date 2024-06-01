@@ -22,8 +22,20 @@ public class CategoryController : BaseController
         [HttpGet("GetAllCategories")]
         public async Task<IActionResult> GetAllCategories()
         {
-            var categories = await _categoryService.GetAllCategories();
-            return CustomResult("Data loaded!", categories);
+            try
+            {
+                var categories = await _categoryService.GetAllCategories();
+                return CustomResult("Data loaded!", categories);
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
         }
 
 

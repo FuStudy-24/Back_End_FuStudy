@@ -18,5 +18,7 @@ namespace FuStudy_Service.Interface
         
         Task<bool> DeleteQuestionAsync(long questionId);
 
+        Task<bool> IsExistByQuestionId(long questionId);
+
     }
 }

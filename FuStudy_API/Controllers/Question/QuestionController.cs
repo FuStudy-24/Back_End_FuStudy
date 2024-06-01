@@ -28,8 +28,21 @@ namespace FuStudy_API.Controllers.Question
         [HttpGet("GetAllQuestions")]
         public async Task<IActionResult> GetAllQuestions()
         {
-            var questions = await _questionService.GetAllQuestionsAsync();
-            return CustomResult("Data loaded!", questions);
+            try
+            {
+                var questions = await _questionService.GetAllQuestionsAsync();
+                return CustomResult("Data loaded!", questions);
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
+            
         }
 
 
