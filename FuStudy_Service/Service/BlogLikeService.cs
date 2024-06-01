@@ -23,29 +23,28 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<BlogLikeResponse> CreateBlogLikeAsync(BlogLikeRequest request)
-        {
-            var checkBlogLike = _unitOfWork.BlogLikeRepository
-                                    .Get(filter: x => x.Blog.Id == request.BlogId
-                                        && x.User.Id == request.UserId, includeProperties: "Blog,BlogLike")
-                                    .FirstOrDefault();
-            //check lai
+        //public async Task<BlogLikeResponse> CreateBlogLikeAsync(BlogLikeRequest request)
+        //{
+        //    var checkBlogLike = _unitOfWork.BlogLikeRepository
+        //                            .Get(filter: x => x.Blog.Id == request.BlogId
+        //                                && x.User.Id == request.UserId, includeProperties: "Blog,BlogLike")
+        //                            .FirstOrDefault();
 
 
-            if (checkBlogLike != null)
-            {
-                throw new CustomException.DataNotFoundException($"Request not found !");
-            }
+        //    if (checkBlogLike != null)
+        //    {
+        //        return null;
+        //    }
 
-            request.Status = true;
-            checkBlogLike.Blog.TotalLike += 1;
+        //    checkBlogLike.Status = true;
+        //    checkBlogLike.Blog.TotalLike += 1;
 
-            var blogLike = _mapper.Map<BlogLike>(request);
-            _unitOfWork.BlogLikeRepository.Insert(blogLike);
-            _unitOfWork.Save();
+        //    var blogLike = _mapper.Map<BlogLike>(request);
+        //    _unitOfWork.BlogLikeRepository.AddAsync(blogLike);
+        //    _unitOfWork.Save();
 
-            return _mapper.Map<BlogLikeResponse>(blogLike);
-        }
+        //    return _mapper.Map<BlogLikeResponse>(blogLike);
+        //}
 
         //public async Task<bool> DeleteBlogLikeAsync(long id)
         //{
@@ -80,11 +79,14 @@ namespace FuStudy_Service.Service
         {
             var checkBlogLike = _unitOfWork.BlogLikeRepository
                                     .Get(filter: x => x.Blog.Id == request.BlogId
-                                        && x.User.Id == request.UserId, includeProperties: "Blog, BlogLike")
+                                        && x.User.Id == request.UserId, includeProperties: "Blog")
                                     .FirstOrDefault();
             if (checkBlogLike == null)
             {
-                throw new CustomException.DataNotFoundException($"Blog Like {checkBlogLike} not found !");
+                var response = _mapper.Map(request, checkBlogLike);
+                response.Status = true;
+                await _unitOfWork.BlogLikeRepository.AddAsync(response);
+                return _mapper.Map<BlogLikeResponse>(response);
             }
             checkBlogLike.Status = !checkBlogLike.Status;
 
@@ -94,12 +96,12 @@ namespace FuStudy_Service.Service
             }
             else
             {
-                checkBlogLike.Blog.TotalLike -= 1;
+                var result = checkBlogLike.Blog.TotalLike <= 0 ? 0 : checkBlogLike.Blog.TotalLike -= 1;
             }
+            _unitOfWork.Save();
 
             var blogLike = _mapper.Map<BlogLike>(checkBlogLike);
-            _unitOfWork.BlogLikeRepository.UpdateAsync(blogLike);
-            _unitOfWork.Save();
+            await _unitOfWork.BlogLikeRepository.UpdateAsync(blogLike);
 
             return _mapper.Map<BlogLikeResponse>(blogLike);
         }

@@ -17,8 +17,11 @@ namespace FuStudy_Model.Mapper
             //Request
             //CreateMap<FuStudyRequest, FuStudy>().ReverseMap();
             CreateMap<CreateAccountDTORequest, User>().ReverseMap();
+            CreateMap<LoginDTORequest, User>().ReverseMap();
+            CreateMap<User, UserDTOResponse>().ReverseMap();
+            CreateMap<User, LoginDTOResponse>().ReverseMap();
 
-            #region Blog 
+            #region Blog
             CreateMap<BlogRequest, Blog>();
             CreateMap<Blog, BlogResponse>()
                 .ForMember(dst => dst.Fullname, src => src.MapFrom(x => x.User.Fullname))
@@ -66,6 +69,7 @@ namespace FuStudy_Model.Mapper
             CreateMap<TransactionRequest, Transaction>().ReverseMap();
             CreateMap<Transaction, TransactionResponse>().ReverseMap();
             #endregion
+            CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
 
             #region Order
             CreateMap<OrderRequest, Order>().ReverseMap();
@@ -90,6 +94,19 @@ namespace FuStudy_Model.Mapper
             #region Category Response
             CreateMap<CategoryResponse, Category>().ReverseMap();
             #endregion
+            //Conversation
+            CreateMap<ConversationRequest, Conversation>().ForMember(dest => dest.Duration, opt => opt.Ignore());
+
+            CreateMap<Conversation, ConversationResponse>();
+
+            CreateMap<ConversationMessageRequest, ConversationMessage>();
+            CreateMap<ConversationMessage, ConversationMessageResponse>().ReverseMap();
+
+            CreateMap<MessageReactionRequest, MessageReaction>();
+
+            CreateMap<MessageReaction, MessageReactionResponse>().ReverseMap();
+
+            CreateMap<Attachment, AttachmentResponse>();
         }
     }
 }
