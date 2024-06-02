@@ -36,6 +36,7 @@ namespace FuStudy_Repository.Repository
         private IGenericRepository<Transaction> _transactionRepository;
         private IGenericRepository<User> _userRepository;
         private IGenericRepository<Wallet> _walletRepository;
+        private IGenericRepository<CommentImage> _commentImage;
 
         public UnitOfWork()
         {
@@ -352,6 +353,19 @@ namespace FuStudy_Repository.Repository
                 return _walletRepository;
             }
         }
+
+        public IGenericRepository<CommentImage> CommentImageRepository
+        {
+            get
+            {
+                if(_commentImage == null)
+                {
+                    _commentImage = new GenericRepository<CommentImage>(_context);
+                }
+                return _commentImage;
+            }
+        }
+
         public void Save()
         {
             _context.SaveChanges();

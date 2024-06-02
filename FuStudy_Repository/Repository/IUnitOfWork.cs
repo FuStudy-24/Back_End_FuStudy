@@ -32,6 +32,7 @@ namespace FuStudy_Repository.Repository
         public IGenericRepository<Transaction> TransactionRepository { get; }
         public IGenericRepository<User> UserRepository { get; }
         public IGenericRepository<Wallet> WalletRepository { get; }
+        public IGenericRepository<CommentImage> CommentImageRepository {  get; }
         void Save();
     }
 }

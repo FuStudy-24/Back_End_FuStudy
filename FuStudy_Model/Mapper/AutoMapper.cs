@@ -29,7 +29,22 @@ namespace FuStudy_Model.Mapper
                 .ReverseMap();
             #endregion
 
-            #region Question Request
+            #region Blog comment
+            CreateMap<BlogCommentRequest, BlogComment>()
+                .ForSourceMember(src => src.CommentImage, opt => opt.DoNotValidate())
+                .ReverseMap();
+
+            CreateMap<BlogComment, BlogCommentResponse>()
+                .ForMember(dest => dest.Avatar, src => src.MapFrom(x => x.User.Avatar))
+                .ForMember(dest => dest.Fullname, src => src.MapFrom(x => x.User.Fullname))
+                .ReverseMap();
+            #endregion
+
+            #region Comment Image
+            CreateMap<CommentImageRequest, CommentImage>();
+            CreateMap<CommentImage, CommentImageResponse>();
+            #endregion
+
             CreateMap<QuestionRequest, Question>().ReverseMap();
             CreateMap<QuestionCommentRequest, QuestionComment>().ReverseMap();
             CreateMap<QuestionRatingRequest, QuestionRating>().ReverseMap();
