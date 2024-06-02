@@ -27,6 +27,10 @@ namespace FuStudy_Service.Service
         public async Task<IEnumerable<QuestionResponse>> GetAllQuestionsAsync()
         {
             var questions = _unitOfWork.QuestionRepository.Get();
+            if (questions == null)
+            {
+                throw new CustomException.DataNotFoundException("The question list is empty!");
+            }
             return _mapper.Map<IEnumerable<QuestionResponse>>(questions);
         }
 
@@ -85,6 +89,12 @@ namespace FuStudy_Service.Service
             _unitOfWork.QuestionRepository.Delete(deletedQuestion);
             _unitOfWork.Save();
             return true;
+        }
+
+        public async Task<bool> IsExistByQuestionId(long questionId)
+        {
+            var isExist = await _unitOfWork.QuestionRepository.ExistsAsync(question => question.Id == questionId);
+            return isExist;
         }
     }
 }

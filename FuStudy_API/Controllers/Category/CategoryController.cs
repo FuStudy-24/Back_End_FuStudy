@@ -1,37 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Net;
 using CoreApiResponse;
-using FuStudy_Service.Interface;
-using FuStudy_Repository.Entity;
-using FuStudy_Model.DTO.Response;
 using FuStudy_Model.DTO.Request;
+using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Tools;
 
+namespace FUStudy_API.Controllers.Category;
 
-namespace FuStudy_API.Controllers.Question
-
+[Route("api/[controller]")]
+[ApiController]
+public class CategoryController : BaseController
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class QuestionController : BaseController
-    {
-        private readonly IQuestionService _questionService;
+    private readonly ICategoryService _categoryService;
 
-        public QuestionController(IQuestionService questionService)
+        public CategoryController(ICategoryService categoryService)
         {
-            this._questionService = questionService;
+            this._categoryService = categoryService;
         }
 
 
-        [HttpGet("GetAllQuestions")]
-        public async Task<IActionResult> GetAllQuestions()
+        [HttpGet("GetAllCategories")]
+        public async Task<IActionResult> GetAllCategories()
         {
             try
             {
-                var questions = await _questionService.GetAllQuestionsAsync();
-                return CustomResult("Data loaded!", questions);
+                var categories = await _categoryService.GetAllCategories();
+                return CustomResult("Data loaded!", categories);
             }
             catch (CustomException.DataNotFoundException e)
             {
@@ -42,26 +36,25 @@ namespace FuStudy_API.Controllers.Question
             {
                 return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
             }
-            
         }
 
 
-        [HttpGet("GetQuestionById/{id}")]
-        public async Task<IActionResult> GetQuestionById(long id)
+        [HttpGet("GetCategoryById/{id}")]
+        public async Task<IActionResult> GetCategoryById(long id)
         {
-            var question = await _questionService.GetQuestionByIdAsync(id);
+            var category = await _categoryService.GetCategoryByIdAsync(id);
 
-            if (question == null)
+            if (category == null)
             {
                 return CustomResult("Question not found", HttpStatusCode.NotFound);
             }
 
-            return CustomResult("Data loaded!", question);
+            return CustomResult("Data loaded!", category);
 
         }
 
-    [HttpPost("CreateQuestion")]
-        public async Task<IActionResult> CreateQuestion([FromBody] QuestionRequest questionRequest)
+    [HttpPost("CreateCategory")]
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryRequest categoryRequest)
         {
             try
             {
@@ -71,11 +64,11 @@ namespace FuStudy_API.Controllers.Question
                 }
 
 
-                var createdQuestion = await _questionService.CreateQuestionAsync(questionRequest);
+                var createCategory = await _categoryService.CreateCategoryAsync(categoryRequest);
 
 
 
-                return CustomResult("Created successfully", createdQuestion);
+                return CustomResult("Created successfully", createCategory);
             }
             catch (CustomException.DataNotFoundException e)
             {
@@ -90,8 +83,8 @@ namespace FuStudy_API.Controllers.Question
             
         }
 
-        [HttpPost("UpdateQuestion/{questionId}")]
-        public async Task<IActionResult> UpdateQuestion(long questionId, [FromBody] QuestionRequest questionRequest)
+        [HttpPost("UpdateCategory/{categoryId}")]
+        public async Task<IActionResult> UpdateCategory(long categoryId, [FromBody] CategoryRequest categoryRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -100,8 +93,8 @@ namespace FuStudy_API.Controllers.Question
 
             try
             {
-                var updateQuestion = await _questionService.UpdateQuestionAsync(questionRequest, questionId);
-                return CustomResult("Update successfully", updateQuestion);
+                var updateCategory = await _categoryService.UpdateCategoryAsync(categoryRequest, categoryId);
+                return CustomResult("Update successfully", updateCategory);
             }
             catch (CustomException.DataNotFoundException e)
             {
@@ -116,13 +109,13 @@ namespace FuStudy_API.Controllers.Question
             
         }
 
-        [HttpDelete("DeleteQuestion/{questionId}")]
-        public async Task<IActionResult> DeleteQuestion(long questionId)
+        [HttpDelete("DeleteCategory/{categoryId}")]
+        public async Task<IActionResult> DeleteCategory(long categoryId)
         {
             try
             {
-                await _questionService.DeleteQuestionAsync(questionId);
-                return CustomResult("Delete question successfully", HttpStatusCode.NoContent);
+                await _categoryService.DeleteCategoryAsync(categoryId);
+                return CustomResult("Delete category successfully", HttpStatusCode.NoContent);
             }
             catch (CustomException.DataNotFoundException e)
             {
@@ -135,11 +128,6 @@ namespace FuStudy_API.Controllers.Question
             }
 
         }
-
-        
-
-    }
-
-
-
+    
+    
 }

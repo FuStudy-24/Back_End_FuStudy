@@ -20,6 +20,9 @@ namespace FuStudy_Repository.Entity
         [Required]
         public string Image { get; set; }
 
+        [Required]
+        public bool Status { get; set; }
+
         [ForeignKey("BlogCommentId")]
         public virtual BlogComment BlogComment { get; set; }
     }

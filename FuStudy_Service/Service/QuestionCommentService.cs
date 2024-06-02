@@ -26,6 +26,10 @@ public class QuestionCommentService : IQuestionCommentService
     public async Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionComments()
     {
         var questionComments =  _unitOfWork.QuestionCommentRepository.Get(includeProperties: "Question");
+        if (questionComments == null)
+        {
+            throw new CustomException.DataNotFoundException("The question comment list is empty!");
+        }
         return _mapper.Map<IEnumerable<QuestionCommentResponse>>(questionComments);
 
     }

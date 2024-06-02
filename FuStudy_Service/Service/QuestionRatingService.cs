@@ -51,7 +51,7 @@ public class QuestionRatingService : IQuestionRatingService
         bool isExist = await RatingExists(questionRating.QuestionId, questionRatingRequest.UserId);
         if (isExist)
         {
-            throw new InvalidCastException($"QuestionRating can not duplicated!");
+            throw new CustomException.InvalidDataException("500", "This Rating is duplicated!");
         }
         questionRating.Status = true;
         _unitOfWork.QuestionRatingRepository.Insert(questionRating);
@@ -94,7 +94,17 @@ public class QuestionRatingService : IQuestionRatingService
         _unitOfWork.Save();
 
     }
-    
+
+    public async Task<IEnumerable<QuestionRatingResponse>> GetAllQuestionRatingByQuestionId(long questionId)
+    {
+        if (!await _unitOfWork.QuestionRepository.ExistsAsync(q => q.Id == questionId))
+        {
+            throw new CustomException.DataNotFoundException($"Question with Id: {questionId} not found!");
+        }
+        var questionRatings =_unitOfWork.QuestionRatingRepository.Get(rating => rating.QuestionId == questionId);
+        return _mapper.Map<IEnumerable<QuestionRatingResponse>>(questionRatings);
+    }
+
     public async Task<bool> RatingExists(long questionId, long userId)
     {
         return await _unitOfWork.QuestionRatingRepository.ExistsAsync(r => 

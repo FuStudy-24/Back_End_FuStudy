@@ -15,13 +15,32 @@ namespace FuStudy_API.Controllers.Question;
 public class QuestionRatingController : BaseController
 {
     private readonly IQuestionRatingService _questionRatingService;
+ 
     
     public QuestionRatingController (IQuestionRatingService questionRatingService)
     {
         this._questionRatingService = questionRatingService;
-    } 
-    
+    }
 
+    [HttpGet("GetAllQuestionsRatingByQuestionId/{questionId}")]
+    public async Task<IActionResult> GetAllQuestionsRatingByQuestionId(long questionId)
+    {
+        try
+        {
+            var questionRatings = await _questionRatingService.GetAllQuestionRatingByQuestionId(questionId);
+            return CustomResult("Ok", questionRatings);
+        }
+        catch (CustomException.DataNotFoundException e)
+        {
+            return CustomResult(e.Message, HttpStatusCode.NotFound);
+        }
+        catch (Exception exception)
+        {
+            return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+        }
+
+    }
+    
     
 
     [HttpPost("Like")]
