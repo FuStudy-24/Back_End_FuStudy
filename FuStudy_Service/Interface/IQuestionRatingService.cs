@@ -9,8 +9,8 @@ namespace FuStudy_Service.Interface;
 public interface IQuestionRatingService
 {
     Task<IEnumerable<QuestionRatingResponse>> GetAllQuestionsRatings();
-    Task<QuestionRatingResponse> GetQuestionCommentById(long id);
-    Task<QuestionRatingResponse> CreateQuestionRating(QuestionRatingRequest questionRatingRequest);
-    Task<QuestionRatingResponse> UpdateQuestionRating(QuestionRequest questionRequest, long questionId);
-    Task DeleteQuestionRating(long questionId);
+    Task<QuestionRatingResponse> GetQuestionRatingById(long id);
+    Task<QuestionRatingResponse> LikeQuestion(QuestionRatingRequest questionRatingRequest);
+    Task UnlikeQuestion(QuestionRatingRequest questionRatingRequest);
+    Task<IEnumerable<QuestionRatingResponse>> GetAllQuestionRatingByQuestionId(long questionId);
 }

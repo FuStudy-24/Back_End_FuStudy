@@ -17,6 +17,8 @@ namespace FuStudy_Model.DTO.Response
         public string Content { get; set; }
 
         public string Image { get; set; }
+        
+        public int TotalRating { get; set; }
 
         public DateTime CreateDate { get; set; }
 

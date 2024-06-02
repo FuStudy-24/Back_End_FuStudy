@@ -28,21 +28,21 @@ namespace FuStudy_API.Controllers.BlogLike
         //    return CustomResult("Data loaded", response);
         //}
 
-        [HttpPost("/create-blog-like")]
-        public async Task<IActionResult> CreateBlogLike([FromBody] BlogLikeRequest request)
-        {
-            try
-            {
-                var response = await _blogLikeService.CreateBlogLikeAsync(request);
-                return CustomResult("Create successfully", response);
-            }
-            catch
-            {
-                return CustomResult("Error!", System.Net.HttpStatusCode.BadRequest);
-            }
-        }
+        //[HttpPost("/create-blog-like")]
+        //public async Task<IActionResult> CreateBlogLike([FromBody] BlogLikeRequest request)
+        //{
+        //    try
+        //    {
+        //        var response = await _blogLikeService.CreateBlogLikeAsync(request);
+        //        return CustomResult("Create successfully", response);
+        //    }
+        //    catch
+        //    {
+        //        return CustomResult("Error!", System.Net.HttpStatusCode.BadRequest);
+        //    }
+        //}
 
-        [HttpPost("/update-blog-like")]
+        [HttpPost]
         public async Task<IActionResult> UpdateBlogLike([FromBody] BlogLikeRequest request)
         {
             try

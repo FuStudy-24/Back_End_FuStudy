@@ -26,8 +26,21 @@ public class QuestionCommentController : BaseController
     [HttpGet("GetAllQuestionComments")]
     public async Task<IActionResult> GetAllQuestionComments()
     {
-        var questionsComments = await _questionCommentService.GetAllQuestionComments();
-        return CustomResult("Data Loaded!", questionsComments);
+        try
+        {
+            var questionsComments = await _questionCommentService.GetAllQuestionComments();
+            return CustomResult("Data Loaded!", questionsComments);
+        }
+        catch (CustomException.DataNotFoundException e)
+        {
+            return CustomResult(e.Message, HttpStatusCode.NotFound);
+
+        }
+        catch (Exception exception)
+        {
+            return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+        }
+        
     }
     
       [HttpGet("GetQuestionCommentById/{id}")]
@@ -45,7 +58,7 @@ public class QuestionCommentController : BaseController
         }
 
     [HttpPost("CreateQuestionComment")]
-        public async Task<IActionResult> CreateQuestion([FromBody] QuestionCommentRequest questionCommentRequest)
+        public async Task<IActionResult> CreateQuestionComment([FromBody] QuestionCommentRequest questionCommentRequest)
         {
             try
             {
@@ -75,7 +88,7 @@ public class QuestionCommentController : BaseController
         }
 
         [HttpPost("UpdateQuestionComment/{questionCommentId}")]
-        public async Task<IActionResult> UpdateQuestion(long questionCommentId, [FromBody] QuestionCommentRequest questionRequest)
+        public async Task<IActionResult> UpdateQuestionComment(long questionCommentId, [FromBody] QuestionCommentRequest questionRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -101,7 +114,7 @@ public class QuestionCommentController : BaseController
         }
 
         [HttpDelete("DeleteQuestionComment/{questionId}")]
-        public async Task<IActionResult> DeleteQuestion(long questionId)
+        public async Task<IActionResult> DeleteQuestionComment(long questionId)
         {
             try
             {
