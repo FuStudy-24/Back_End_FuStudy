@@ -19,14 +19,12 @@ namespace FuStudy_Repository.Entity
 
         public long QuestionId { get; set; }
 
-        [Required]
         public string Content { get; set; }
 
         public DateTime CreateDate { get; set; }
 
         public DateTime ModifiedDate { get; set; }
 
-        [Required]
         public bool Status { get; set; }
 
         [ForeignKey("UserId")]

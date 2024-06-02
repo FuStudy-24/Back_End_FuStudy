@@ -21,15 +21,12 @@ namespace FuStudy_Repository.Entity
 
         public DateTime CreateTime { get; set; }
 
-        [Required]
         public string Content { get; set; }
 
-        [Required]
         public bool IsDelete { get; set; }
 
         public DateTime DeleteAt { get; set; }
 
-        [Required]
         public bool IsSeen { get; set; }
 
         [ForeignKey("ConversationId")]

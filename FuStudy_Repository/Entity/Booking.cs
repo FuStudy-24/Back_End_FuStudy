@@ -26,7 +26,6 @@ namespace FuStudy_Repository.Entity
 
         public DateTime EndTime { get; set; }
 
-        [Required]
         public string Status { get; set; }
 
         [ForeignKey("UserId")]

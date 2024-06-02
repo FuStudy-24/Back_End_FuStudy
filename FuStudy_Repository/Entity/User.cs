@@ -17,36 +17,26 @@ namespace FuStudy_Repository.Entity
 
         public long RoleId { get; set; }
 
-        [Required]
         public string Username { get; set; }
 
-        [Required]
         public string Password { get; set; }
 
-        [Required]
         public string Fullname { get; set; }
 
-        [Required]
         public string Email { get; set; }
 
-        [Required]
         public string IdentityCard { get; set; }
 
-        [Required]
         public string Gender { get; set; }
 
-        [Required]
         public string Avatar { get; set; }
 
-        [Required]
         public DateTime Dob { get; set; }
 
-        [Required]
         public string Phone { get; set; }
 
         public DateTime CreateDate { get; set; }
 
-        [Required]
         public bool Status { get; set; }
 
         [ForeignKey("RoleId")]

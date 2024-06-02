@@ -17,10 +17,8 @@ namespace FuStudy_Repository.Entity
 
         public long UserId { get; set; }
 
-        [Required]
         public double Balance { get; set; }
 
-        [Required]
         public bool Status { get; set; }
 
         [ForeignKey("UserId")]

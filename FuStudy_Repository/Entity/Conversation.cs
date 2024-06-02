@@ -23,13 +23,10 @@ namespace FuStudy_Repository.Entity
 
         public DateTime EndTime { get; set; }
 
-        [Required]
         public string LastMessage { get; set; }
 
-        [Required]
         public TimeSpan Duration { get; set; }
 
-        [Required]
         public bool IsClose { get; set; }
 
         [ForeignKey("User1Id")]

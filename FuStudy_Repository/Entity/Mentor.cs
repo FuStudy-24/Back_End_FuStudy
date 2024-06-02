@@ -17,17 +17,12 @@ namespace FuStudy_Repository.Entity
 
         public long UserId { get; set; }
         
-
-        [Required]
         public string AcademicLevel { get; set; }
 
-        [Required]
         public string WorkPlace { get; set; }
 
-        [Required]
         public string Status { get; set; }
 
-        [Required]
         public string Skill { get; set; }
 
         public string Video { get; set; }

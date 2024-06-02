@@ -19,10 +19,8 @@ namespace FuStudy_Repository.Entity
 
         public long SubcriptionId { get; set; }
 
-        [Required]
-        public int LimitQuestion { get; set; }
+        public int CurrentMeeting { get; set; }
 
-        [Required]
         public int CurrentQuestion { get; set; }
 
         public DateTime StartDate { get; set; }

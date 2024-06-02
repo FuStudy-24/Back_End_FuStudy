@@ -19,7 +19,6 @@ namespace FuStudy_Repository.Entity
 
         public long ConversationMessageId { get; set; }
 
-        [Required]
         public string ReactionType { get; set; }
 
         public DateTime CreateAt { get; set; }

@@ -17,10 +17,8 @@ namespace FuStudy_Repository.Entity
 
         public long BlogCommentId { get; set; }
 
-        [Required]
         public string Image { get; set; }
 
-        [Required]
         public bool Status { get; set; }
 
         [ForeignKey("BlogCommentId")]

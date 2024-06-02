@@ -15,13 +15,14 @@ namespace FuStudy_Repository.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [Required]
         public string SubcriptionName { get; set; }
 
-        [Required]
         public double SubcriptionPrice { get; set; }
 
-        [Required]
+        public int LimitQuestion { get; set; }
+
+        public int LimitMeeting { get; set; }
+
         public bool Status { get; set; }
     }
 }

@@ -25,10 +25,8 @@ namespace FuStudy_Repository.Entity
 
         public DateTime EndTime { get; set; }
 
-        [Required]
         public double Cost { get; set; }
 
-        [Required]
         public int Rating { get; set; }
 
         [Required]

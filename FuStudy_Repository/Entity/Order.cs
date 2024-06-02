@@ -17,18 +17,14 @@ namespace FuStudy_Repository.Entity
 
         public long TransactionId { get; set; }
 
-        [Required]
         public string PaymentCode { get; set; }
 
-        [Required]
         public string Description { get; set; }
 
         public DateTime CreateDate { get; set; }
 
-        [Required]
         public double Money { get; set; }
 
-        [Required]
         public bool Status { get; set; }
 
         [ForeignKey("TransactionId")]

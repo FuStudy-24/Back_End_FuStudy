@@ -19,7 +19,6 @@ namespace FuStudy_Repository.Entity
 
         public long BlogId { get; set; }
 
-        [Required]
         public bool Status { get; set; }
 
         [ForeignKey("UserId")]
