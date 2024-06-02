@@ -55,7 +55,7 @@ namespace FuStudy_Service.Service
             }
             else
             {
-                studentsub.LimitQuestion = 20;
+                //studentsub.LimitQuestion = 20;
                 studentsub.CurrentQuestion = 0;
                 studentsub.StartDate = DateTime.Now;
                 studentsub.EndDate = DateTime.Now.AddMonths(2);
