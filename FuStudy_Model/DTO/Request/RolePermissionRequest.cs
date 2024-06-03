@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FuStudy_Service.Interface
+namespace FuStudy_Model.DTO.Request
 {
-    public interface IRolePermissionService
+    public class PermissionRequest
     {
+        public string PermissionName { get; set; }
     }
 }

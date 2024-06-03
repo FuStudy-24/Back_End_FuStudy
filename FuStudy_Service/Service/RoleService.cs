@@ -27,8 +27,11 @@ namespace FuStudy_Service.Service
         public async Task<List<RoleResponse>> GetAllRole(QueryObject queryObject)
         {
             var roles = _unitOfWork.RoleRepository.Get(
-                filter: p => p.RoleName.Contains(queryObject.SearchText))
+                filter: p => p.RoleName.Contains(queryObject.Search),
+                pageIndex:queryObject.PageIndex,
+                pageSize:queryObject.PageSize)
                 .ToList();
+
             if (!roles.Any())
             {
                 throw new CustomException.DataNotFoundException("No Role in Database");
@@ -79,12 +82,12 @@ namespace FuStudy_Service.Service
                 throw new CustomException.DataNotFoundException($"Role with ID {id} not found.");
             }
 
-            var duplicateExists = _unitOfWork.RoleRepository.ExistsAsync(p =>
+            var duplicateExists = await _unitOfWork.RoleRepository.ExistsAsync(p =>
                 p.Id != id &&
                 p.RoleName.ToLower() == roleRequest.RoleName.ToLower()
             );
 
-            if (duplicateExists.Equals(true))
+            if (duplicateExists)
             {
                 throw new CustomException.DataExistException($"Role with name '{roleRequest.RoleName}' already exists in Data.");
             }
@@ -94,7 +97,6 @@ namespace FuStudy_Service.Service
 
             var roleResponse = _mapper.Map<RoleResponse>(existingRole);
             return roleResponse;
-
         }
         public async Task<bool> DeleteRole(long id)
         {

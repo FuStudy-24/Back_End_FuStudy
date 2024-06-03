@@ -70,6 +70,8 @@ builder.Services.AddScoped<IConversationMessageService, ConversationMessageServi
 builder.Services.AddScoped<IMessageReactionService, MessageReactionService>();
 builder.Services.AddScoped<IAttachmentService, AttachmentService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IPermissionService, PermissionService>();
 
 builder.Services.AddScoped<Tools.Firebase>();
 

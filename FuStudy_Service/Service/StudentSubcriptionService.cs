@@ -78,7 +78,6 @@ namespace FuStudy_Service.Service
             }
             _mapper.Map(updateStudentSubcriptionRequest, existstudentsub);
 
-            // set trạng thái nếu trả lời câu hỏi => cộng currentQuestion + 1
             if (existstudentsub.CurrentQuestion >= 20 || existstudentsub.Status == false)
             {
                 throw new CustomException.DataNotFoundException("You Subcription has been không xài được địt mẹ mày.");
