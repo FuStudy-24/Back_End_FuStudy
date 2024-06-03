@@ -11,6 +11,9 @@ public interface IQuestionCommentService
 {
     Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionComments(QueryObject queryObject);
     
+    Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionCommentsByQuestionId(QueryObject queryObject, long questionId);
+
+    
     Task<QuestionCommentResponse> GetQuestionCommentById(long id);
 
     Task<QuestionCommentResponse> CreateQuestionComment(QuestionCommentRequest questionCommentRequest);

@@ -60,6 +60,8 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IQuestionRatingService, QuestionRatingService>();
+builder.Services.AddScoped<IQuestionCommentService, QuestionCommentService>();
 builder.Services.AddScoped<ISubcriptionService, SubcriptionService>();
 builder.Services.AddScoped<IStudentSubcriptionService, StudentSubcriptionService>();
 builder.Services.AddScoped<IBlogService,BlogService>();

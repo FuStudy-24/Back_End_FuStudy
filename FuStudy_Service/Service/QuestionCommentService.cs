@@ -8,6 +8,7 @@ using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
+using Microsoft.IdentityModel.Tokens;
 using Tools;
 
 namespace FuStudy_Service.Service;
@@ -36,12 +37,32 @@ public class QuestionCommentService : IQuestionCommentService
         var questionComments =  _unitOfWork.QuestionCommentRepository.Get(
             filter:filter
             ,includeProperties: "Question", pageIndex:queryObject.PageIndex, pageSize:queryObject.PageSize);
-        if (questionComments == null)
+        if (questionComments.IsNullOrEmpty())
         {
             throw new CustomException.DataNotFoundException("The question comment list is empty!");
         }
         return _mapper.Map<IEnumerable<QuestionCommentResponse>>(questionComments);
 
+    }
+
+    public async Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionCommentsByQuestionId(QueryObject queryObject, long questionId)
+    {
+        //check if QueryObject search is not null
+        Expression<Func<QuestionComment, bool>> filter = questionComment => questionComment.QuestionId == questionId;
+        if (!string.IsNullOrWhiteSpace(queryObject.Search))
+        {
+            filter = questionComment => questionComment.Content.ToLower().Contains(queryObject.Search.Trim().ToLower()) && questionComment.QuestionId == questionId;
+        }
+       
+        var questionComments =  _unitOfWork.QuestionCommentRepository.Get(
+            filter:filter
+            ,includeProperties: "Question", pageIndex:queryObject.PageIndex, pageSize:queryObject.PageSize);
+
+        if (questionComments.IsNullOrEmpty())
+        {
+            throw new CustomException.DataNotFoundException("The question comment list is empty!");
+        }
+        return _mapper.Map<IEnumerable<QuestionCommentResponse>>(questionComments);
     }
 
     public async Task<QuestionCommentResponse> GetQuestionCommentById(long id)
