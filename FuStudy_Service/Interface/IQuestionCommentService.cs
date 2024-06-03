@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
+using Tools;
 
 namespace FuStudy_Service.Interface;
 
 public interface IQuestionCommentService
 {
-    Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionComments();
+    Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionComments(QueryObject queryObject);
     
     Task<QuestionCommentResponse> GetQuestionCommentById(long id);
 

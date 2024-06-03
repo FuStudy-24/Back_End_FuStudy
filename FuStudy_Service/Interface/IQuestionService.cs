@@ -3,12 +3,13 @@ using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
 using System.Threading.Tasks;
+using Tools;
 
 namespace FuStudy_Service.Interface
 {
     public interface IQuestionService
     {
-        Task<IEnumerable<QuestionResponse>> GetAllQuestionsAsync();
+        Task<IEnumerable<QuestionResponse>> GetAllQuestionsAsync(QueryObject queryObject);
 
         Task<QuestionResponse> GetQuestionByIdAsync(long id);
 

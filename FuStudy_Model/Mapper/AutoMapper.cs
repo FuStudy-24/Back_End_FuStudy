@@ -44,7 +44,7 @@ namespace FuStudy_Model.Mapper
             CreateMap<CommentImageRequest, CommentImage>();
             CreateMap<CommentImage, CommentImageResponse>();
             #endregion
-
+            #region Question Request
             CreateMap<QuestionRequest, Question>().ReverseMap();
             CreateMap<QuestionCommentRequest, QuestionComment>().ReverseMap();
             CreateMap<QuestionRatingRequest, QuestionRating>().ReverseMap();

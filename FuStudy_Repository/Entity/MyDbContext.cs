@@ -186,7 +186,7 @@ namespace FuStudy_Repository.Entity
                 Id = 1,
                 StudentId = students[0].Id,
                 SubcriptionId = subscriptions[0].Id,
-                LimitQuestion = 10,
+                CurrentMeeting = 1,
                 CurrentQuestion = 0,
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now.AddMonths(1),
