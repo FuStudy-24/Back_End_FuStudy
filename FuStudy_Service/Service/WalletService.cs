@@ -7,6 +7,7 @@ using FuStudy_Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
@@ -24,9 +25,27 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<WalletResponse>> GetAllWalletsAsync()
+        public async Task<IEnumerable<WalletResponse>> GetAllWalletsAsync(QueryObject queryObject)
         {
-            var wallets = _unitOfWork.WalletRepository.Get();
+            // Check if QueryObject search is not null
+            Expression<Func<Wallet, bool>> filter = null;
+            if (!string.IsNullOrWhiteSpace(queryObject.Search))
+            {
+                filter = wallet => wallet.UserId.ToString().Contains(queryObject.Search)
+                                || wallet.Balance.ToString().Contains(queryObject.Search)
+                                || wallet.Status.ToString().Contains(queryObject.Search);
+            }
+
+            var wallets = _unitOfWork.WalletRepository.Get(
+                filter: filter,
+                pageIndex: queryObject.PageIndex,
+                pageSize: queryObject.PageSize);
+
+            if (wallets == null || !wallets.Any())
+            {
+                throw new CustomException.DataNotFoundException("The wallet list is empty!");
+            }
+
             return _mapper.Map<IEnumerable<WalletResponse>>(wallets);
         }
 
