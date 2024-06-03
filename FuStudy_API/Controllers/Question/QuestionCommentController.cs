@@ -24,11 +24,11 @@ public class QuestionCommentController : BaseController
     
     
     [HttpGet("GetAllQuestionComments")]
-    public async Task<IActionResult> GetAllQuestionComments()
+    public async Task<IActionResult> GetAllQuestionComments([FromQuery] QueryObject queryObject)
     {
         try
         {
-            var questionsComments = await _questionCommentService.GetAllQuestionComments();
+            var questionsComments = await _questionCommentService.GetAllQuestionComments(queryObject);
             return CustomResult("Data Loaded!", questionsComments);
         }
         catch (CustomException.DataNotFoundException e)
@@ -87,7 +87,7 @@ public class QuestionCommentController : BaseController
             
         }
 
-        [HttpPost("UpdateQuestionComment/{questionCommentId}")]
+        [HttpPatch("UpdateQuestionComment/{questionCommentId}")]
         public async Task<IActionResult> UpdateQuestionComment(long questionCommentId, [FromBody] QuestionCommentRequest questionRequest)
         {
             if (!ModelState.IsValid)

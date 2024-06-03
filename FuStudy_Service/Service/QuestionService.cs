@@ -8,6 +8,7 @@ using FuStudy_Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Tools;
 
@@ -24,14 +25,24 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<QuestionResponse>> GetAllQuestionsAsync()
+        public async Task<IEnumerable<QuestionResponse>> GetAllQuestionsAsync(QueryObject queryObject)
         {
-            var questions = _unitOfWork.QuestionRepository.Get();
-            if (questions == null)
+            //check if QueryObject search is not null
+            Expression<Func<Question, bool>> filter = null;
+            if (!string.IsNullOrWhiteSpace(queryObject.Search))
             {
-                throw new CustomException.DataNotFoundException("The question list is empty!");
+                filter = question => question.Content.Contains(queryObject.Search);
+            }
+            
+            var questions = _unitOfWork.QuestionRepository.Get(
+                filter:filter,
+                pageIndex:queryObject.PageIndex, 
+                pageSize:queryObject.PageSize);
+            if (questions == null) {
+                    throw new CustomException.DataNotFoundException("The question list is empty!");
             }
             return _mapper.Map<IEnumerable<QuestionResponse>>(questions);
+            
         }
 
         public async Task<QuestionResponse> GetQuestionByIdAsync(long id)

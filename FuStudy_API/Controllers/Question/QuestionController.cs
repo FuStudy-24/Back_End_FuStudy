@@ -26,11 +26,11 @@ namespace FuStudy_API.Controllers.Question
 
 
         [HttpGet("GetAllQuestions")]
-        public async Task<IActionResult> GetAllQuestions()
+        public async Task<IActionResult> GetAllQuestions([FromQuery]QueryObject queryObject)
         {
             try
             {
-                var questions = await _questionService.GetAllQuestionsAsync();
+                var questions = await _questionService.GetAllQuestionsAsync(queryObject);
                 return CustomResult("Data loaded!", questions);
             }
             catch (CustomException.DataNotFoundException e)
@@ -90,7 +90,7 @@ namespace FuStudy_API.Controllers.Question
             
         }
 
-        [HttpPost("UpdateQuestion/{questionId}")]
+        [HttpPatch("UpdateQuestion/{questionId}")]
         public async Task<IActionResult> UpdateQuestion(long questionId, [FromBody] QuestionRequest questionRequest)
         {
             if (!ModelState.IsValid)

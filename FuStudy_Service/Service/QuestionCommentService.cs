@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using FuStudy_Model.DTO.Request;
@@ -23,9 +24,18 @@ public class QuestionCommentService : IQuestionCommentService
         _mapper = mapper;
     }
     
-    public async Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionComments()
+    public async Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionComments(QueryObject queryObject)
     {
-        var questionComments =  _unitOfWork.QuestionCommentRepository.Get(includeProperties: "Question");
+        //check if QueryObject search is not null
+        Expression<Func<QuestionComment, bool>> filter = null;
+        if (!string.IsNullOrWhiteSpace(queryObject.Search))
+        {
+            filter = questionComment => questionComment.Content.Contains(queryObject.Search);
+        }
+        
+        var questionComments =  _unitOfWork.QuestionCommentRepository.Get(
+            filter:filter
+            ,includeProperties: "Question", pageIndex:queryObject.PageIndex, pageSize:queryObject.PageSize);
         if (questionComments == null)
         {
             throw new CustomException.DataNotFoundException("The question comment list is empty!");
