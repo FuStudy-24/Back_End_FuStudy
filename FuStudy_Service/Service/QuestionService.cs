@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 using Tools;
 
 namespace FuStudy_Service.Service
@@ -38,7 +39,7 @@ namespace FuStudy_Service.Service
                 filter:filter,
                 pageIndex:queryObject.PageIndex, 
                 pageSize:queryObject.PageSize);
-            if (questions == null) {
+            if (questions.IsNullOrEmpty()) {
                     throw new CustomException.DataNotFoundException("The question list is empty!");
             }
             return _mapper.Map<IEnumerable<QuestionResponse>>(questions);

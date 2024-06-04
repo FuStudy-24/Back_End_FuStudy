@@ -20,11 +20,11 @@ public class CategoryController : BaseController
 
 
         [HttpGet("GetAllCategories")]
-        public async Task<IActionResult> GetAllCategories()
+        public async Task<IActionResult> GetAllCategories([FromQuery] QueryObject queryObject)
         {
             try
             {
-                var categories = await _categoryService.GetAllCategories();
+                var categories = await _categoryService.GetAllCategories(queryObject);
                 return CustomResult("Data loaded!", categories);
             }
             catch (CustomException.DataNotFoundException e)
