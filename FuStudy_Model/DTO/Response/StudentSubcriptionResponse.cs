@@ -17,7 +17,7 @@ namespace FuStudy_Model.DTO.Response
 
         public long SubcriptionId { get; set; }
 
-        public int LimitQuestion { get; set; }
+        public int CurrentMeeting { get; set; }
 
         public int CurrentQuestion { get; set; }
 
