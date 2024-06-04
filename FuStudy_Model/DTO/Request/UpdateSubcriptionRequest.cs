@@ -13,7 +13,11 @@ namespace FuStudy_Model.DTO.Request
         public required string SubcriptionName { get; set; }
         [Required(ErrorMessage = "SubcriptionPrice is required")]
         public double SubcriptionPrice { get; set; }
-        [Required(ErrorMessage = "Status is required")]
+        [Required(ErrorMessage = "limit Question is a number and it required")]
+        public int limitQuestion { get; set; }
+        [Required(ErrorMessage = "limit Metting is a number and it required")]
+        public int limitMetting { get; set; }
+        [Required(ErrorMessage = "Status is required and it bool")]
         public bool Status { get; set; }
     }
 }

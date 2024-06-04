@@ -174,8 +174,8 @@ namespace FuStudy_Repository.Entity
             // -- Subscriptions --
             var subscriptions = new List<Subcription>
             {
-                new Subcription {Id = 1, SubcriptionName = "Basic", SubcriptionPrice = 9.99, Status = true },
-                new Subcription {Id = 2, SubcriptionName = "Premium", SubcriptionPrice = 19.99, Status = true }
+                new Subcription {Id = 1, SubcriptionName = "Basic",  SubcriptionPrice = 9.99, LimitQuestion = 20, LimitMeeting= 20,  Status = true },
+                new Subcription {Id = 2, SubcriptionName = "Premium", SubcriptionPrice = 9.99, LimitQuestion = 20, LimitMeeting= 20, Status = true }
             };
             modelBuilder.Entity<Subcription>().HasData(subscriptions);
 
@@ -186,7 +186,7 @@ namespace FuStudy_Repository.Entity
                 Id = 1,
                 StudentId = students[0].Id,
                 SubcriptionId = subscriptions[0].Id,
-                CurrentMeeting = 1,
+                CurrentMeeting = 0,
                 CurrentQuestion = 0,
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now.AddMonths(1),
