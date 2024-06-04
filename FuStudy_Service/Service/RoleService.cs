@@ -42,7 +42,7 @@ namespace FuStudy_Service.Service
             return roleResponses;
         }
 
-        public async Task<RoleResponse> GetRoledById(long id)
+        public async Task<RoleResponse> GetRoleById(long id)
         {
             var role = _unitOfWork.RoleRepository.GetByID(id);
 
