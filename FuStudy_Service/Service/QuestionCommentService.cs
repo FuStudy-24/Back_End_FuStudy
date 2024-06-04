@@ -41,7 +41,14 @@ public class QuestionCommentService : IQuestionCommentService
         {
             throw new CustomException.DataNotFoundException("The question comment list is empty!");
         }
-        return _mapper.Map<IEnumerable<QuestionCommentResponse>>(questionComments);
+
+        var response = _mapper.Map<IEnumerable<QuestionCommentResponse>>(questionComments);
+  
+        foreach (var comment in response)
+        {
+            IsMentor(comment);
+        }
+        return response;
 
     }
 
@@ -62,13 +69,20 @@ public class QuestionCommentService : IQuestionCommentService
         {
             throw new CustomException.DataNotFoundException("The question comment list is empty!");
         }
-        return _mapper.Map<IEnumerable<QuestionCommentResponse>>(questionComments);
+        var response = _mapper.Map<IEnumerable<QuestionCommentResponse>>(questionComments);
+        foreach (var comment in response)
+        {
+            IsMentor(comment);
+        }
+        return response;
     }
 
     public async Task<QuestionCommentResponse> GetQuestionCommentById(long id)
     {
-        var questionComments = await _unitOfWork.QuestionCommentRepository.GetByIdWithInclude(id, includeProperties:"Question");
-        return _mapper.Map<QuestionCommentResponse>(questionComments);
+        var questionComment = await _unitOfWork.QuestionCommentRepository.GetByIdWithInclude(id, includeProperties:"Question");
+        var response = _mapper.Map<QuestionCommentResponse>(questionComment);
+        IsMentor(response);
+        return response;
     }
 
     public async Task<QuestionCommentResponse> CreateQuestionComment(QuestionCommentRequest questionCommentRequest)
@@ -88,7 +102,9 @@ public class QuestionCommentService : IQuestionCommentService
         _unitOfWork.QuestionCommentRepository.Insert(questionComment);
         _unitOfWork.Save();
 
-        return _mapper.Map<QuestionCommentResponse>(questionComment);
+        var response = _mapper.Map<QuestionCommentResponse>(questionComment);
+        IsMentor(response);
+        return response;
     }
 
     public async Task<QuestionCommentResponse> UpdateQuestionComment(QuestionCommentRequest questionCommentRequest, long questionCommentId)
@@ -109,12 +125,19 @@ public class QuestionCommentService : IQuestionCommentService
             throw new CustomException.DataNotFoundException($"User with this ID: {questionCommentRequest.UserId} not found!");
         }
 
+        if (questionComment.UserId != questionCommentRequest.UserId)
+        {
+            throw new CustomException.InvalidDataException("Invalid input");
+        }
+
         _mapper.Map(questionCommentRequest, questionComment);
         questionComment.ModifiedDate = DateTime.Now;
         _unitOfWork.QuestionCommentRepository.Update(questionComment);
         _unitOfWork.Save();
 
-        return _mapper.Map<QuestionCommentResponse>(questionComment);
+        var response = _mapper.Map<QuestionCommentResponse>(questionComment);
+        IsMentor(response);
+        return response;
     }
 
     public async Task<bool> DeleteQuestionComment(long questionCommentId)
@@ -129,5 +152,19 @@ public class QuestionCommentService : IQuestionCommentService
         _unitOfWork.QuestionCommentRepository.Delete(deletedQuestionComment);
         _unitOfWork.Save();
         return true;
+    }
+
+    public void IsMentor(QuestionCommentResponse response)
+    {
+
+        if (response != null && response.UserId != null) // Check if comment and UserId are not null
+        {
+            var role = _unitOfWork.RoleRepository.GetByID(_unitOfWork.UserRepository.GetByID(response.UserId).RoleId);
+            if (role != null) // Check if role are not null
+            {
+                response.IsMentor = role.RoleName == "Mentor";
+            }
+        }
+        
     }
 }

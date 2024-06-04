@@ -21,6 +21,7 @@ public class QuestionCommentResponse
 
     public bool Status { get; set; }
 
+    public bool IsMentor { get; set; }
     public QuestionResponse QuestionResponse { get; set; } 
 
 }
