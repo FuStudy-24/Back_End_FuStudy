@@ -7,6 +7,7 @@ using FuStudy_Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
@@ -24,7 +25,7 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<List<RolePermissionResponse>> GetAllRolePermission(QueryObject queryObject)
+        public async Task<IEnumerable<RolePermissionResponse>> GetAllRolePermission(QueryObject queryObject)
         {
             var rps = _unitOfWork.RolePermissionRepository.Get(
                 pageIndex: queryObject.PageIndex,
@@ -36,14 +37,23 @@ namespace FuStudy_Service.Service
                 throw new CustomException.DataNotFoundException("No RolePermission in Database");
             }
 
-            var roleResponses = _mapper.Map<List<RolePermissionResponse>>(rps);
+            var roleResponses = _mapper.Map<IEnumerable<RolePermissionResponse>>(rps);
 
             return roleResponses;
         }
 
         public async Task<List<RolePermissionResponse>> GetAllPermissionByRoleId(long id)
         {
-            throw new NotImplementedException();
+            var rp = _unitOfWork.RolePermissionRepository.Get(filter: p =>
+                                                        p.RoleId == id);
+
+            if (rp == null)
+            {
+                throw new CustomException.DataNotFoundException($"RolePermission not found with RoleId: {id}");
+            }
+
+            var rolePermissionResponse = _mapper.Map<List<RolePermissionResponse>>(rp);
+            return rolePermissionResponse;
         }
 
         public async Task<RolePermissionResponse> GetRolePermissionById(long id)
@@ -84,9 +94,9 @@ namespace FuStudy_Service.Service
                 throw new CustomException.DataExistException($"RolePermission with Id '{rolePermissionRequest.PermissionId}' already exists.");
             }
             var rolePermissionResponse = _mapper.Map<RolePermissionResponse>(existingRP);
-            var newRP = _mapper.Map<Role>(rolePermissionRequest);
+            var newRP = _mapper.Map<RolePermission>(rolePermissionRequest);
 
-            _unitOfWork.RoleRepository.Insert(newRP);
+            _unitOfWork.RolePermissionRepository.Insert(newRP);
             _unitOfWork.Save();
 
             _mapper.Map(newRP, rolePermissionResponse);

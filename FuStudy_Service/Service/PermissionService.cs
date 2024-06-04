@@ -7,6 +7,7 @@ using FuStudy_Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
@@ -24,22 +25,28 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<List<PermissionResponse>> GetAllPermission(QueryObject queryObject)
+        public async Task<IEnumerable<PermissionResponse>> GetAllPermission(QueryObject queryObject)
         {
+            Expression<Func<Permission, bool>> filter = null;
+            if (!string.IsNullOrWhiteSpace(queryObject.Search))
+            {
+                filter = p => p.PermissionName.Contains(queryObject.Search);
+            }
+
             var permissions = _unitOfWork.PermissionRepository.Get(
-                filter: p => p.PermissionName.Contains(queryObject.Search),
+                filter: filter,
                 pageIndex: queryObject.PageIndex,
                 pageSize: queryObject.PageSize)
                 .ToList();
 
             if (!permissions.Any())
             {
-                throw new CustomException.DataNotFoundException("No Role in Database");
+                throw new CustomException.DataNotFoundException("No Permission in Database");
             }
 
-            var PermissionResponses = _mapper.Map<List<PermissionResponse>>(permissions);
+            var permissionResponses = _mapper.Map<IEnumerable<PermissionResponse>>(permissions);
 
-            return PermissionResponses;
+            return permissionResponses;
         }
 
         public async Task<PermissionResponse> GetPermissionById(long id)
