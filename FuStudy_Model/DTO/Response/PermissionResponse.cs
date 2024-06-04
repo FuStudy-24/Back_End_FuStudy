@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace FuStudy_Model.DTO.Response
 {
-    public class RolePermissionResponse
+    public class PermissionResponse
     {
         public long Id { get; set; }
 
-        public long RoleId { get; set; }
-
-        public long PermissionId { get; set; }
+        public string PermissionName { get; set; }
     }
 }

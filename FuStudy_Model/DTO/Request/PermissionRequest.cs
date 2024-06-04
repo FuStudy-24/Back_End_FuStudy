@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace FuStudy_Model.DTO.Request
 {
-    public class RolePermissionRequest
+    public class PermissionRequest
     {
-        public long RoleId { get; set; }
-        public long PermissionId { get; set; }
+        public string PermissionName { get; set; }
     }
 }

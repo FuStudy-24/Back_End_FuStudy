@@ -12,7 +12,7 @@ namespace FuStudy_Service.Interface
     public interface IRoleService
     {
         Task<List<RoleResponse>> GetAllRole(QueryObject queryObject);
-        Task<RoleResponse> GetRoledById(long id);
+        Task<RoleResponse> GetRoleById(long id);
         Task<RoleResponse> CreateRole(RoleRequest roleRequest);
         Task<RoleResponse> UpdateRole(long id, RoleRequest roleRequest);
         Task<bool> DeleteRole(long id);
