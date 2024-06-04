@@ -1,11 +1,12 @@
 ﻿using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
+using Tools;
 
 namespace FuStudy_Service.Interface;
 
 public interface ICategoryService
 {
-    Task<IEnumerable<CategoryResponse>> GetAllCategories();
+    Task<IEnumerable<CategoryResponse>> GetAllCategories(QueryObject queryObject);
 
     Task<CategoryResponse> GetCategoryByIdAsync(long id);
 

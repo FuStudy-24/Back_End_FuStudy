@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
@@ -21,9 +22,19 @@ public class CategoryService : ICategoryService
     }
     
     
-    public async Task<IEnumerable<CategoryResponse>> GetAllCategories()
+    public async Task<IEnumerable<CategoryResponse>> GetAllCategories(QueryObject queryObject)
     {
-        var categories = _unitOfWork.CategoryRepository.Get();
+        //check if QueryObject search is not null
+        Expression<Func<Category, bool>> filter = null;
+        if (!string.IsNullOrWhiteSpace(queryObject.Search))
+        {
+            filter = categoty => categoty.CategoryName.Contains(queryObject.Search);
+        }
+        
+        var categories = _unitOfWork.CategoryRepository.Get(
+            filter:filter,
+            pageIndex:queryObject.PageIndex,
+            pageSize:queryObject.PageSize);
         if (categories == null)
         {
             throw new CustomException.DataNotFoundException("The category list is empty!");
