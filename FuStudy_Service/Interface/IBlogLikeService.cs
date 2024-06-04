@@ -10,10 +10,8 @@ namespace FuStudy_Service.Interface
 {
     public interface IBlogLikeService
     {
-        //Task<IEnumerable<BlogLikeResponse>> GetAllBlogLikeAsync();
         Task<BlogLikeResponse> GetBlogLikeByIdAsync(long id);
-        //Task<BlogLikeResponse> CreateBlogLikeAsync(BlogLikeRequest request);
-        Task<BlogLikeResponse> UpdateBlogLikeAsync(BlogLikeRequest request);
-        //Task<bool> DeleteBlogLikeAsync(long id);
+        Task<BlogLikeResponse> CreateBlogLikeAsync(BlogLikeRequest request);
+        Task<BlogLikeResponse> DeleteBlogLikeAsync(BlogLikeRequest request);
     }
 }

@@ -1,9 +1,11 @@
 ﻿using CoreApiResponse;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
+using Tools;
 
 namespace FuStudy_API.Controllers.BlogLike
 {
@@ -17,37 +19,43 @@ namespace FuStudy_API.Controllers.BlogLike
             _blogLikeService = blogLikeService;
         }
 
-        //[HttpGet("/get-all-blog-like")]
-        //public async Task<IActionResult> GetAllBlogLike()
-        //{
-        //    var response = await _blogLikeService.GetAllBlogLikeAsync();
-        //    if (response == null)
-        //    {
-        //        return CustomResult("Data not found", System.Net.HttpStatusCode.NotFound);
-        //    }
-        //    return CustomResult("Data loaded", response);
-        //}
-
-        //[HttpPost("/create-blog-like")]
-        //public async Task<IActionResult> CreateBlogLike([FromBody] BlogLikeRequest request)
-        //{
-        //    try
-        //    {
-        //        var response = await _blogLikeService.CreateBlogLikeAsync(request);
-        //        return CustomResult("Create successfully", response);
-        //    }
-        //    catch
-        //    {
-        //        return CustomResult("Error!", System.Net.HttpStatusCode.BadRequest);
-        //    }
-        //}
-
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetAllBlogLike(long id)
+        {
+            var response = await _blogLikeService.GetBlogLikeByIdAsync(id);
+            if (response == null)
+            {
+                return CustomResult("Data not found", System.Net.HttpStatusCode.NotFound);
+            }
+            return CustomResult("Data loaded", response);
+        }
         [HttpPost]
-        public async Task<IActionResult> UpdateBlogLike([FromBody] BlogLikeRequest request)
+        [Authorize]
+        public async Task<IActionResult> CreateBlogLike([FromBody] BlogLikeRequest request)
         {
             try
             {
-                var response = await _blogLikeService.UpdateBlogLikeAsync(request);
+                var response = await _blogLikeService.CreateBlogLikeAsync(request);
+                return CustomResult("Create successfully", response);
+            }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
+            }
+            catch
+            {
+                return CustomResult("Error!", HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPut] //Change Status, not Delete
+        [Authorize]
+        public async Task<IActionResult> DeleteBlogLikeAsync([FromBody] BlogLikeRequest request)
+        {
+            try
+            {
+                var response = await _blogLikeService.DeleteBlogLikeAsync(request);
                 return CustomResult("Update successfully", response);
             }
             catch
@@ -55,18 +63,5 @@ namespace FuStudy_API.Controllers.BlogLike
                 return CustomResult("Error!", System.Net.HttpStatusCode.BadRequest);
             }
         }
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteBlogLike(long id)
-        //{
-        //    try
-        //    {
-        //        var response = _blogLikeService.DeleteBlogLikeAsync(id);
-        //        return CustomResult("Delete Successfull (Status)", response, HttpStatusCode.OK);
-        //    }
-        //    catch
-        //    {
-        //        return CustomResult("Error!", System.Net.HttpStatusCode.BadRequest);
-        //    }
-        //}
     }
 }
