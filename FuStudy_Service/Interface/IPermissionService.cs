@@ -11,7 +11,7 @@ namespace FuStudy_Service.Interface
 {
     public interface IPermissionService
     {
-        Task<List<PermissionResponse>> GetAllPermission(QueryObject queryObject);
+        Task<IEnumerable<PermissionResponse>> GetAllPermission(QueryObject queryObject);
         Task<PermissionResponse> GetPermissionById(long id);
         Task<PermissionResponse> CreatePermission(PermissionRequest permissionRequest);
         Task<PermissionResponse> UpdatePermission(long id, PermissionRequest permissionRequest);

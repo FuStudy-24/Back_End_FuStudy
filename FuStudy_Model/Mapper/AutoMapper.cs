@@ -21,9 +21,24 @@ namespace FuStudy_Model.Mapper
             CreateMap<User, UserDTOResponse>().ReverseMap();
             CreateMap<User, LoginDTOResponse>().ReverseMap();
 
-            #region Role
+            #region RolePermission
             CreateMap<RolePermissionRequest, RolePermission>().ReverseMap();
             CreateMap<RolePermission, RolePermissionResponse>().ReverseMap();
+            #endregion
+
+            #region Role
+            CreateMap<RoleRequest, Role>().ReverseMap();
+            CreateMap<Role, RoleResponse>().ReverseMap();
+            #endregion
+
+            #region Permission
+            CreateMap<PermissionRequest, Permission>().ReverseMap();
+            CreateMap<Permission, PermissionResponse>().ReverseMap();
+            #endregion
+
+            #region Major
+            CreateMap<MajorRequest, Major>().ReverseMap();
+            CreateMap<Major, MajorResponse>().ReverseMap();
             #endregion
 
             #region Blog

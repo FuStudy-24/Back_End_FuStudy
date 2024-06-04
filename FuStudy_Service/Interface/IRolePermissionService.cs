@@ -11,7 +11,7 @@ namespace FuStudy_Service.Interface
 {
     public interface IRolePermissionService
     {
-        Task<List<RolePermissionResponse>> GetAllRolePermission(QueryObject queryObject);
+        Task<IEnumerable<RolePermissionResponse>> GetAllRolePermission(QueryObject queryObject);
         Task<List<RolePermissionResponse>> GetAllPermissionByRoleId(long id);
         Task<RolePermissionResponse> GetRolePermissionById(long id);
         Task<RolePermissionResponse> CreateRolePermission(RolePermissionRequest rolePermissionRequest);

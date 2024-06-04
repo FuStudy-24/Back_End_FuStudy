@@ -7,6 +7,7 @@ using FuStudy_Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
@@ -24,10 +25,16 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<List<RoleResponse>> GetAllRole(QueryObject queryObject)
+        public async Task<IEnumerable<RoleResponse>> GetAllRole(QueryObject queryObject)
         {
+            Expression<Func<Role, bool>> filter = null;
+            if (!string.IsNullOrWhiteSpace(queryObject.Search))
+            {
+                filter = r => r.RoleName.Contains(queryObject.Search);
+            }
+
             var roles = _unitOfWork.RoleRepository.Get(
-                filter: p => p.RoleName.Contains(queryObject.Search),
+                filter: filter,
                 pageIndex:queryObject.PageIndex,
                 pageSize:queryObject.PageSize)
                 .ToList();
@@ -37,12 +44,12 @@ namespace FuStudy_Service.Service
                 throw new CustomException.DataNotFoundException("No Role in Database");
             }
 
-            var roleResponses = _mapper.Map<List<RoleResponse>>(roles);
+            var roleResponses = _mapper.Map<IEnumerable<RoleResponse>>(roles);
 
             return roleResponses;
         }
 
-        public async Task<RoleResponse> GetRoledById(long id)
+        public async Task<RoleResponse> GetRoleById(long id)
         {
             var role = _unitOfWork.RoleRepository.GetByID(id);
 
