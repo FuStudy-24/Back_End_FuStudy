@@ -13,5 +13,9 @@ namespace FuStudy_Model.DTO.Request
         public required string SubcriptionName { get; set; }
         [Required(ErrorMessage = "SubcriptionPrice is required")]
         public  double SubcriptionPrice { get; set; }
+        [Required(ErrorMessage = "Limit Question in a number and required")]
+        public int limitQuestion { get; set; }
+        [Required(ErrorMessage = "Limit Meeting in a number and required")]
+        public int limitMeeting { get; set; }
     }
 }
