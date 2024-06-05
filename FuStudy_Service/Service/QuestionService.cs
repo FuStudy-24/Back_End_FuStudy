@@ -34,16 +34,17 @@ namespace FuStudy_Service.Service
             {
                 filter = question => question.Content.Contains(queryObject.Search);
             }
-            
+
             var questions = _unitOfWork.QuestionRepository.Get(
-                filter:filter,
-                pageIndex:queryObject.PageIndex, 
-                pageSize:queryObject.PageSize);
-            if (questions.IsNullOrEmpty()) {
-                    throw new CustomException.DataNotFoundException("The question list is empty!");
+                filter: filter,
+                pageIndex: queryObject.PageIndex,
+                pageSize: queryObject.PageSize);
+            if (questions.IsNullOrEmpty())
+            {
+                throw new CustomException.DataNotFoundException("The question list is empty!");
             }
+
             return _mapper.Map<IEnumerable<QuestionResponse>>(questions);
-            
         }
 
         public async Task<QuestionResponse> GetQuestionByIdAsync(long id)
@@ -53,23 +54,78 @@ namespace FuStudy_Service.Service
         }
 
 
-        public async Task<QuestionResponse> CreateQuestionAsync(QuestionRequest questionRequest)
+        public async Task<QuestionResponse> CreateQuestionWithSubscription(QuestionRequest questionRequest)
         {
             if (_unitOfWork.StudentRepository.GetByID(questionRequest.StudentId) == null)
             {
-                throw new CustomException.DataNotFoundException($"Student with this {questionRequest.StudentId} not found!");
+                throw new CustomException.DataNotFoundException($"Student with ID: {questionRequest.StudentId} not found!");
             }
             if (_unitOfWork.CategoryRepository.GetByID(questionRequest.CategoryId) == null)
             {
-                throw new CustomException.DataNotFoundException($"Category with this {questionRequest.CategoryId} not found!");
+                throw new CustomException.DataNotFoundException($"Category with ID: {questionRequest.CategoryId} not found!");
             }
+            //check if student having subscription
+            var studentSubscription = await _unitOfWork.StudentSubcriptionRepository.GetByFilterAsync(s => s.StudentId == questionRequest.StudentId && s.Status == true);
+            var selectedStudentSubscription = studentSubscription.FirstOrDefault();
+            var selectedSubscription =
+                _unitOfWork.SubcriptionRepository.GetByID(selectedStudentSubscription.SubcriptionId);
 
-            var question = _mapper.Map<Question>(questionRequest);
-            _unitOfWork.QuestionRepository.Insert(question);
+            if (!(selectedStudentSubscription == null))
+            {
+
+                //check if current question equal to limit subscription
+                if (selectedStudentSubscription.CurrentQuestion == selectedSubscription.LimitQuestion)
+                {
+                    throw new CustomException.InvalidDataException("The student's current question have reach limit!");
+                }
+                selectedStudentSubscription.CurrentQuestion++;
+            }
+            else
+            {
+                throw new CustomException.InvalidDataException("This User does not have valid subscription!");
+            }
+            
+            var questionWithCoin = _mapper.Map<Question>(questionRequest);
+            questionWithCoin.CreateDate = DateTime.Now;
+            questionWithCoin.TotalRating = 0;
+            _unitOfWork.QuestionRepository.Insert(questionWithCoin);
             _unitOfWork.Save();
 
-            return _mapper.Map<QuestionResponse>(question);
+            return _mapper.Map<QuestionResponse>(questionWithCoin);
         }
+
+        public async Task<QuestionResponse> CreateQuestionByCoin(QuestionRequest questionRequest)
+        {
+            if (_unitOfWork.StudentRepository.GetByID(questionRequest.StudentId) == null)
+            {
+                throw new CustomException.DataNotFoundException($"Student with ID: {questionRequest.StudentId} not found!");
+            }
+            if (_unitOfWork.CategoryRepository.GetByID(questionRequest.CategoryId) == null)
+            {
+                throw new CustomException.DataNotFoundException($"Category with ID: {questionRequest.CategoryId} not found!");
+            }
+            
+            var student = _unitOfWork.StudentRepository.GetByID(questionRequest.StudentId);
+            //If having coin
+            //20 FuCoin per question
+            var userWallet = _unitOfWork.WalletRepository.Get(wallet => wallet.UserId == student.UserId).FirstOrDefault();
+            if (userWallet.Balance < 20)
+            {
+                throw new CustomException.InvalidDataException("You dont have enough FuCoin!");
+            }
+
+            userWallet.Balance -= 20;
+            //save to database
+            var questionWithCoin = _mapper.Map<Question>(questionRequest);
+            questionWithCoin.CreateDate = DateTime.Now;
+            questionWithCoin.TotalRating = 0;
+            _unitOfWork.QuestionRepository.Insert(questionWithCoin);
+            _unitOfWork.Save();
+            
+            return _mapper.Map<QuestionResponse>(questionWithCoin);
+
+        }
+
 
         public async Task<QuestionResponse> UpdateQuestionAsync(QuestionRequest questionRequest, long questionId)
         {
@@ -86,7 +142,6 @@ namespace FuStudy_Service.Service
             _unitOfWork.Save();
 
             return _mapper.Map<QuestionResponse>(question);
-
         }
 
         public async Task<bool> DeleteQuestionAsync(long questionId)
@@ -97,7 +152,7 @@ namespace FuStudy_Service.Service
             {
                 throw new CustomException.DataNotFoundException($"Question with ID: {questionId} not found");
             }
-            
+
             _unitOfWork.QuestionRepository.Delete(deletedQuestion);
             _unitOfWork.Save();
             return true;

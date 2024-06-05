@@ -13,7 +13,10 @@ namespace FuStudy_Service.Interface
 
         Task<QuestionResponse> GetQuestionByIdAsync(long id);
 
-        Task<QuestionResponse> CreateQuestionAsync(QuestionRequest questionRequest);
+        Task<QuestionResponse> CreateQuestionWithSubscription(QuestionRequest questionRequest);
+        
+        Task<QuestionResponse> CreateQuestionByCoin(QuestionRequest questionRequest);
+
         
         Task<QuestionResponse> UpdateQuestionAsync(QuestionRequest questionRequest, long questionId);
         
