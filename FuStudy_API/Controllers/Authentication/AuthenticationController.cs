@@ -8,6 +8,7 @@ using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,22 @@ namespace FuStudy_API.Controllers.Authentication
             try
             {
                 CreateAccountDTOResponse user = await _authenticationService.Register(createAccountDTORequest);
+
+                return CustomResult("Register Success",user, HttpStatusCode.OK);
+
+            }
+            catch (Exception e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.InternalServerError);
+            }
+            
+        }
+        [HttpPost("RegisterTutor"), Authorize]
+        public async Task<IActionResult> RegisterTutor([FromBody] RegisterTutorRequest registerTutorRequest)
+        {
+            try
+            {
+                RegisterTutorResponse user = await _authenticationService.RegisterTutor(registerTutorRequest);
 
                 return CustomResult("Register Success",user, HttpStatusCode.OK);
 

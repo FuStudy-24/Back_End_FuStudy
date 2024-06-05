@@ -17,9 +17,12 @@ namespace FuStudy_Model.Mapper
             //Request
             //CreateMap<FuStudyRequest, FuStudy>().ReverseMap();
             CreateMap<CreateAccountDTORequest, User>().ReverseMap();
+            CreateMap<CreateAccountDTOResponse, User>().ReverseMap();
             CreateMap<LoginDTOResponse, User>().ReverseMap();
             CreateMap<User, UserDTOResponse>().ReverseMap();
             CreateMap<User, LoginDTOResponse>().ReverseMap();
+            CreateMap<Mentor, RegisterTutorRequest>().ReverseMap();
+            CreateMap<Mentor, RegisterTutorResponse>().ReverseMap();
 
             #region RolePermission
             CreateMap<RolePermissionRequest, RolePermission>().ReverseMap();

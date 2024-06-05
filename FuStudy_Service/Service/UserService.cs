@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Http;
 using Tools;
 
 namespace FuStudy_Service.Service;
@@ -16,11 +18,13 @@ public class UserService : IUserService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _httpContextAccessor = httpContextAccessor;
     }
     public async Task<User> CreateUser(CreateAccountDTORequest createAccountRequest)
     {
@@ -68,5 +72,19 @@ public class UserService : IUserService
         await _unitOfWork.UserRepository.UpdateAsync(userToUpdate);
        
         return userToUpdate;
+    }
+
+    public string GetUserID()
+    {
+        var result = string.Empty;
+        if (_httpContextAccessor.HttpContext != null)
+        {
+            var claim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid);
+            if (claim != null)
+            {
+                result = claim.Value;
+            }
+        }
+        return result;
     }
 }

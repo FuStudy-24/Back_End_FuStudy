@@ -21,11 +21,14 @@ public class AuthenticationService: IAuthenticationService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
-    public AuthenticationService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+    private readonly IUserService _userService;
+        
+    public AuthenticationService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, IUserService userService)
     {
         _unitOfWork = unitOfWork; 
         _mapper = mapper;
         _configuration = configuration;
+        _userService = userService;
     }  
     public async Task<CreateAccountDTOResponse> Register(CreateAccountDTORequest createAccountDTORequest)
     {
@@ -83,5 +86,15 @@ public class AuthenticationService: IAuthenticationService
         Authentication authentication = new(_configuration, _unitOfWork);
         string token = await authentication.GenerateJwtToken(user, 15);
         return (token, loginDtoResponse);
+    }
+
+    public async Task<RegisterTutorResponse> RegisterTutor(RegisterTutorRequest registerTutorRequest)
+    {
+        var mentor = _mapper.Map<Mentor>(registerTutorRequest);
+        mentor.UserId = long.Parse(_userService.GetUserID());
+        mentor.Status = "pending";
+        await _unitOfWork.MentorRepository.AddAsync(mentor);
+        RegisterTutorResponse registerTutorResponse = _mapper.Map<RegisterTutorResponse>(mentor);
+        return registerTutorResponse;
     }
 }
