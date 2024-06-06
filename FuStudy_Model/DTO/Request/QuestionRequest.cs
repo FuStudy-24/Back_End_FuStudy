@@ -9,9 +9,6 @@ namespace FuStudy_Model.DTO.Request
 {
     public class QuestionRequest
     {
-        [Required(ErrorMessage = "Student is required!")]
-        public long StudentId { get; set; }
-        
         [Required(ErrorMessage = "Category is required!")]
         public long CategoryId { get; set; }
         

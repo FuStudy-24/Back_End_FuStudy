@@ -7,6 +7,7 @@ using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Http;
 using Tools;
 
 namespace FuStudy_Service.Service;
@@ -16,11 +17,13 @@ public class QuestionRatingService : IQuestionRatingService
     
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-
-    public QuestionRatingService(IUnitOfWork unitOfWork, IMapper mapper)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    public QuestionRatingService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _httpContextAccessor = httpContextAccessor;
+
     }
     public async Task<IEnumerable<QuestionRatingResponse>> GetAllQuestionsRatings()
     {
@@ -36,9 +39,11 @@ public class QuestionRatingService : IQuestionRatingService
 
     public async Task<QuestionRatingResponse> LikeQuestion(QuestionRatingRequest questionRatingRequest)
     {
-        if (_unitOfWork.UserRepository.GetByID(questionRatingRequest.UserId) == null)
+        var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
+
+        if (_unitOfWork.UserRepository.GetByID(userId) == null)
         {
-            throw new CustomException.DataNotFoundException($"Student with this {questionRatingRequest.UserId} not found!");
+            throw new CustomException.DataNotFoundException($"Student with this {userId} not found!");
         }
         if (_unitOfWork.QuestionRepository.GetByID(questionRatingRequest.QuestionId) == null)
         {
@@ -48,7 +53,7 @@ public class QuestionRatingService : IQuestionRatingService
         //create question rating
         var questionRating = _mapper.Map<QuestionRating>(questionRatingRequest);
         //check if rating is exist
-        bool isExist = await RatingExists(questionRating.QuestionId, questionRatingRequest.UserId);
+        bool isExist = await RatingExists(questionRating.QuestionId, userId);
         if (isExist)
         {
             throw new CustomException.InvalidDataException("500", "This Rating is duplicated!");
@@ -66,9 +71,11 @@ public class QuestionRatingService : IQuestionRatingService
 
     public async Task UnlikeQuestion(QuestionRatingRequest questionRatingRequest)
     {
-        if (_unitOfWork.UserRepository.GetByID(questionRatingRequest.UserId) == null)
+        var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
+
+        if (_unitOfWork.UserRepository.GetByID(userId) == null)
         {
-            throw new CustomException.DataNotFoundException($"Student with this {questionRatingRequest.UserId} not found!");
+            throw new CustomException.DataNotFoundException($"Student with this {userId} not found!");
         }
         if (_unitOfWork.QuestionRepository.GetByID(questionRatingRequest.QuestionId) == null)
         {
@@ -78,7 +85,7 @@ public class QuestionRatingService : IQuestionRatingService
         var questionRating = _mapper.Map<QuestionRating>(questionRatingRequest);
         
         //check if rating is exist
-        bool isExist = await RatingExists(questionRating.QuestionId, questionRatingRequest.UserId);
+        bool isExist = await RatingExists(questionRating.QuestionId, userId);
         if (!isExist)
         {
             throw new CustomException.DataNotFoundException($"This QuestionRating not found!");
