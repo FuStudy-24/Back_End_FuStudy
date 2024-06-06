@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Tools;
 
@@ -19,11 +20,13 @@ namespace FuStudy_Service.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-
-        public QuestionService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public QuestionService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
         public async Task<IEnumerable<QuestionResponse>> GetAllQuestionsAsync(QueryObject queryObject)
@@ -56,16 +59,18 @@ namespace FuStudy_Service.Service
 
         public async Task<QuestionResponse> CreateQuestionWithSubscription(QuestionRequest questionRequest)
         {
-            if (_unitOfWork.StudentRepository.GetByID(questionRequest.StudentId) == null)
+            var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
+            var studentId = GetStudentIdByUserId(userId);
+            if (_unitOfWork.StudentRepository.GetByID(studentId) == null)
             {
-                throw new CustomException.DataNotFoundException($"Student with ID: {questionRequest.StudentId} not found!");
+                throw new CustomException.DataNotFoundException($"Student with ID: {studentId} not found!");
             }
             if (_unitOfWork.CategoryRepository.GetByID(questionRequest.CategoryId) == null)
             {
                 throw new CustomException.DataNotFoundException($"Category with ID: {questionRequest.CategoryId} not found!");
             }
             //check if student having subscription
-            var studentSubscription = await _unitOfWork.StudentSubcriptionRepository.GetByFilterAsync(s => s.StudentId == questionRequest.StudentId && s.Status == true);
+            var studentSubscription = await _unitOfWork.StudentSubcriptionRepository.GetByFilterAsync(s => s.StudentId == studentId && s.Status == true);
             var selectedStudentSubscription = studentSubscription.FirstOrDefault();
             var selectedSubscription =
                 _unitOfWork.SubcriptionRepository.GetByID(selectedStudentSubscription.SubcriptionId);
@@ -96,16 +101,19 @@ namespace FuStudy_Service.Service
 
         public async Task<QuestionResponse> CreateQuestionByCoin(QuestionRequest questionRequest)
         {
-            if (_unitOfWork.StudentRepository.GetByID(questionRequest.StudentId) == null)
+            var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
+            var studentId = GetStudentIdByUserId(userId);
+
+            if (_unitOfWork.StudentRepository.GetByID(studentId) == null)
             {
-                throw new CustomException.DataNotFoundException($"Student with ID: {questionRequest.StudentId} not found!");
+                throw new CustomException.DataNotFoundException($"Student with ID: {studentId} not found!");
             }
             if (_unitOfWork.CategoryRepository.GetByID(questionRequest.CategoryId) == null)
             {
                 throw new CustomException.DataNotFoundException($"Category with ID: {questionRequest.CategoryId} not found!");
             }
             
-            var student = _unitOfWork.StudentRepository.GetByID(questionRequest.StudentId);
+            var student = _unitOfWork.StudentRepository.GetByID(studentId);
             //If having coin
             //20 FuCoin per question
             var userWallet = _unitOfWork.WalletRepository.Get(wallet => wallet.UserId == student.UserId).FirstOrDefault();
@@ -162,6 +170,16 @@ namespace FuStudy_Service.Service
         {
             var isExist = await _unitOfWork.QuestionRepository.ExistsAsync(question => question.Id == questionId);
             return isExist;
+        }
+
+        public long GetStudentIdByUserId(long userId)
+        {
+            var student = _unitOfWork.StudentRepository.Get(s => s.UserId == userId).FirstOrDefault();
+            if (student == null)
+            {
+                throw new CustomException.DataNotFoundException("This user is not a student <3");
+            }
+            return student.Id;
         }
     }
 }

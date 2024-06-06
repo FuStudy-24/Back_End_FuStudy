@@ -8,6 +8,7 @@ using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Tools;
 
@@ -18,11 +19,13 @@ public class QuestionCommentService : IQuestionCommentService
     
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-
-    public QuestionCommentService(IUnitOfWork unitOfWork, IMapper mapper)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    public QuestionCommentService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _httpContextAccessor = httpContextAccessor;
+
     }
     
     public async Task<IEnumerable<QuestionCommentResponse>> GetAllQuestionComments(QueryObject queryObject)
@@ -87,13 +90,15 @@ public class QuestionCommentService : IQuestionCommentService
 
     public async Task<QuestionCommentResponse> CreateQuestionComment(QuestionCommentRequest questionCommentRequest)
     {
+        var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
+
         if (_unitOfWork.QuestionRepository.GetByID(questionCommentRequest.QuestionId) == null)
         {
             throw new CustomException.DataNotFoundException($"Question with this ID: {questionCommentRequest.QuestionId} not found!");
         }
-        if (_unitOfWork.UserRepository.GetByID(questionCommentRequest.UserId) == null)
+        if (_unitOfWork.UserRepository.GetByID(userId) == null)
         {
-            throw new CustomException.DataNotFoundException($"User with this ID: {questionCommentRequest.UserId} not found!");
+            throw new CustomException.DataNotFoundException($"User with this ID: {userId} not found!");
         }
 
         var questionComment = _mapper.Map<QuestionComment>(questionCommentRequest);
@@ -110,7 +115,7 @@ public class QuestionCommentService : IQuestionCommentService
     public async Task<QuestionCommentResponse> UpdateQuestionComment(QuestionCommentRequest questionCommentRequest, long questionCommentId)
     {
         var questionComment = _unitOfWork.QuestionCommentRepository.GetByID(questionCommentId);
-
+        var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
         if (questionComment == null)
         {
             throw new CustomException.DataNotFoundException($"Question Comment with ID: {questionCommentId} not found");
@@ -120,12 +125,12 @@ public class QuestionCommentService : IQuestionCommentService
         {
             throw new CustomException.DataNotFoundException($"Question with this ID: {questionCommentRequest.QuestionId} not found!");
         }
-        if (_unitOfWork.UserRepository.GetByID(questionCommentRequest.UserId) == null)
+        if (_unitOfWork.UserRepository.GetByID(userId) == null)
         {
-            throw new CustomException.DataNotFoundException($"User with this ID: {questionCommentRequest.UserId} not found!");
+            throw new CustomException.DataNotFoundException($"User with this ID: {userId} not found!");
         }
 
-        if (questionComment.UserId != questionCommentRequest.UserId)
+        if (questionComment.UserId != userId)
         {
             throw new CustomException.InvalidDataException("Invalid input");
         }
@@ -156,10 +161,12 @@ public class QuestionCommentService : IQuestionCommentService
 
     public void IsMentor(QuestionCommentResponse response)
     {
+        var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
 
-        if (response != null && response.UserId != null) // Check if comment and UserId are not null
+
+        if (response != null && userId != null) // Check if comment and UserId are not null
         {
-            var role = _unitOfWork.RoleRepository.GetByID(_unitOfWork.UserRepository.GetByID(response.UserId).RoleId);
+            var role = _unitOfWork.RoleRepository.GetByID(_unitOfWork.UserRepository.GetByID(userId).RoleId);
             if (role != null) // Check if role are not null
             {
                 response.IsMentor = role.RoleName == "Mentor";
