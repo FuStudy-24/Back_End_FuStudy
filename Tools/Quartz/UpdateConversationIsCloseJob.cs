@@ -37,6 +37,20 @@ public class UpdateConversationIsCloseJob : IJob
                 }
             }
 
+            var studentSubcriptions = _unitOfWork.StudentSubcriptionRepository
+                .Get(c => c.Status == true)
+                .ToList();
+
+            foreach(var studentSubcription in studentSubcriptions)
+            {
+                var endTimeWithDuration = studentSubcription.EndDate;
+                if(endTimeWithDuration <= currentTime)
+                {
+                    studentSubcription.Status = false;
+                    _unitOfWork.StudentSubcriptionRepository.Update(studentSubcription);
+                }
+            }
+
             _unitOfWork.Save();
         }
         catch (Exception ex)
