@@ -60,8 +60,8 @@ namespace FuStudy_API.Controllers.Question
 
         }
 
-    [HttpPost("CreateQuestion")]
-        public async Task<IActionResult> CreateQuestion([FromBody] QuestionRequest questionRequest)
+    [HttpPost("CreateQuestionWithSubscription")]
+        public async Task<IActionResult> CreateQuestionWithSubscription([FromBody] QuestionRequest questionRequest)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace FuStudy_API.Controllers.Question
                 }
 
 
-                var createdQuestion = await _questionService.CreateQuestionAsync(questionRequest);
+                var createdQuestion = await _questionService.CreateQuestionWithSubscription(questionRequest);
 
 
 
@@ -90,6 +90,36 @@ namespace FuStudy_API.Controllers.Question
             
         }
 
+        [HttpPost("CreateQuestionByCoin")]
+        public async Task<IActionResult> CreateQuestionByCoin([FromBody] QuestionRequest questionRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return CustomResult(ModelState, HttpStatusCode.BadRequest);
+                }
+
+
+                var createdQuestion = await _questionService.CreateQuestionByCoin(questionRequest);
+
+
+
+                return CustomResult("Created successfully", createdQuestion);
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
+                
+            
+        }
+        
         [HttpPatch("UpdateQuestion/{questionId}")]
         public async Task<IActionResult> UpdateQuestion(long questionId, [FromBody] QuestionRequest questionRequest)
         {
