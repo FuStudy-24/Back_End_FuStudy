@@ -27,7 +27,7 @@ namespace FuStudy_Service.Service
 
         public async Task<IEnumerable<RolePermissionResponse>> GetAllRolePermission(QueryObject queryObject)
         {
-            var rps = _unitOfWork.RolePermissionRepository.Get(
+            var rps = _unitOfWork.RolePermissionRepository.Get(includeProperties: "Role,Permission",
                 pageIndex: queryObject.PageIndex,
                 pageSize: queryObject.PageSize)
                 .ToList();
@@ -45,7 +45,7 @@ namespace FuStudy_Service.Service
         public async Task<List<RolePermissionResponse>> GetAllPermissionByRoleId(long id)
         {
             var rp = _unitOfWork.RolePermissionRepository.Get(filter: p =>
-                                                        p.RoleId == id);
+                                                        p.RoleId == id, includeProperties: "Role,Permission");
 
             if (rp == null)
             {
@@ -56,16 +56,17 @@ namespace FuStudy_Service.Service
             return rolePermissionResponse;
         }
 
-        public async Task<RolePermissionResponse> GetRolePermissionById(long id)
+        public async Task<List<RolePermissionResponse>> GetRolePermissionById(long id)
         {
-            var rp = _unitOfWork.RolePermissionRepository.GetByID(id);
+            var rp = _unitOfWork.RolePermissionRepository.Get(filter: p =>
+                                                        p.Id == id, includeProperties: "Role,Permission");
 
             if (rp == null)
             {
                 throw new CustomException.DataNotFoundException($"RolePermission not found with ID: {id}");
             }
 
-            var rolePermissionResponse = _mapper.Map<RolePermissionResponse>(rp);
+            var rolePermissionResponse = _mapper.Map<List<RolePermissionResponse>>(rp);
             return rolePermissionResponse;
         }
 

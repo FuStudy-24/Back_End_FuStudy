@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FuStudy_Repository.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,9 @@ namespace FuStudy_Model.DTO.Response
     {
         public long Id { get; set; }
 
-        public long RoleId { get; set; }
+        public Role Role { get; set; }
 
-        public long PermissionId { get; set; }
+        public Permission Permission { get; set; }
+
     }
 }
