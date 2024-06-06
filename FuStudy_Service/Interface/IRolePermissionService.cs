@@ -13,7 +13,7 @@ namespace FuStudy_Service.Interface
     {
         Task<IEnumerable<RolePermissionResponse>> GetAllRolePermission(QueryObject queryObject);
         Task<List<RolePermissionResponse>> GetAllPermissionByRoleId(long id);
-        Task<RolePermissionResponse> GetRolePermissionById(long id);
+        Task<List<RolePermissionResponse>> GetRolePermissionById(long id);
         Task<RolePermissionResponse> CreateRolePermission(RolePermissionRequest rolePermissionRequest);
         Task<bool> DeleteRolePermission(long id);
     }
