@@ -11,4 +11,5 @@ public interface IUserService
     Task<IEnumerable<User>> GetAllUsers();
     Task<User> GetUserById(long id);
     Task<User> UpdateUser(long id, UpdateAccountDTORequest updateAccountDTORequest);
+    string GetUserID();
 }
