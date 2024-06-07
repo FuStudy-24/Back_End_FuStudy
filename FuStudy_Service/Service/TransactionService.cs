@@ -7,6 +7,7 @@ using FuStudy_Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
@@ -24,9 +25,26 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TransactionResponse>> GetAllTransactionsAsync()
+        public async Task<IEnumerable<TransactionResponse>> GetAllTransactionsAsync(QueryObject queryObject)
         {
-            var transactions = _unitOfWork.TransactionRepository.Get();
+            Expression<Func<Transaction, bool>> filter = null;
+            if (!string.IsNullOrWhiteSpace(queryObject.Search))
+            {
+                filter = transaction => transaction.Type.Contains(queryObject.Search) ||
+                                        transaction.Description.Contains(queryObject.Search) ||
+                                        transaction.WalletId.ToString().Contains(queryObject.Search);
+            }
+
+            var transactions = _unitOfWork.TransactionRepository.Get(
+                filter: filter,
+                pageIndex: queryObject.PageIndex,
+                pageSize: queryObject.PageSize);
+
+            if (transactions == null || !transactions.Any())
+            {
+                throw new CustomException.DataNotFoundException("The transaction list is empty!");
+            }
+
             return _mapper.Map<IEnumerable<TransactionResponse>>(transactions);
         }
 

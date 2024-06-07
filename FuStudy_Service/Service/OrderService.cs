@@ -7,6 +7,7 @@ using FuStudy_Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
@@ -24,9 +25,26 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<OrderResponse>> GetAllOrdersAsync()
+        public async Task<IEnumerable<OrderResponse>> GetAllOrdersAsync(QueryObject queryObject)
         {
-            var orders = _unitOfWork.OrderRepository.Get();
+            Expression<Func<Order, bool>> filter = null;
+            if (!string.IsNullOrWhiteSpace(queryObject.Search))
+            {
+                filter = order => order.PaymentCode.Contains(queryObject.Search) ||
+                                  order.Description.Contains(queryObject.Search) ||
+                                  order.TransactionId.ToString().Contains(queryObject.Search);
+            }
+
+            var orders = _unitOfWork.OrderRepository.Get(
+                filter: filter,
+                pageIndex: queryObject.PageIndex,
+                pageSize: queryObject.PageSize);
+
+            if (orders == null || !orders.Any())
+            {
+                throw new CustomException.DataNotFoundException("The order list is empty!");
+            }
+
             return _mapper.Map<IEnumerable<OrderResponse>>(orders);
         }
 
