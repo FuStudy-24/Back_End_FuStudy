@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
+using FuStudy_Model.Enum;
 using FuStudy_Repository;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
@@ -52,13 +53,44 @@ public class AuthenticationService: IAuthenticationService
         user.Password = EncryptPassword.Encrypt(createAccountDTORequest.Password);
         user.Status = true;
         user.CreateDate = DateTime.Now.Date;
-        user.RoleId = 3;
+
+
+
+
+
         
-        
-        
-			
-			
         await _unitOfWork.UserRepository.AddAsync(user);
+        var wallet = new Wallet
+        {
+            UserId = user.Id,
+            Balance = 0,
+            Status = false
+        };
+        await _unitOfWork.WalletRepository.AddAsync(wallet);
+        if (user.RoleId.Equals(RoleName.Student))
+        {
+            var student = new Student();
+            student.UserId = user.Id;
+            await _unitOfWork.StudentRepository.AddAsync(student);
+            
+        }
+
+        if (user.RoleId.Equals(RoleName.Mentor))
+        {
+            var mentor = new Mentor
+            {
+                UserId = user.Id,
+                AcademicLevel = "",
+                WorkPlace = "",
+                Status = "pending",
+                Skill = "",
+                Video = ""
+            };
+            
+            
+            await _unitOfWork.MentorRepository.AddAsync(mentor);
+            
+        }
         CreateAccountDTOResponse createAccountDTOResponse = _mapper.Map<CreateAccountDTOResponse>(user);
         return createAccountDTOResponse;
         
