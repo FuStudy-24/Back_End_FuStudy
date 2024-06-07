@@ -36,17 +36,17 @@ namespace FuStudy_API.Controllers.Authentication
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] CreateAccountDTORequest createAccountDTORequest)
         {
-            try
-            {
+            // try
+            // {
                 CreateAccountDTOResponse user = await _authenticationService.Register(createAccountDTORequest);
 
                 return CustomResult("Register Success",user, HttpStatusCode.OK);
 
-            }
-            catch (Exception e)
-            {
-                return CustomResult(e.Message, HttpStatusCode.InternalServerError);
-            }
+            // }
+            // catch (Exception e)
+            // {
+            //      return CustomResult(e.Message, HttpStatusCode.InternalServerError);
+            // }
             
         }
         [HttpPost("RegisterTutor"), Authorize]

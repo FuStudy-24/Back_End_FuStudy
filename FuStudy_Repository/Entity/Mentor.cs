@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,17 +15,18 @@ namespace FuStudy_Repository.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
+      
 
         public long UserId { get; set; }
-        
+        [AllowNull]
         public string AcademicLevel { get; set; }
-
+        [AllowNull]
         public string WorkPlace { get; set; }
-
+        [AllowNull]
         public string Status { get; set; }
-
+        [AllowNull]
         public string Skill { get; set; }
-
+        [AllowNull]
         public string Video { get; set; }
 
         [ForeignKey("UserId")]
