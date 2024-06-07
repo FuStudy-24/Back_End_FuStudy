@@ -67,6 +67,13 @@ namespace FuStudy_Service.Service
 
         public async Task<WalletResponse> CreateWalletAsync(WalletRequest walletRequest)
         {
+            // Check for duplicate wallet
+            var existingWallet = _unitOfWork.WalletRepository.Get(w => w.UserId == walletRequest.UserId).FirstOrDefault();
+            if (existingWallet != null)
+            {
+                throw new CustomException.InvalidDataException($"Wallet for user ID: {walletRequest.UserId} already exists");
+            }
+
             var wallet = _mapper.Map<Wallet>(walletRequest);
             _unitOfWork.WalletRepository.Insert(wallet);
             _unitOfWork.Save();
@@ -79,6 +86,12 @@ namespace FuStudy_Service.Service
             if (wallet == null)
             {
                 throw new CustomException.DataNotFoundException($"Wallet with ID: {walletId} not found");
+            }
+
+            // Check if the user ID matches the wallet ID
+            if (wallet.UserId != walletRequest.UserId)
+            {
+                throw new CustomException.InvalidDataException($"The user ID: {walletRequest.UserId} does not match the wallet's user ID: {wallet.UserId}");
             }
 
             _mapper.Map(walletRequest, wallet);
@@ -101,4 +114,3 @@ namespace FuStudy_Service.Service
         }
     }
 }
-
