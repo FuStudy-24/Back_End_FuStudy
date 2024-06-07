@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
 namespace FuStudy_Service.Interface
 {
     public interface IOrderService
     {
-        Task<IEnumerable<OrderResponse>> GetAllOrdersAsync();
+        Task<IEnumerable<OrderResponse>> GetAllOrdersAsync(QueryObject queryObject);
         Task<OrderResponse> GetOrderByIdAsync(long id);
         Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest);
         Task<OrderResponse> UpdateOrderAsync(OrderRequest orderRequest, long orderId);

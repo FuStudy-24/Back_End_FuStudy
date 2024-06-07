@@ -22,11 +22,23 @@ namespace FuStudy_API.Controllers.Order
         }
 
         [HttpGet("GetAllOrders")]
-        public async Task<IActionResult> GetAllOrders()
+        public async Task<IActionResult> GetAllOrders([FromQuery] QueryObject queryObject)
         {
-            var orders = await _orderService.GetAllOrdersAsync();
-            return CustomResult("Data loaded!", orders);
+            try
+            {
+                var orders = await _orderService.GetAllOrdersAsync(queryObject);
+                return CustomResult("Data loaded!", orders);
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
         }
+
 
         [HttpGet("GetOrderById/{id}")]
         public async Task<IActionResult> GetOrderById(long id)
