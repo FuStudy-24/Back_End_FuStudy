@@ -118,6 +118,12 @@ namespace FuStudy_Repository.Repository
             return await dbSet.FindAsync(id);
         }
 
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await context.Set<User>().SingleOrDefaultAsync(u => u.Email == email);
+        }
+
+
         public async Task<IEnumerable<RolePermission>> GetRolePermissionsByRoleIdAsync(long roleId)
         {
             if (typeof(TEntity) == typeof(RolePermission))
@@ -129,6 +135,12 @@ namespace FuStudy_Repository.Repository
 
             throw new InvalidOperationException("This method can only be used with RolePermission entities.");
         }
+
+        public async Task<Token> GetUserToken(long userId)
+        {
+            return await context.Set<Token>().Where(t => t.UserId == userId && !t.IsExpired && !t.Revoked).FirstOrDefaultAsync();
+        }
+
 
         public virtual async Task<IEnumerable<TEntity>> GetAsync(
             Expression<Func<TEntity, bool>> filter = null,

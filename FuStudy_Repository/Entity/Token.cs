@@ -1,28 +1,26 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FuStudy_Repository.Entity;
-
-[Table("Token")]
-public class Token
+namespace FuStudy_Repository.Entity
 {
-    [Key] 
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public long Id;
+    [Table("Token")]
+    public class Token
+    {
+        [Key] 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
     
-    public long UserId;
+        public long UserId { get; set; }
 
-    public string TokenValue { get; set; }
+        public string TokenValue { get; set; }
 
-    public DateTime Time{ get; set; }
+        public DateTime Time { get; set; }
 
-    public int Revoked { get; set; }
+        public bool Revoked { get; set; }
 
-    public int IsExpired { get; set; }
+        public bool IsExpired { get; set; }
     
-    [ForeignKey("UserId")]
-    public virtual User User { get; set; }
-
-    
-    
+        [ForeignKey("UserId")]
+        public virtual User User { get; set; }
+    }
 }
