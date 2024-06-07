@@ -11,8 +11,11 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FuStudy_Repository;
+using FuStudy_Service;
 using Quartz.Impl;
 using Quartz;
+using Tools;
 using Tools.Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -78,8 +81,13 @@ builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 builder.Services.AddScoped<IMajorService, MajorService>();
 builder.Services.AddScoped<IMentorMajorService, MentorMajorService>();
+builder.Services.Configure<Email>(builder.Configuration.GetSection("EmailConfiguration"));
+builder.Services.AddScoped<IEmailConfig, EmailConfig>();
 
 builder.Services.AddScoped<Tools.Firebase>();
+
+
+
 
 
 builder.Services.AddScoped<IBlogCommentService, BlogCommentService>();

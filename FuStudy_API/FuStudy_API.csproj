@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Authentication\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

@@ -272,6 +272,31 @@ namespace FuStudy_API.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Token",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    TokenValue = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Revoked = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsExpired = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Token", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Token_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Wallet",
                 columns: table => new
                 {
@@ -813,12 +838,12 @@ namespace FuStudy_API.Migrations
             migrationBuilder.InsertData(
                 table: "Blog",
                 columns: new[] { "Id", "BlogContent", "CreateDate", "Image", "TotalLike", "UserId" },
-                values: new object[] { 1L, "How to be a better mentor", new DateTime(2024, 6, 6, 0, 17, 7, 214, DateTimeKind.Local).AddTicks(9970), "ahihi", 1, 2L });
+                values: new object[] { 1L, "How to be a better mentor", new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7030), "ahihi", 1, 2L });
 
             migrationBuilder.InsertData(
                 table: "Conversation",
                 columns: new[] { "Id", "CreateAt", "Duration", "EndTime", "IsClose", "LastMessage", "User1Id", "User2Id" },
-                values: new object[] { 1L, new DateTime(2024, 6, 6, 0, 17, 7, 215, DateTimeKind.Local).AddTicks(120), new TimeSpan(0, 0, 0, 0, 0), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Hello!", 1L, 2L });
+                values: new object[] { 1L, new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7170), new TimeSpan(0, 0, 0, 0, 0), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Hello!", 1L, 2L });
 
             migrationBuilder.InsertData(
                 table: "Mentor",
@@ -842,7 +867,7 @@ namespace FuStudy_API.Migrations
             migrationBuilder.InsertData(
                 table: "BlogComment",
                 columns: new[] { "Id", "BlogId", "Comment", "CreateDate", "ModifiedDate", "Status", "UserId" },
-                values: new object[] { 1L, 1L, "Great post!", new DateTime(2024, 6, 6, 0, 17, 7, 215, DateTimeKind.Local), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1L });
+                values: new object[] { 1L, 1L, "Great post!", new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7060), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1L });
 
             migrationBuilder.InsertData(
                 table: "BlogLike",
@@ -852,7 +877,7 @@ namespace FuStudy_API.Migrations
             migrationBuilder.InsertData(
                 table: "ConversationMessage",
                 columns: new[] { "Id", "Content", "ConversationId", "CreateTime", "DeleteAt", "IsDelete", "IsSeen", "SenderId" },
-                values: new object[] { 1L, "Hello!", 1L, new DateTime(2024, 6, 6, 0, 17, 7, 215, DateTimeKind.Local).AddTicks(140), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 1L });
+                values: new object[] { 1L, "Hello!", 1L, new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7200), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 1L });
 
             migrationBuilder.InsertData(
                 table: "MentorMajor",
@@ -862,17 +887,17 @@ namespace FuStudy_API.Migrations
             migrationBuilder.InsertData(
                 table: "Question",
                 columns: new[] { "Id", "CategoryId", "Content", "CreateDate", "Image", "ModifiedDate", "Status", "StudentId", "TotalRating" },
-                values: new object[] { 1L, 1L, "How to sort an array in C#?", new DateTime(2024, 6, 6, 0, 17, 7, 214, DateTimeKind.Local).AddTicks(9720), "ahihi", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1L, 1 });
+                values: new object[] { 1L, 1L, "How to sort an array in C#?", new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(6790), "ahihi", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1L, 1 });
 
             migrationBuilder.InsertData(
                 table: "StudentSubcription",
                 columns: new[] { "Id", "CurrentMeeting", "CurrentQuestion", "EndDate", "StartDate", "Status", "StudentId", "SubcriptionId" },
-                values: new object[] { 1L, 0, 0, new DateTime(2024, 7, 6, 0, 17, 7, 214, DateTimeKind.Local).AddTicks(9880), new DateTime(2024, 6, 6, 0, 17, 7, 214, DateTimeKind.Local).AddTicks(9880), true, 1L, 1L });
+                values: new object[] { 1L, 0, 0, new DateTime(2024, 7, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(6940), new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(6940), true, 1L, 1L });
 
             migrationBuilder.InsertData(
                 table: "Transaction",
                 columns: new[] { "Id", "Ammount", "CreateTime", "Description", "Type", "WalletId" },
-                values: new object[] { 1L, 9.9900000000000002, new DateTime(2024, 6, 6, 0, 17, 7, 214, DateTimeKind.Local).AddTicks(9930), "Subscription payment", "Deposit", 1L });
+                values: new object[] { 1L, 9.9900000000000002, new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(6990), "Subscription payment", "Deposit", 1L });
 
             migrationBuilder.InsertData(
                 table: "CommentImage",
@@ -882,17 +907,17 @@ namespace FuStudy_API.Migrations
             migrationBuilder.InsertData(
                 table: "MessageReaction",
                 columns: new[] { "Id", "ConversationMessageId", "CreateAt", "ReactionType", "UserId" },
-                values: new object[] { 1L, 1L, new DateTime(2024, 6, 6, 0, 17, 7, 215, DateTimeKind.Local).AddTicks(180), "like", 2L });
+                values: new object[] { 1L, 1L, new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7230), "like", 2L });
 
             migrationBuilder.InsertData(
                 table: "Order",
                 columns: new[] { "Id", "CreateDate", "Description", "Money", "PaymentCode", "Status", "TransactionId" },
-                values: new object[] { 1L, new DateTime(2024, 6, 6, 0, 17, 7, 214, DateTimeKind.Local).AddTicks(9960), "Payment for Basic subscription", 9.9900000000000002, "PAY12345", true, 1L });
+                values: new object[] { 1L, new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7020), "Payment for Basic subscription", 9.9900000000000002, "PAY12345", true, 1L });
 
             migrationBuilder.InsertData(
                 table: "QuestionComment",
                 columns: new[] { "Id", "Content", "CreateDate", "ModifiedDate", "QuestionId", "Status", "UserId" },
-                values: new object[] { 1L, "Good question!", new DateTime(2024, 6, 6, 0, 17, 7, 215, DateTimeKind.Local).AddTicks(100), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1L, false, 2L });
+                values: new object[] { 1L, "Good question!", new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7140), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1L, false, 2L });
 
             migrationBuilder.InsertData(
                 table: "QuestionRating",
@@ -1060,6 +1085,11 @@ namespace FuStudy_API.Migrations
                 column: "SubcriptionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Token_UserId",
+                table: "Token",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transaction_WalletId",
                 table: "Transaction",
                 column: "WalletId");
@@ -1113,6 +1143,9 @@ namespace FuStudy_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "StudentSubcription");
+
+            migrationBuilder.DropTable(
+                name: "Token");
 
             migrationBuilder.DropTable(
                 name: "BlogComment");

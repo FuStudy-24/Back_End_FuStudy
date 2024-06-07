@@ -94,7 +94,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             BlogContent = "How to be a better mentor",
-                            CreateDate = new DateTime(2024, 6, 6, 0, 17, 7, 214, DateTimeKind.Local).AddTicks(9970),
+                            CreateDate = new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7030),
                             Image = "ahihi",
                             TotalLike = 1,
                             UserId = 2L
@@ -142,7 +142,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             BlogId = 1L,
                             Comment = "Great post!",
-                            CreateDate = new DateTime(2024, 6, 6, 0, 17, 7, 215, DateTimeKind.Local),
+                            CreateDate = new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7060),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = false,
                             UserId = 1L
@@ -330,7 +330,7 @@ namespace FuStudy_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateAt = new DateTime(2024, 6, 6, 0, 17, 7, 215, DateTimeKind.Local).AddTicks(120),
+                            CreateAt = new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7170),
                             Duration = new TimeSpan(0, 0, 0, 0, 0),
                             EndTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsClose = false,
@@ -384,7 +384,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             Content = "Hello!",
                             ConversationId = 1L,
-                            CreateTime = new DateTime(2024, 6, 6, 0, 17, 7, 215, DateTimeKind.Local).AddTicks(140),
+                            CreateTime = new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7200),
                             DeleteAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDelete = false,
                             IsSeen = false,
@@ -578,7 +578,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             ConversationMessageId = 1L,
-                            CreateAt = new DateTime(2024, 6, 6, 0, 17, 7, 215, DateTimeKind.Local).AddTicks(180),
+                            CreateAt = new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7230),
                             ReactionType = "like",
                             UserId = 2L
                         });
@@ -622,7 +622,7 @@ namespace FuStudy_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 6, 6, 0, 17, 7, 214, DateTimeKind.Local).AddTicks(9960),
+                            CreateDate = new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7020),
                             Description = "Payment for Basic subscription",
                             Money = 9.9900000000000002,
                             PaymentCode = "PAY12345",
@@ -718,7 +718,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             CategoryId = 1L,
                             Content = "How to sort an array in C#?",
-                            CreateDate = new DateTime(2024, 6, 6, 0, 17, 7, 214, DateTimeKind.Local).AddTicks(9720),
+                            CreateDate = new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(6790),
                             Image = "ahihi",
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = false,
@@ -767,7 +767,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             Content = "Good question!",
-                            CreateDate = new DateTime(2024, 6, 6, 0, 17, 7, 215, DateTimeKind.Local).AddTicks(100),
+                            CreateDate = new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(7140),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             QuestionId = 1L,
                             Status = false,
@@ -960,8 +960,8 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             CurrentMeeting = 0,
                             CurrentQuestion = 0,
-                            EndDate = new DateTime(2024, 7, 6, 0, 17, 7, 214, DateTimeKind.Local).AddTicks(9880),
-                            StartDate = new DateTime(2024, 6, 6, 0, 17, 7, 214, DateTimeKind.Local).AddTicks(9880),
+                            EndDate = new DateTime(2024, 7, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(6940),
+                            StartDate = new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(6940),
                             Status = true,
                             StudentId = 1L,
                             SubcriptionId = 1L
@@ -1017,6 +1017,37 @@ namespace FuStudy_API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FuStudy_Repository.Entity.Token", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("Revoked")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("TokenValue")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Token");
+                });
+
             modelBuilder.Entity("FuStudy_Repository.Entity.Transaction", b =>
                 {
                     b.Property<long>("Id")
@@ -1053,7 +1084,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             Ammount = 9.9900000000000002,
-                            CreateTime = new DateTime(2024, 6, 6, 0, 17, 7, 214, DateTimeKind.Local).AddTicks(9930),
+                            CreateTime = new DateTime(2024, 6, 7, 14, 52, 22, 808, DateTimeKind.Local).AddTicks(6990),
                             Description = "Subscription payment",
                             Type = "Deposit",
                             WalletId = 1L
@@ -1520,6 +1551,17 @@ namespace FuStudy_API.Migrations
                     b.Navigation("Student");
 
                     b.Navigation("Subcription");
+                });
+
+            modelBuilder.Entity("FuStudy_Repository.Entity.Token", b =>
+                {
+                    b.HasOne("FuStudy_Repository.Entity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Transaction", b =>
