@@ -107,7 +107,7 @@ namespace FuStudy_API.Controllers.Authentication
             }
 
             var token =  Tools.Authentication.GenerateRandomString(10);
-            var forgotPasswordLink = $"http://localhost:5173/confirm-password?token={token}&email={user.Email}";
+            var forgotPasswordLink = $"http://localhost:3000/forgetpass?token={token}&email={user.Email}";
             var tokenEntity = new Token
             {
                 TokenValue = token,
