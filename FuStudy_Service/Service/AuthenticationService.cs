@@ -92,7 +92,7 @@ public class AuthenticationService: IAuthenticationService
     {
         var mentor = _mapper.Map<Mentor>(registerTutorRequest);
         mentor.UserId = long.Parse(_userService.GetUserID());
-        mentor.Status = "pending";
+        mentor.VerifyStatus = true;
         await _unitOfWork.MentorRepository.AddAsync(mentor);
         RegisterTutorResponse registerTutorResponse = _mapper.Map<RegisterTutorResponse>(mentor);
         return registerTutorResponse;
