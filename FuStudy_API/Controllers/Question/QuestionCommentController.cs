@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CoreApiResponse;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Tools;
@@ -73,6 +74,7 @@ public class QuestionCommentController : BaseController
     }
 
     [HttpPost("CreateQuestionComment")]
+    [Authorize]
     public async Task<IActionResult> CreateQuestionComment([FromBody] QuestionCommentRequest questionCommentRequest)
     {
         try
@@ -99,6 +101,7 @@ public class QuestionCommentController : BaseController
     }
 
     [HttpPatch("UpdateQuestionComment/{questionCommentId}")]
+    [Authorize]
     public async Task<IActionResult> UpdateQuestionComment(long questionCommentId,
         [FromBody] QuestionCommentRequest questionRequest)
     {
@@ -124,6 +127,7 @@ public class QuestionCommentController : BaseController
     }
 
     [HttpDelete("DeleteQuestionComment/{questionId}")]
+    [Authorize]
     public async Task<IActionResult> DeleteQuestionComment(long questionId)
     {
         try

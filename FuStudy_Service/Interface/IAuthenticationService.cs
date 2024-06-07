@@ -9,7 +9,9 @@ public interface IAuthenticationService
 {
     Task<CreateAccountDTOResponse> Register(CreateAccountDTORequest createAccountDTORequest); 
     Task<(string, LoginDTOResponse)> Login(LoginDTORequest loginDtoRequest);
-    Task<RegisterTutorResponse> RegisterTutor(RegisterTutorRequest registerTutorRequest); 
-    
+    Task<RegisterTutorResponse> RegisterTutor(RegisterTutorRequest registerTutorRequest);
+    Task<Token> SaveToken(Token token);
+
+    Task<ResponseDTO> ResetPassAsync(UserResetPassDTO userReset);
 }
 

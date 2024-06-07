@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CoreApiResponse;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tools;
 
@@ -44,6 +45,7 @@ public class QuestionRatingController : BaseController
     
 
     [HttpPost("Like")]
+    [Authorize]
         public async Task<IActionResult> Like([FromBody] QuestionRatingRequest questionRatingRequest)
         {
             try
@@ -74,6 +76,7 @@ public class QuestionRatingController : BaseController
         }
 
         [HttpDelete("Unlike")]
+        [Authorize]
         public async Task<IActionResult> Unlike([FromBody] QuestionRatingRequest questionRatingRequest)
         {
             try

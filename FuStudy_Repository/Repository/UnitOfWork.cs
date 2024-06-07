@@ -37,6 +37,7 @@ namespace FuStudy_Repository.Repository
         private IGenericRepository<User> _userRepository;
         private IGenericRepository<Wallet> _walletRepository;
         private IGenericRepository<CommentImage> _commentImage;
+        private IGenericRepository<Token> _tokenRepository;
 
         public UnitOfWork()
         {
@@ -363,6 +364,20 @@ namespace FuStudy_Repository.Repository
                     _commentImage = new GenericRepository<CommentImage>(_context);
                 }
                 return _commentImage;
+            }
+        }
+
+        public IGenericRepository<Token> TokenRepository
+        {
+            get
+            {
+                if (_tokenRepository == null)
+                {
+                    _tokenRepository = new GenericRepository<Token>(_context);
+                    
+                }
+
+                return _tokenRepository;
             }
         }
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
+using FuStudy_Model.Enum;
 using FuStudy_Repository;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
@@ -52,13 +53,44 @@ public class AuthenticationService: IAuthenticationService
         user.Password = EncryptPassword.Encrypt(createAccountDTORequest.Password);
         user.Status = true;
         user.CreateDate = DateTime.Now.Date;
-        user.RoleId = 3;
+
+
+
+
+
         
-        
-        
-			
-			
         await _unitOfWork.UserRepository.AddAsync(user);
+        var wallet = new Wallet
+        {
+            UserId = user.Id,
+            Balance = 0,
+            Status = false
+        };
+        await _unitOfWork.WalletRepository.AddAsync(wallet);
+        if (user.RoleId.Equals(RoleName.Student))
+        {
+            var student = new Student();
+            student.UserId = user.Id;
+            await _unitOfWork.StudentRepository.AddAsync(student);
+            
+        }
+
+        if (user.RoleId.Equals(RoleName.Mentor))
+        {
+            var mentor = new Mentor
+            {
+                UserId = user.Id,
+                AcademicLevel = "",
+                WorkPlace = "",
+                Status = "pending",
+                Skill = "",
+                Video = ""
+            };
+            
+            
+            await _unitOfWork.MentorRepository.AddAsync(mentor);
+            
+        }
         CreateAccountDTOResponse createAccountDTOResponse = _mapper.Map<CreateAccountDTOResponse>(user);
         return createAccountDTOResponse;
         
@@ -97,4 +129,74 @@ public class AuthenticationService: IAuthenticationService
         RegisterTutorResponse registerTutorResponse = _mapper.Map<RegisterTutorResponse>(mentor);
         return registerTutorResponse;
     }
+
+    public async Task<Token> SaveToken(Token token)
+    {
+        var existingToken = await _unitOfWork.TokenRepository.GetUserToken(token.UserId);
+
+        if (existingToken != null)
+        {
+            // Mark existing token as expired
+            existingToken.IsExpired = true;
+            existingToken.Revoked = true;
+            await _unitOfWork.TokenRepository.UpdateAsync(existingToken);
+        }
+        token.Time = DateTime.Now;
+        token.Revoked = false;
+        token.IsExpired = false;
+        var tokenAdd = await _unitOfWork.TokenRepository.AddAsync(token);
+        return tokenAdd;
+    }
+
+    public async Task<ResponseDTO> ResetPassAsync(UserResetPassDTO userReset)
+    {
+        var user = await _unitOfWork.UserRepository.GetByEmailAsync(userReset.Email);
+        if (user == null)
+        {
+            return new ResponseDTO()
+            {
+                Success = false,
+                Message = "User not found"
+            };
+        }
+
+        var userToken = await _unitOfWork.TokenRepository.GetUserToken(user.Id);
+        if (userToken == null || userToken.IsExpired || userToken.Revoked)
+        {
+            return new ResponseDTO()
+            {
+                Success = false,
+                Message = "Invalid or expired token"
+            };
+        }
+
+        if (!userReset.Token.Equals(userToken.TokenValue))
+        {
+            return new ResponseDTO()
+            {
+                Success = false,
+                Message = "Token not found"
+            };
+        }
+
+        string encryptedPassword = EncryptPassword.Encrypt(userReset.NewPassword);
+        user.Password = encryptedPassword;
+        userToken.IsExpired = true;
+        userToken.Revoked = true;
+        
+
+        
+           await _unitOfWork.UserRepository.UpdateAsync(user);
+           await _unitOfWork.TokenRepository.UpdateAsync(userToken);
+            
+
+            return new ResponseDTO()
+            {
+                Success = true,
+                Message = "Password reset successfully"
+            };
+        
+        
+    }
+
 }

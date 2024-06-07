@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Tools\Tools.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MimeKit" Version="4.6.0" />
+  </ItemGroup>
+
 </Project>

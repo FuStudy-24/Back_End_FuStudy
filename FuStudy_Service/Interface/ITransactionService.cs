@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
 namespace FuStudy_Service.Interface
 {
     public interface ITransactionService
     {
-        Task<IEnumerable<TransactionResponse>> GetAllTransactionsAsync();
+        Task<IEnumerable<TransactionResponse>> GetAllTransactionsAsync(QueryObject queryObject);
         Task<TransactionResponse> GetTransactionByIdAsync(long id);
         Task<TransactionResponse> CreateTransactionAsync(TransactionRequest transactionRequest);
         Task<TransactionResponse> UpdateTransactionAsync(TransactionRequest transactionRequest, long transactionId);

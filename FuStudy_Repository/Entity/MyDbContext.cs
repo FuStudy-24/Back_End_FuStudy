@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using FuStudy_Repository.Entity;
 using Microsoft.Extensions.Configuration;
 using System.Runtime.Intrinsics.X86;
+using Humanizer;
 using Microsoft.EntityFrameworkCore.Internal;
 
 namespace FuStudy_Repository.Entity
@@ -48,7 +50,7 @@ namespace FuStudy_Repository.Entity
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
-
+        public DbSet<Token> Tokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -66,7 +68,14 @@ namespace FuStudy_Repository.Entity
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            foreach (var entity in modelBuilder.Model.GetEntityTypes())
+            {
+                // Pluralize the table name
+                entity.SetTableName(entity.DisplayName().Pluralize());
+            }
             base.OnModelCreating(modelBuilder);
+           
+            
             // -- Roles & Permissions --
             var roles = new List<Role>
             {

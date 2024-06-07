@@ -7,6 +7,7 @@ using FuStudy_Service.Interface;
 using FuStudy_Repository.Entity;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Model.DTO.Request;
+using Microsoft.AspNetCore.Authorization;
 using Tools;
 
 
@@ -61,6 +62,7 @@ namespace FuStudy_API.Controllers.Question
         }
 
     [HttpPost("CreateQuestionWithSubscription")]
+    [Authorize]
         public async Task<IActionResult> CreateQuestionWithSubscription([FromBody] QuestionRequest questionRequest)
         {
             try
@@ -91,6 +93,7 @@ namespace FuStudy_API.Controllers.Question
         }
 
         [HttpPost("CreateQuestionByCoin")]
+        [Authorize]
         public async Task<IActionResult> CreateQuestionByCoin([FromBody] QuestionRequest questionRequest)
         {
             try
@@ -121,6 +124,7 @@ namespace FuStudy_API.Controllers.Question
         }
         
         [HttpPatch("UpdateQuestion/{questionId}")]
+        [Authorize]
         public async Task<IActionResult> UpdateQuestion(long questionId, [FromBody] QuestionRequest questionRequest)
         {
             if (!ModelState.IsValid)
@@ -147,6 +151,7 @@ namespace FuStudy_API.Controllers.Question
         }
 
         [HttpDelete("DeleteQuestion/{questionId}")]
+        [Authorize]
         public async Task<IActionResult> DeleteQuestion(long questionId)
         {
             try

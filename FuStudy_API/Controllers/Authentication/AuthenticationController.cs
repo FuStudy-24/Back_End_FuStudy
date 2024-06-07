@@ -7,6 +7,7 @@ using CoreApiResponse;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
+using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,25 +22,31 @@ namespace FuStudy_API.Controllers.Authentication
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailConfig _emailConfig;
+        
 
-        public AuthenticationController(IAuthenticationService authenticationService, IMapper _mapper)
+        public AuthenticationController(IAuthenticationService authenticationService, IMapper mapper, IUnitOfWork unitOfWork, IEmailConfig emailConfig)
         {
             _authenticationService = authenticationService;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+            _emailConfig = emailConfig;
         }
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] CreateAccountDTORequest createAccountDTORequest)
         {
-            try
-            {
+            // try
+            // {
                 CreateAccountDTOResponse user = await _authenticationService.Register(createAccountDTORequest);
 
                 return CustomResult("Register Success",user, HttpStatusCode.OK);
 
-            }
-            catch (Exception e)
-            {
-                return CustomResult(e.Message, HttpStatusCode.InternalServerError);
-            }
+            // }
+            // catch (Exception e)
+            // {
+            //      return CustomResult(e.Message, HttpStatusCode.InternalServerError);
+            // }
             
         }
         [HttpPost("RegisterTutor"), Authorize]
@@ -83,6 +90,58 @@ namespace FuStudy_API.Controllers.Authentication
             }
 
             
+        }
+        [HttpPost("ForgotPassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPasswordAsync(UserForgotPassDTO forgotPassUser)
+        {
+            var user = await _unitOfWork.UserRepository.GetByEmailAsync(forgotPassUser.Email);
+
+            if (user == null)
+            {
+                return BadRequest(new ResponseDTO
+                {
+                    Success = false,
+                    Message = "Could not send link to email, please try again. \nYour email does not exist in system."
+                });
+            }
+
+            var token =  Tools.Authentication.GenerateRandomString(10);
+            var forgotPasswordLink = $"http://localhost:3000/resetpass?token={token}&email={user.Email}";
+            var tokenEntity = new Token
+            {
+                TokenValue = token,
+                UserId = user.Id
+            };
+            await _authenticationService.SaveToken(tokenEntity);
+            Console.WriteLine("Link: " + forgotPasswordLink);
+            var message = new EmailDTO
+            (
+                new string[] { user.Email },
+                "Forgot Password Link!",
+                forgotPasswordLink!
+            );
+
+            _emailConfig.SendEmail(message);
+
+            return Ok(new ResponseDTO
+            {
+                Success = true,
+                Message = $"Password changed request is sent on your Email {user.Email}.Please open your email and click the link."
+            });
+        }
+        [HttpPost("ResetPassword")]
+        [AllowAnonymous]
+
+        public async Task<IActionResult> ResetPassAsync(UserResetPassDTO userReset)
+        {
+            var result = await _authenticationService.ResetPassAsync(userReset);
+            if(!result.Success) 
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
     }
 }
