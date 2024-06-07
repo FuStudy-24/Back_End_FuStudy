@@ -100,6 +100,15 @@ public class AuthenticationService: IAuthenticationService
 
     public async Task<Token> SaveToken(Token token)
     {
+        var existingToken = await _unitOfWork.TokenRepository.GetUserToken(token.UserId);
+
+        if (existingToken != null)
+        {
+            // Mark existing token as expired
+            existingToken.IsExpired = true;
+            existingToken.Revoked = true;
+            await _unitOfWork.TokenRepository.UpdateAsync(existingToken);
+        }
         token.Time = DateTime.Now;
         token.Revoked = false;
         token.IsExpired = false;
