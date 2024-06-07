@@ -7,6 +7,7 @@ using FuStudy_Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
@@ -24,9 +25,27 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<WalletResponse>> GetAllWalletsAsync()
+        public async Task<IEnumerable<WalletResponse>> GetAllWalletsAsync(QueryObject queryObject)
         {
-            var wallets = _unitOfWork.WalletRepository.Get();
+            // Check if QueryObject search is not null
+            Expression<Func<Wallet, bool>> filter = null;
+            if (!string.IsNullOrWhiteSpace(queryObject.Search))
+            {
+                filter = wallet => wallet.UserId.ToString().Contains(queryObject.Search)
+                                || wallet.Balance.ToString().Contains(queryObject.Search)
+                                || wallet.Status.ToString().Contains(queryObject.Search);
+            }
+
+            var wallets = _unitOfWork.WalletRepository.Get(
+                filter: filter,
+                pageIndex: queryObject.PageIndex,
+                pageSize: queryObject.PageSize);
+
+            if (wallets == null || !wallets.Any())
+            {
+                throw new CustomException.DataNotFoundException("The wallet list is empty!");
+            }
+
             return _mapper.Map<IEnumerable<WalletResponse>>(wallets);
         }
 
@@ -48,6 +67,13 @@ namespace FuStudy_Service.Service
 
         public async Task<WalletResponse> CreateWalletAsync(WalletRequest walletRequest)
         {
+            // Check for duplicate wallet
+            var existingWallet = _unitOfWork.WalletRepository.Get(w => w.UserId == walletRequest.UserId).FirstOrDefault();
+            if (existingWallet != null)
+            {
+                throw new CustomException.InvalidDataException($"Wallet for user ID: {walletRequest.UserId} already exists");
+            }
+
             var wallet = _mapper.Map<Wallet>(walletRequest);
             _unitOfWork.WalletRepository.Insert(wallet);
             _unitOfWork.Save();
@@ -60,6 +86,12 @@ namespace FuStudy_Service.Service
             if (wallet == null)
             {
                 throw new CustomException.DataNotFoundException($"Wallet with ID: {walletId} not found");
+            }
+
+            // Check if the user ID matches the wallet ID
+            if (wallet.UserId != walletRequest.UserId)
+            {
+                throw new CustomException.InvalidDataException($"The user ID: {walletRequest.UserId} does not match the wallet's user ID: {wallet.UserId}");
             }
 
             _mapper.Map(walletRequest, wallet);
@@ -82,4 +114,3 @@ namespace FuStudy_Service.Service
         }
     }
 }
-

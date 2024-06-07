@@ -21,10 +21,21 @@ namespace FuStudy_API.Controllers.Wallet
         }
 
         [HttpGet("GetAllWallets")]
-        public async Task<IActionResult> GetAllWallets()
+        public async Task<IActionResult> GetAllWallets([FromQuery] QueryObject queryObject)
         {
-            var wallets = await _walletService.GetAllWalletsAsync();
-            return CustomResult("Data loaded!", wallets);
+            try
+            {
+                var wallets = await _walletService.GetAllWalletsAsync(queryObject);
+                return CustomResult("Data loaded!", wallets);
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet("GetWalletById/{id}")]

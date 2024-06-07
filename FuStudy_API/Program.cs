@@ -141,14 +141,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 
 //Build CORS
-/*builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
+builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
 {
     // Dòng ở dưới là đường cứng
-    //build.WithOrigins("https:localhost:3000", "https:localhost:7022");
+    build.WithOrigins("https:localhost:3000", "https:localhost:7022","http:localhost:3000");
 
     //Dòng dưới là nhận hết
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-}));*/
+}));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
