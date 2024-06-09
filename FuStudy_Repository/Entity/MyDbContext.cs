@@ -68,11 +68,7 @@ namespace FuStudy_Repository.Entity
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            foreach (var entity in modelBuilder.Model.GetEntityTypes())
-            {
-                // Pluralize the table name
-                entity.SetTableName(entity.DisplayName().Pluralize());
-            }
+            
             base.OnModelCreating(modelBuilder);
            
             
