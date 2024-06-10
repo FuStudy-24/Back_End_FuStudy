@@ -1,0 +1,133 @@
+﻿using CoreApiResponse;
+using FuStudy_Model.DTO.Request;
+using FuStudy_Model.DTO.Response;
+using FuStudy_Service.Interface;
+using FuStudy_Service.Service;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using Tools;
+
+namespace FuStudy_API.Controllers.Mentor
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class MentorController : BaseController
+    {
+        private readonly IMentorService _mentorService;
+
+        public MentorController(IMentorService mentorService)
+        { 
+            _mentorService = mentorService;
+        }
+
+        [HttpGet("GetAllMentorVerify")]
+        public IActionResult GetAllMentorVerify([FromQuery] QueryObject queryPbject)
+        {
+            try
+            {
+                var mentors = _mentorService.GetAllMentorVerify(queryPbject);
+                return CustomResult("Data Load Successfully", mentors);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet("GetAllMentorWaiting")]
+        public IActionResult GetAllMentor([FromQuery] QueryObject queryPbject)
+        {
+            try
+            {
+                var mentors = _mentorService.GetAllMentorWaiting(queryPbject);
+                return CustomResult("Data Load Successfully", mentors);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet("GetMentorById/{id}")]
+        public async Task<IActionResult> GetMentorById(long id)
+        {
+            try
+            {
+                var mentor = await _mentorService.GetMentorById(id);
+
+                return CustomResult("Data Load Successfully", mentor);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPatch("UpdateMentor/{id}")]
+        public async Task<IActionResult> UpdateMentor(long id, MentorRequest mentorRequest)
+        {
+            try
+            {
+                MentorResponse mentor = await _mentorService.UpdateMentor(id, mentorRequest);
+                return CustomResult("Update Sucessfully", mentor, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.DataExistException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Conflict);
+            }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /*[HttpPatch("UpdateOnlineStatus/{id}")]
+        public async Task<IActionResult> UpdateOnlineStatus(long id)
+        {
+            try
+            {
+                Men
+            }
+        }*/
+
+        [HttpDelete("DeleteMentor/{id}")]
+        public async Task<IActionResult> DeleteMentor(long id)
+        {
+            try
+            {
+                var mentor = await _mentorService.DeleteMentor(id);
+                return CustomResult("Delete Role Successfull (Status)", mentor, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+
+        }
+    }
+}

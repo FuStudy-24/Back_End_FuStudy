@@ -22,12 +22,14 @@ namespace FuStudy_Repository.Entity
         public string AcademicLevel { get; set; }
         [AllowNull]
         public string WorkPlace { get; set; }
-        [AllowNull]
-        public string Status { get; set; }
-        [AllowNull]
+
+        public string OnlineStatus { get; set; }
+
         public string Skill { get; set; }
         [AllowNull]
         public string Video { get; set; }
+
+        public bool VerifyStatus { get; set; }
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
