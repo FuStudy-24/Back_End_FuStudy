@@ -80,6 +80,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 builder.Services.AddScoped<IMajorService, MajorService>();
+builder.Services.AddScoped<IMentorService, MentorService>();
 builder.Services.AddScoped<IMentorMajorService, MentorMajorService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();

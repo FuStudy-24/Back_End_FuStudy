@@ -11,11 +11,11 @@ namespace FuStudy_Model.DTO.Response
     {
         public long Id { get; set; }
 
-        public string AccademyLevel { get; set; }
+        public long UserId { get; set; }
+
+        public string AcademicLevel { get; set; }
 
         public string WorkPlace { get; set; }
-
-        public string OnlineStatus { get; set; }
 
         public string Skill { get; set; }
 
@@ -23,8 +23,5 @@ namespace FuStudy_Model.DTO.Response
 
         public bool VerifyStatus { get; set; }
 
-        public User User { get; set; }
-
-        public Major Major { get; set; }
     }
 }

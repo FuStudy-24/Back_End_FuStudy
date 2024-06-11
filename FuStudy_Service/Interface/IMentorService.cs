@@ -15,8 +15,8 @@ namespace FuStudy_Service.Interface
     {
         Task<IEnumerable<MentorResponse>> GetAllMentorVerify(QueryObject queryObject);
         Task<IEnumerable<MentorResponse>> GetAllMentorWaiting(QueryObject queryObject);
-        Task<MentorResponse> GetMentorById(long id);
+        Task<List<MentorResponse>> GetMentorById(long id);
         Task<MentorResponse> UpdateMentor(long id, MentorRequest mentorRequest);
-        Task<bool> DeleteMentor(long id);
+        Task<UpdateMentorOnlineStatusResponse> UpdateOnlineStatus(long id, UpdateMentorOnlineStatusResquest updateMentorOnlineStatusResquest);
     }
 }

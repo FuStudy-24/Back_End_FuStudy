@@ -24,7 +24,7 @@ namespace FuStudy_Repository.Entity
         public string WorkPlace { get; set; }
 
         public string OnlineStatus { get; set; }
-
+        [AllowNull]
         public string Skill { get; set; }
         [AllowNull]
         public string Video { get; set; }

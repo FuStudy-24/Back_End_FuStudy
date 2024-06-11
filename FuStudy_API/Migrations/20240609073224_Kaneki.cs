@@ -18,7 +18,7 @@ namespace FuStudy_API.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -28,12 +28,12 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Major",
+                name: "Majors",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -43,12 +43,12 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Major", x => x.Id);
+                    table.PrimaryKey("PK_Majors", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Permission",
+                name: "Permissions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -58,12 +58,12 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Permission", x => x.Id);
+                    table.PrimaryKey("PK_Permissions", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Role",
+                name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -73,12 +73,12 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Role", x => x.Id);
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Subcription",
+                name: "Subcriptions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -92,12 +92,12 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Subcription", x => x.Id);
+                    table.PrimaryKey("PK_Subcriptions", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "RolePermission",
+                name: "RolePermissions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -107,24 +107,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RolePermission", x => x.Id);
+                    table.PrimaryKey("PK_RolePermissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RolePermission_Permission_PermissionId",
+                        name: "FK_RolePermissions_Permissions_PermissionId",
                         column: x => x.PermissionId,
-                        principalTable: "Permission",
+                        principalTable: "Permissions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RolePermission_Role_RoleId",
+                        name: "FK_RolePermissions_Roles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "Role",
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -152,18 +152,18 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_Role_RoleId",
+                        name: "FK_Users_Roles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "Role",
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Blog",
+                name: "Blogs",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -178,18 +178,18 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Blog", x => x.Id);
+                    table.PrimaryKey("PK_Blogs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Blog_User_UserId",
+                        name: "FK_Blogs_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Conversation",
+                name: "Conversations",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -205,24 +205,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Conversation", x => x.Id);
+                    table.PrimaryKey("PK_Conversations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Conversation_User_User1Id",
+                        name: "FK_Conversations_Users_User1Id",
                         column: x => x.User1Id,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Conversation_User_User2Id",
+                        name: "FK_Conversations_Users_User2Id",
                         column: x => x.User2Id,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Mentor",
+                name: "Mentors",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -242,18 +242,18 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Mentor", x => x.Id);
+                    table.PrimaryKey("PK_Mentors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Mentor_User_UserId",
+                        name: "FK_Mentors_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Student",
+                name: "Students",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -262,18 +262,43 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Student", x => x.Id);
+                    table.PrimaryKey("PK_Students", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Student_User_UserId",
+                        name: "FK_Students_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Wallet",
+                name: "Tokens",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    TokenValue = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Revoked = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsExpired = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tokens_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Wallets",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -284,18 +309,18 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Wallet", x => x.Id);
+                    table.PrimaryKey("PK_Wallets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Wallet_User_UserId",
+                        name: "FK_Wallets_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "BlogComment",
+                name: "BlogComments",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -310,24 +335,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BlogComment", x => x.Id);
+                    table.PrimaryKey("PK_BlogComments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BlogComment_Blog_BlogId",
+                        name: "FK_BlogComments_Blogs_BlogId",
                         column: x => x.BlogId,
-                        principalTable: "Blog",
+                        principalTable: "Blogs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BlogComment_User_UserId",
+                        name: "FK_BlogComments_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "BlogLike",
+                name: "BlogLikes",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -338,24 +363,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BlogLike", x => x.Id);
+                    table.PrimaryKey("PK_BlogLikes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BlogLike_Blog_BlogId",
+                        name: "FK_BlogLikes_Blogs_BlogId",
                         column: x => x.BlogId,
-                        principalTable: "Blog",
+                        principalTable: "Blogs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BlogLike_User_UserId",
+                        name: "FK_BlogLikes_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ConversationMessage",
+                name: "ConversationMessages",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -371,24 +396,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ConversationMessage", x => x.Id);
+                    table.PrimaryKey("PK_ConversationMessages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ConversationMessage_Conversation_ConversationId",
+                        name: "FK_ConversationMessages_Conversations_ConversationId",
                         column: x => x.ConversationId,
-                        principalTable: "Conversation",
+                        principalTable: "Conversations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ConversationMessage_User_SenderId",
+                        name: "FK_ConversationMessages_Users_SenderId",
                         column: x => x.SenderId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Booking",
+                name: "Bookings",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -403,24 +428,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Booking", x => x.Id);
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Booking_Mentor_MentorId",
+                        name: "FK_Bookings_Mentors_MentorId",
                         column: x => x.MentorId,
-                        principalTable: "Mentor",
+                        principalTable: "Mentors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Booking_User_UserId",
+                        name: "FK_Bookings_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "MentorMajor",
+                name: "MentorMajors",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -430,24 +455,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MentorMajor", x => x.Id);
+                    table.PrimaryKey("PK_MentorMajors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MentorMajor_Major_MajorId",
+                        name: "FK_MentorMajors_Majors_MajorId",
                         column: x => x.MajorId,
-                        principalTable: "Major",
+                        principalTable: "Majors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MentorMajor_Mentor_MentorId",
+                        name: "FK_MentorMajors_Mentors_MentorId",
                         column: x => x.MentorId,
-                        principalTable: "Mentor",
+                        principalTable: "Mentors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "MeetingHistory",
+                name: "MeetingHistories",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -464,24 +489,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MeetingHistory", x => x.Id);
+                    table.PrimaryKey("PK_MeetingHistories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MeetingHistory_Mentor_MentorId",
+                        name: "FK_MeetingHistories_Mentors_MentorId",
                         column: x => x.MentorId,
-                        principalTable: "Mentor",
+                        principalTable: "Mentors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MeetingHistory_Student_StudentId",
+                        name: "FK_MeetingHistories_Students_StudentId",
                         column: x => x.StudentId,
-                        principalTable: "Student",
+                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Question",
+                name: "Questions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -499,24 +524,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Question", x => x.Id);
+                    table.PrimaryKey("PK_Questions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Question_Category_CategoryId",
+                        name: "FK_Questions_Categories_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "Category",
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Question_Student_StudentId",
+                        name: "FK_Questions_Students_StudentId",
                         column: x => x.StudentId,
-                        principalTable: "Student",
+                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "StudentSubcription",
+                name: "StudentSubcriptions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -531,24 +556,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentSubcription", x => x.Id);
+                    table.PrimaryKey("PK_StudentSubcriptions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StudentSubcription_Student_StudentId",
+                        name: "FK_StudentSubcriptions_Students_StudentId",
                         column: x => x.StudentId,
-                        principalTable: "Student",
+                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudentSubcription_Subcription_SubcriptionId",
+                        name: "FK_StudentSubcriptions_Subcriptions_SubcriptionId",
                         column: x => x.SubcriptionId,
-                        principalTable: "Subcription",
+                        principalTable: "Subcriptions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Transaction",
+                name: "Transactions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -563,18 +588,18 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transaction", x => x.Id);
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transaction_Wallet_WalletId",
+                        name: "FK_Transactions_Wallets_WalletId",
                         column: x => x.WalletId,
-                        principalTable: "Wallet",
+                        principalTable: "Wallets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "CommentImage",
+                name: "CommentImages",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -586,18 +611,18 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CommentImage", x => x.Id);
+                    table.PrimaryKey("PK_CommentImages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CommentImage_BlogComment_BlogCommentId",
+                        name: "FK_CommentImages_BlogComments_BlogCommentId",
                         column: x => x.BlogCommentId,
-                        principalTable: "BlogComment",
+                        principalTable: "BlogComments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Attachment",
+                name: "Attachments",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -614,18 +639,18 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Attachment", x => x.Id);
+                    table.PrimaryKey("PK_Attachments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Attachment_ConversationMessage_ConversationMessageId",
+                        name: "FK_Attachments_ConversationMessages_ConversationMessageId",
                         column: x => x.ConversationMessageId,
-                        principalTable: "ConversationMessage",
+                        principalTable: "ConversationMessages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "MessageReaction",
+                name: "MessageReactions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -638,24 +663,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MessageReaction", x => x.Id);
+                    table.PrimaryKey("PK_MessageReactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MessageReaction_ConversationMessage_ConversationMessageId",
+                        name: "FK_MessageReactions_ConversationMessages_ConversationMessageId",
                         column: x => x.ConversationMessageId,
-                        principalTable: "ConversationMessage",
+                        principalTable: "ConversationMessages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MessageReaction_User_UserId",
+                        name: "FK_MessageReactions_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "QuestionComment",
+                name: "QuestionComments",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -670,24 +695,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestionComment", x => x.Id);
+                    table.PrimaryKey("PK_QuestionComments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_QuestionComment_Question_QuestionId",
+                        name: "FK_QuestionComments_Questions_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Question",
+                        principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_QuestionComment_User_UserId",
+                        name: "FK_QuestionComments_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "QuestionRating",
+                name: "QuestionRatings",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -698,24 +723,24 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestionRating", x => x.Id);
+                    table.PrimaryKey("PK_QuestionRatings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_QuestionRating_Question_QuestionId",
+                        name: "FK_QuestionRatings_Questions_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Question",
+                        principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_QuestionRating_User_UserId",
+                        name: "FK_QuestionRatings_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Order",
+                name: "Orders",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -731,18 +756,18 @@ namespace FuStudy_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Order_Transaction_TransactionId",
+                        name: "FK_Orders_Transactions_TransactionId",
                         column: x => x.TransactionId,
-                        principalTable: "Transaction",
+                        principalTable: "Transactions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "CategoryName" },
                 values: new object[,]
                 {
@@ -752,7 +777,7 @@ namespace FuStudy_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Major",
+                table: "Majors",
                 columns: new[] { "Id", "MajorName" },
                 values: new object[,]
                 {
@@ -761,7 +786,7 @@ namespace FuStudy_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Permission",
+                table: "Permissions",
                 columns: new[] { "Id", "PermissionName" },
                 values: new object[,]
                 {
@@ -772,7 +797,7 @@ namespace FuStudy_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Role",
+                table: "Roles",
                 columns: new[] { "Id", "RoleName" },
                 values: new object[,]
                 {
@@ -783,7 +808,7 @@ namespace FuStudy_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Subcription",
+                table: "Subcriptions",
                 columns: new[] { "Id", "LimitMeeting", "LimitQuestion", "Status", "SubcriptionName", "SubcriptionPrice" },
                 values: new object[,]
                 {
@@ -792,7 +817,7 @@ namespace FuStudy_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "RolePermission",
+                table: "RolePermissions",
                 columns: new[] { "Id", "PermissionId", "RoleId" },
                 values: new object[,]
                 {
@@ -802,7 +827,7 @@ namespace FuStudy_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "User",
+                table: "Users",
                 columns: new[] { "Id", "Avatar", "CreateDate", "Dob", "Email", "Fullname", "Gender", "IdentityCard", "Password", "Phone", "RoleId", "Status", "Username" },
                 values: new object[,]
                 {
@@ -812,27 +837,27 @@ namespace FuStudy_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Blog",
+                table: "Blogs",
                 columns: new[] { "Id", "BlogContent", "CreateDate", "Image", "TotalLike", "UserId" },
-                values: new object[] { 1L, "How to be a better mentor", new DateTime(2024, 6, 7, 23, 14, 28, 142, DateTimeKind.Local).AddTicks(2702), "ahihi", 1, 2L });
+                values: new object[] { 1L, "How to be a better mentor", new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7924), "ahihi", 1, 2L });
 
             migrationBuilder.InsertData(
-                table: "Conversation",
+                table: "Conversations",
                 columns: new[] { "Id", "CreateAt", "Duration", "EndTime", "IsClose", "LastMessage", "User1Id", "User2Id" },
-                values: new object[] { 1L, new DateTime(2024, 6, 7, 23, 14, 28, 142, DateTimeKind.Local).AddTicks(2981), new TimeSpan(0, 0, 0, 0, 0), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Hello!", 1L, 2L });
+                values: new object[] { 1L, new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(8237), new TimeSpan(0, 0, 0, 0, 0), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Hello!", 1L, 2L });
 
             migrationBuilder.InsertData(
-                table: "Mentor",
+                table: "Mentors",
                 columns: new[] { "Id", "AcademicLevel", "OnlineStatus", "Skill", "UserId", "VerifyStatus", "Video", "WorkPlace" },
-                values: new object[] { 1L, "Master's", "offline", "Ahihi", 3L, true, "ahihi", "Tech Company" });
+                values: new object[] { 1L, "Master's", "Invisible", "Ahihi", 3L, true, "ahihi", "Tech Company" });
 
             migrationBuilder.InsertData(
-                table: "Student",
+                table: "Students",
                 columns: new[] { "Id", "UserId" },
                 values: new object[] { 1L, 1L });
 
             migrationBuilder.InsertData(
-                table: "Wallet",
+                table: "Wallets",
                 columns: new[] { "Id", "Balance", "Status", "UserId" },
                 values: new object[,]
                 {
@@ -841,238 +866,243 @@ namespace FuStudy_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "BlogComment",
+                table: "BlogComments",
                 columns: new[] { "Id", "BlogId", "Comment", "CreateDate", "ModifiedDate", "Status", "UserId" },
-                values: new object[] { 1L, 1L, "Great post!", new DateTime(2024, 6, 7, 23, 14, 28, 142, DateTimeKind.Local).AddTicks(2765), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1L });
+                values: new object[] { 1L, 1L, "Great post!", new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7975), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1L });
 
             migrationBuilder.InsertData(
-                table: "BlogLike",
+                table: "BlogLikes",
                 columns: new[] { "Id", "BlogId", "Status", "UserId" },
                 values: new object[] { 2L, 1L, true, 1L });
 
             migrationBuilder.InsertData(
-                table: "ConversationMessage",
+                table: "ConversationMessages",
                 columns: new[] { "Id", "Content", "ConversationId", "CreateTime", "DeleteAt", "IsDelete", "IsSeen", "SenderId" },
-                values: new object[] { 1L, "Hello!", 1L, new DateTime(2024, 6, 7, 23, 14, 28, 142, DateTimeKind.Local).AddTicks(3024), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 1L });
+                values: new object[] { 1L, "Hello!", 1L, new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(8272), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, 1L });
 
             migrationBuilder.InsertData(
-                table: "MentorMajor",
+                table: "MentorMajors",
                 columns: new[] { "Id", "MajorId", "MentorId" },
                 values: new object[] { 1L, 1L, 1L });
 
             migrationBuilder.InsertData(
-                table: "Question",
+                table: "Questions",
                 columns: new[] { "Id", "CategoryId", "Content", "CreateDate", "Image", "ModifiedDate", "Status", "StudentId", "TotalRating" },
-                values: new object[] { 1L, 1L, "How to sort an array in C#?", new DateTime(2024, 6, 7, 23, 14, 28, 142, DateTimeKind.Local).AddTicks(2101), "ahihi", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1L, 1 });
+                values: new object[] { 1L, 1L, "How to sort an array in C#?", new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7504), "ahihi", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1L, 1 });
 
             migrationBuilder.InsertData(
-                table: "StudentSubcription",
+                table: "StudentSubcriptions",
                 columns: new[] { "Id", "CurrentMeeting", "CurrentQuestion", "EndDate", "StartDate", "Status", "StudentId", "SubcriptionId" },
-                values: new object[] { 1L, 0, 0, new DateTime(2024, 7, 7, 23, 14, 28, 142, DateTimeKind.Local).AddTicks(2286), new DateTime(2024, 6, 7, 23, 14, 28, 142, DateTimeKind.Local).AddTicks(2281), true, 1L, 1L });
+                values: new object[] { 1L, 0, 0, new DateTime(2024, 7, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7722), new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7721), true, 1L, 1L });
 
             migrationBuilder.InsertData(
-                table: "Transaction",
+                table: "Transactions",
                 columns: new[] { "Id", "Ammount", "CreateTime", "Description", "Type", "WalletId" },
-                values: new object[] { 1L, 9.9900000000000002, new DateTime(2024, 6, 7, 23, 14, 28, 142, DateTimeKind.Local).AddTicks(2566), "Subscription payment", "Deposit", 1L });
+                values: new object[] { 1L, 9.9900000000000002, new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7834), "Subscription payment", "Deposit", 1L });
 
             migrationBuilder.InsertData(
-                table: "CommentImage",
+                table: "CommentImages",
                 columns: new[] { "Id", "BlogCommentId", "Image", "Status" },
                 values: new object[] { 1L, 1L, "Ahihi do ngoc", false });
 
             migrationBuilder.InsertData(
-                table: "MessageReaction",
+                table: "MessageReactions",
                 columns: new[] { "Id", "ConversationMessageId", "CreateAt", "ReactionType", "UserId" },
-                values: new object[] { 1L, 1L, new DateTime(2024, 6, 7, 23, 14, 28, 142, DateTimeKind.Local).AddTicks(3084), "like", 2L });
+                values: new object[] { 1L, 1L, new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(8339), "like", 2L });
 
             migrationBuilder.InsertData(
-                table: "Order",
+                table: "Orders",
                 columns: new[] { "Id", "CreateDate", "Description", "Money", "PaymentCode", "Status", "TransactionId" },
-                values: new object[] { 1L, new DateTime(2024, 6, 7, 23, 14, 28, 142, DateTimeKind.Local).AddTicks(2661), "Payment for Basic subscription", 9.9900000000000002, "PAY12345", true, 1L });
+                values: new object[] { 1L, new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7906), "Payment for Basic subscription", 9.9900000000000002, "PAY12345", true, 1L });
 
             migrationBuilder.InsertData(
-                table: "QuestionComment",
+                table: "QuestionComments",
                 columns: new[] { "Id", "Content", "CreateDate", "ModifiedDate", "QuestionId", "Status", "UserId" },
-                values: new object[] { 1L, "Good question!", new DateTime(2024, 6, 7, 23, 14, 28, 142, DateTimeKind.Local).AddTicks(2929), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1L, false, 2L });
+                values: new object[] { 1L, "Good question!", new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(8189), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1L, false, 2L });
 
             migrationBuilder.InsertData(
-                table: "QuestionRating",
+                table: "QuestionRatings",
                 columns: new[] { "Id", "QuestionId", "Status", "UserId" },
                 values: new object[] { 1L, 1L, true, 2L });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attachment_ConversationMessageId",
-                table: "Attachment",
+                name: "IX_Attachments_ConversationMessageId",
+                table: "Attachments",
                 column: "ConversationMessageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Blog_UserId",
-                table: "Blog",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BlogComment_BlogId",
-                table: "BlogComment",
+                name: "IX_BlogComments_BlogId",
+                table: "BlogComments",
                 column: "BlogId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BlogComment_UserId",
-                table: "BlogComment",
+                name: "IX_BlogComments_UserId",
+                table: "BlogComments",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BlogLike_BlogId",
-                table: "BlogLike",
+                name: "IX_BlogLikes_BlogId",
+                table: "BlogLikes",
                 column: "BlogId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BlogLike_UserId",
-                table: "BlogLike",
+                name: "IX_BlogLikes_UserId",
+                table: "BlogLikes",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Booking_MentorId",
-                table: "Booking",
+                name: "IX_Blogs_UserId",
+                table: "Blogs",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_MentorId",
+                table: "Bookings",
                 column: "MentorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Booking_UserId",
-                table: "Booking",
+                name: "IX_Bookings_UserId",
+                table: "Bookings",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CommentImage_BlogCommentId",
-                table: "CommentImage",
+                name: "IX_CommentImages_BlogCommentId",
+                table: "CommentImages",
                 column: "BlogCommentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Conversation_User1Id",
-                table: "Conversation",
-                column: "User1Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Conversation_User2Id",
-                table: "Conversation",
-                column: "User2Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ConversationMessage_ConversationId",
-                table: "ConversationMessage",
+                name: "IX_ConversationMessages_ConversationId",
+                table: "ConversationMessages",
                 column: "ConversationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ConversationMessage_SenderId",
-                table: "ConversationMessage",
+                name: "IX_ConversationMessages_SenderId",
+                table: "ConversationMessages",
                 column: "SenderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MeetingHistory_MentorId",
-                table: "MeetingHistory",
+                name: "IX_Conversations_User1Id",
+                table: "Conversations",
+                column: "User1Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Conversations_User2Id",
+                table: "Conversations",
+                column: "User2Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MeetingHistories_MentorId",
+                table: "MeetingHistories",
                 column: "MentorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MeetingHistory_StudentId",
-                table: "MeetingHistory",
+                name: "IX_MeetingHistories_StudentId",
+                table: "MeetingHistories",
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mentor_UserId",
-                table: "Mentor",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MentorMajor_MajorId",
-                table: "MentorMajor",
+                name: "IX_MentorMajors_MajorId",
+                table: "MentorMajors",
                 column: "MajorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MentorMajor_MentorId",
-                table: "MentorMajor",
+                name: "IX_MentorMajors_MentorId",
+                table: "MentorMajors",
                 column: "MentorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MessageReaction_ConversationMessageId",
-                table: "MessageReaction",
+                name: "IX_Mentors_UserId",
+                table: "Mentors",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MessageReactions_ConversationMessageId",
+                table: "MessageReactions",
                 column: "ConversationMessageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MessageReaction_UserId",
-                table: "MessageReaction",
+                name: "IX_MessageReactions_UserId",
+                table: "MessageReactions",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_TransactionId",
-                table: "Order",
+                name: "IX_Orders_TransactionId",
+                table: "Orders",
                 column: "TransactionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Question_CategoryId",
-                table: "Question",
+                name: "IX_QuestionComments_QuestionId",
+                table: "QuestionComments",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuestionComments_UserId",
+                table: "QuestionComments",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuestionRatings_QuestionId",
+                table: "QuestionRatings",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuestionRatings_UserId",
+                table: "QuestionRatings",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Questions_CategoryId",
+                table: "Questions",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Question_StudentId",
-                table: "Question",
+                name: "IX_Questions_StudentId",
+                table: "Questions",
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuestionComment_QuestionId",
-                table: "QuestionComment",
-                column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_QuestionComment_UserId",
-                table: "QuestionComment",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_QuestionRating_QuestionId",
-                table: "QuestionRating",
-                column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_QuestionRating_UserId",
-                table: "QuestionRating",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RolePermission_PermissionId",
-                table: "RolePermission",
+                name: "IX_RolePermissions_PermissionId",
+                table: "RolePermissions",
                 column: "PermissionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RolePermission_RoleId",
-                table: "RolePermission",
+                name: "IX_RolePermissions_RoleId",
+                table: "RolePermissions",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Student_UserId",
-                table: "Student",
+                name: "IX_Students_UserId",
+                table: "Students",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentSubcription_StudentId",
-                table: "StudentSubcription",
+                name: "IX_StudentSubcriptions_StudentId",
+                table: "StudentSubcriptions",
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentSubcription_SubcriptionId",
-                table: "StudentSubcription",
+                name: "IX_StudentSubcriptions_SubcriptionId",
+                table: "StudentSubcriptions",
                 column: "SubcriptionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transaction_WalletId",
-                table: "Transaction",
+                name: "IX_Tokens_UserId",
+                table: "Tokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_WalletId",
+                table: "Transactions",
                 column: "WalletId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_RoleId",
-                table: "User",
+                name: "IX_Users_RoleId",
+                table: "Users",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Wallet_UserId",
-                table: "Wallet",
+                name: "IX_Wallets_UserId",
+                table: "Wallets",
                 column: "UserId");
         }
 
@@ -1080,85 +1110,88 @@ namespace FuStudy_API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Attachment");
+                name: "Attachments");
 
             migrationBuilder.DropTable(
-                name: "BlogLike");
+                name: "BlogLikes");
 
             migrationBuilder.DropTable(
-                name: "Booking");
+                name: "Bookings");
 
             migrationBuilder.DropTable(
-                name: "CommentImage");
+                name: "CommentImages");
 
             migrationBuilder.DropTable(
-                name: "MeetingHistory");
+                name: "MeetingHistories");
 
             migrationBuilder.DropTable(
-                name: "MentorMajor");
+                name: "MentorMajors");
 
             migrationBuilder.DropTable(
-                name: "MessageReaction");
+                name: "MessageReactions");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "QuestionComment");
+                name: "QuestionComments");
 
             migrationBuilder.DropTable(
-                name: "QuestionRating");
+                name: "QuestionRatings");
 
             migrationBuilder.DropTable(
-                name: "RolePermission");
+                name: "RolePermissions");
 
             migrationBuilder.DropTable(
-                name: "StudentSubcription");
+                name: "StudentSubcriptions");
 
             migrationBuilder.DropTable(
-                name: "BlogComment");
+                name: "Tokens");
 
             migrationBuilder.DropTable(
-                name: "Major");
+                name: "BlogComments");
 
             migrationBuilder.DropTable(
-                name: "Mentor");
+                name: "Majors");
 
             migrationBuilder.DropTable(
-                name: "ConversationMessage");
+                name: "Mentors");
 
             migrationBuilder.DropTable(
-                name: "Transaction");
+                name: "ConversationMessages");
 
             migrationBuilder.DropTable(
-                name: "Question");
+                name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "Permission");
+                name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "Subcription");
+                name: "Permissions");
 
             migrationBuilder.DropTable(
-                name: "Blog");
+                name: "Subcriptions");
 
             migrationBuilder.DropTable(
-                name: "Conversation");
+                name: "Blogs");
 
             migrationBuilder.DropTable(
-                name: "Wallet");
+                name: "Conversations");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Wallets");
 
             migrationBuilder.DropTable(
-                name: "Student");
+                name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Students");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
         }
     }
 }

@@ -82,9 +82,10 @@ public class AuthenticationService: IAuthenticationService
                 UserId = user.Id,
                 AcademicLevel = "",
                 WorkPlace = "",
-                Status = "pending",
+                OnlineStatus = "Invisible",
                 Skill = "",
-                Video = ""
+                Video = "",
+                VerifyStatus = false
             };
             
             

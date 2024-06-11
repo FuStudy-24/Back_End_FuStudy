@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FuStudy_Model.Enum
+namespace FuStudy_Model.DTO.Response
 {
-    public enum OnlineStatus
+    public class UpdateMentorOnlineStatusResponse
     {
-        Online,
-        Idle,
-        Busy,
-        Invisible
+        public string OnlineStatus { get; set; }
     }
 }

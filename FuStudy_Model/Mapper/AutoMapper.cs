@@ -53,6 +53,16 @@ namespace FuStudy_Model.Mapper
             CreateMap<Major, MajorResponse>().ReverseMap();
             #endregion
 
+            #region Mentor
+            CreateMap<MentorRequest, Mentor>().ReverseMap();
+            CreateMap<Mentor, MentorResponse>().ReverseMap();
+            #endregion
+
+            #region MentorOnlineStatus
+            CreateMap<UpdateMentorOnlineStatusResquest, Mentor>().ReverseMap();
+            CreateMap<Mentor,  UpdateMentorOnlineStatusResponse>().ReverseMap();
+            #endregion
+
             #region MentorMajor
             CreateMap<MentorMajorRequest, MentorMajor>().ReverseMap();
             CreateMap<MentorMajor, MentorMajorResponse>().ReverseMap();
@@ -116,13 +126,12 @@ namespace FuStudy_Model.Mapper
             #endregion
             
             
-            CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
 
             #region Transaction
             CreateMap<TransactionRequest, Transaction>().ReverseMap();
             CreateMap<Transaction, TransactionResponse>().ReverseMap();
             #endregion
-            CreateMap<SubcriptionResponse, Subcription>().ReverseMap();
+            
 
             #region Order
             CreateMap<OrderRequest, Order>().ReverseMap();
