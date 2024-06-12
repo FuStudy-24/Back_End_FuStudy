@@ -165,6 +165,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "FuStudy_API");
+        c.RoutePrefix = "";
+        c.EnableTryItOutByDefault();
+    });
+}
 app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseCors("corspolicy");
