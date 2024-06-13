@@ -27,6 +27,7 @@ namespace FuStudy_API.Controllers.Question
 
 
         [HttpGet("GetAllQuestions")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllQuestions([FromQuery]QueryObject queryObject)
         {
             try
@@ -48,6 +49,7 @@ namespace FuStudy_API.Controllers.Question
 
 
         [HttpGet("GetQuestionById/{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetQuestionById(long id)
         {
             var question = await _questionService.GetQuestionByIdAsync(id);

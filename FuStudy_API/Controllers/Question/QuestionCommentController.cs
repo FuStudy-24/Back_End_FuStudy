@@ -24,6 +24,7 @@ public class QuestionCommentController : BaseController
 
 
     [HttpGet("GetAllQuestionComments")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAllQuestionComments([FromQuery] QueryObject queryObject)
     {
         try
@@ -42,6 +43,7 @@ public class QuestionCommentController : BaseController
     }
 
     [HttpGet("GetQuestionCommentById/{id}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetQuestionCommentById(long id)
     {
         var question = await _questionCommentService.GetQuestionCommentById(id);

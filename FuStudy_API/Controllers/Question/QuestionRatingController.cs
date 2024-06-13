@@ -24,6 +24,7 @@ public class QuestionRatingController : BaseController
     }
 
     [HttpGet("GetAllQuestionsRatingByQuestionId/{questionId}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAllQuestionsRatingByQuestionId(long questionId)
     {
         try
