@@ -46,14 +46,26 @@ public class QuestionCommentController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> GetQuestionCommentById(long id)
     {
-        var question = await _questionCommentService.GetQuestionCommentById(id);
-
-        if (question == null)
+        try
         {
-            return CustomResult("Question not found", HttpStatusCode.NotFound);
-        }
+            var question = await _questionCommentService.GetQuestionCommentById(id);
 
-        return CustomResult("Data loaded!", question);
+            if (question == null)
+            {
+                return CustomResult("Question not found", HttpStatusCode.NotFound);
+            }
+
+            return CustomResult("Data loaded!", question);
+        }
+        catch (CustomException.DataNotFoundException e)
+        {
+            return CustomResult(e.Message, HttpStatusCode.NotFound);
+        }
+        catch (Exception exception)
+        {
+            return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+        }
+       
     }
 
     [HttpGet("GetAllQuestionCommentsByQuestionId/{questionId}")]

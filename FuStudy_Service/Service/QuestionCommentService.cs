@@ -50,7 +50,7 @@ public class QuestionCommentService : IQuestionCommentService
   
         foreach (var comment in response)
         {
-            IsMentor(comment);
+            IsMentorFromUserId(comment);
         }
         return response;
 
@@ -76,7 +76,7 @@ public class QuestionCommentService : IQuestionCommentService
         var response = _mapper.Map<IEnumerable<QuestionCommentResponse>>(questionComments);
         foreach (var comment in response)
         {
-            IsMentor(comment);
+            IsMentorFromUserId(comment);
         }
         return response;
     }
@@ -85,7 +85,7 @@ public class QuestionCommentService : IQuestionCommentService
     {
         var questionComment = await _unitOfWork.QuestionCommentRepository.GetByIdWithInclude(id, includeProperties:"Question");
         var response = _mapper.Map<QuestionCommentResponse>(questionComment);
-        IsMentor(response);
+        IsMentorFromUserId(response);
         return response;
     }
 
@@ -109,7 +109,7 @@ public class QuestionCommentService : IQuestionCommentService
         _unitOfWork.Save();
 
         var response = _mapper.Map<QuestionCommentResponse>(questionComment);
-        IsMentor(response);
+        IsMentorFromUserId(response);
         return response;
     }
 
@@ -142,7 +142,7 @@ public class QuestionCommentService : IQuestionCommentService
         _unitOfWork.Save();
 
         var response = _mapper.Map<QuestionCommentResponse>(questionComment);
-        IsMentor(response);
+        IsMentorFromUserId(response);
         return response;
     }
 
@@ -159,20 +159,16 @@ public class QuestionCommentService : IQuestionCommentService
         _unitOfWork.Save();
         return true;
     }
-
-    public void IsMentor(QuestionCommentResponse response)
+    
+    private void IsMentorFromUserId(QuestionCommentResponse response)
     {
-        var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
-
-
-        if (response != null && userId != null) // Check if comment and UserId are not null
+        if (response != null) // Check if comment and UserId are not null
         {
-            var role = _unitOfWork.RoleRepository.GetByID(_unitOfWork.UserRepository.GetByID(userId).RoleId);
+            var role = _unitOfWork.RoleRepository.GetByID(_unitOfWork.UserRepository.GetByID(response.UserId).RoleId);
             if (role != null) // Check if role are not null
             {
                 response.IsMentor = role.RoleName == RoleName.Mentor.ToString();
             }
         }
-        
     }
 }

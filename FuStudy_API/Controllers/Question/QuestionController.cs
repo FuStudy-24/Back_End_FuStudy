@@ -27,7 +27,6 @@ namespace FuStudy_API.Controllers.Question
 
 
         [HttpGet("GetAllQuestions")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetAllQuestions([FromQuery]QueryObject queryObject)
         {
             try
