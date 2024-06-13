@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
+using FuStudy_Model.Enum;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
@@ -169,7 +170,7 @@ public class QuestionCommentService : IQuestionCommentService
             var role = _unitOfWork.RoleRepository.GetByID(_unitOfWork.UserRepository.GetByID(userId).RoleId);
             if (role != null) // Check if role are not null
             {
-                response.IsMentor = role.RoleName == "Mentor";
+                response.IsMentor = role.RoleName == RoleName.Mentor.ToString();
             }
         }
         

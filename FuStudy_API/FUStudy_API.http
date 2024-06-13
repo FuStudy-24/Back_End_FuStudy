@@ -1,4 +1,4 @@
-@FUStudy_API_HostAddress = http://localhost:5196
+@FUStudy_API_HostAddress = http://localhost:8080
 
 GET {{FUStudy_API_HostAddress}}/weatherforecast/
 Accept: application/json

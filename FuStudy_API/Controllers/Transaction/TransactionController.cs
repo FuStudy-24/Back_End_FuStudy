@@ -21,10 +21,21 @@ namespace FuStudy_API.Controllers.Transaction
         }
 
         [HttpGet("GetAllTransactions")]
-        public async Task<IActionResult> GetAllTransactions()
+        public async Task<IActionResult> GetAllTransactions([FromQuery] QueryObject queryObject)
         {
-            var transactions = await _transactionService.GetAllTransactionsAsync();
-            return CustomResult("Data loaded!", transactions);
+            try
+            {
+                var transactions = await _transactionService.GetAllTransactionsAsync(queryObject);
+                return CustomResult("Data loaded!", transactions);
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet("GetTransactionById/{id}")]
