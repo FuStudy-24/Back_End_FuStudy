@@ -60,6 +60,7 @@ public class AuthenticationService: IAuthenticationService
 
         
         await _unitOfWork.UserRepository.AddAsync(user);
+        var roleName = await _unitOfWork.RoleRepository.GetByIdAsync(user.RoleId);
         var wallet = new Wallet
         {
             UserId = user.Id,
@@ -67,7 +68,7 @@ public class AuthenticationService: IAuthenticationService
             Status = false
         };
         await _unitOfWork.WalletRepository.AddAsync(wallet);
-        if (user.Role.RoleName.Equals(RoleName.Student))
+        if (roleName.RoleName == RoleName.Student.ToString())
         {
             var student = new Student();
             student.UserId = user.Id;
@@ -75,7 +76,7 @@ public class AuthenticationService: IAuthenticationService
             
         }
 
-        if (user.Role.RoleName.Equals(RoleName.Mentor))
+        if (roleName.RoleName == RoleName.Mentor.ToString() )
         {
             var mentor = new Mentor
             {
