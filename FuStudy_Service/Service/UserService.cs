@@ -65,6 +65,7 @@ public class UserService : IUserService
 
         var users = _unitOfWork.UserRepository.Get(
             filter: filter,
+            includeProperties:"Role",
             pageIndex: queryObject.PageIndex,
             pageSize: queryObject.PageSize);
         if (users.IsNullOrEmpty())

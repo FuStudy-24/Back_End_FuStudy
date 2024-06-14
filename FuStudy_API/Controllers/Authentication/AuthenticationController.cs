@@ -12,6 +12,7 @@ using FuStudy_Service.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Tools;
 
 namespace FuStudy_API.Controllers.Authentication
 {
@@ -24,14 +25,16 @@ namespace FuStudy_API.Controllers.Authentication
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailConfig _emailConfig;
+        private readonly IUserService _userService;
         
 
-        public AuthenticationController(IAuthenticationService authenticationService, IMapper mapper, IUnitOfWork unitOfWork, IEmailConfig emailConfig)
+        public AuthenticationController(IAuthenticationService authenticationService, IMapper mapper, IUnitOfWork unitOfWork, IEmailConfig emailConfig, IUserService userService)
         {
             _authenticationService = authenticationService;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _emailConfig = emailConfig;
+            _userService = userService;
         }
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] CreateAccountDTORequest createAccountDTORequest)
@@ -126,6 +129,20 @@ namespace FuStudy_API.Controllers.Authentication
             }
 
             return Ok(result);
+        }
+
+        [HttpGet("GetAllUsers")]
+        public async Task<IActionResult> GetAllUsers([FromQuery]QueryObject queryObject)
+        {
+            try
+            {
+                var users = await _userService.GetAllUsers(queryObject);
+                return CustomResult("Data loaded", users);
+            }
+            catch (Exception e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.InternalServerError);
+            }
         }
     }
 }
