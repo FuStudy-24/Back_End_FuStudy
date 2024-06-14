@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using FuStudy_Model.DTO.Request;
+using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 using Tools;
 
 namespace FuStudy_Service.Service;
@@ -51,9 +54,25 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<IEnumerable<User>> GetAllUsers()
+    public async Task<IEnumerable<UserDTOResponse>> GetAllUsers(QueryObject queryObject)
     {
-        return await _unitOfWork.UserRepository.GetAsync();
+        //check if QueryObject search is not null
+        Expression<Func<User, bool>> filter = null;
+        if (!string.IsNullOrWhiteSpace(queryObject.Search))
+        {
+            filter = user => user.Username.Contains(queryObject.Search);
+        }
+
+        var users = _unitOfWork.UserRepository.Get(
+            filter: filter,
+            pageIndex: queryObject.PageIndex,
+            pageSize: queryObject.PageSize);
+        if (users.IsNullOrEmpty())
+        {
+            throw new CustomException.DataNotFoundException("The user list is empty!");
+        }
+
+        return _mapper.Map<IEnumerable<UserDTOResponse>>(users);
     }
 
     public async Task<User> GetUserById(long id)

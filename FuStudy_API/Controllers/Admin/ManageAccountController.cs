@@ -57,13 +57,35 @@ namespace FuStudy_API.Controllers.Admin
                 {
                     return NotFound();
                 }
-                return CustomResult("Get User Success",user, HttpStatusCode.OK);
+
+                return CustomResult("Get User Success", user, HttpStatusCode.OK);
             }
             catch (CustomException.InvalidDataException ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
         }
-        
+
+        [HttpGet("GetAllUsers")]
+        public async Task<IActionResult> GetAllUsers(QueryObject queryObject)
+        {
+            try
+            {
+                var users = await _userService.GetAllUsers(queryObject);
+            
+                return CustomResult("Get All users successful", users);
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
+           
+        }
+
+
     }
 }

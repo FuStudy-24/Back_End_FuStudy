@@ -47,14 +47,19 @@ namespace FuStudy_Service.Service
         public async Task<StudentSubcriptionResponse> CreateStudentSubcription(CreateStudentSubcriptionRequest studentSubcriptionRequest)
         {
             var studentsub = _mapper.Map<StudentSubcription>(studentSubcriptionRequest);
-
+            var student = _unitOfWork.StudentRepository.Get(s => s.UserId == studentSubcriptionRequest.UserId).FirstOrDefault();
+            if (student == null)
+            {
+                throw new CustomException.DataNotFoundException("This User is not a student!!");
+            }
             // Set trạng thái (limt cứng 20, câu đầu là 0)
             if (studentsub.CurrentQuestion >= 20)
             {
-                throw new CustomException.DataNotFoundException("You Subcription has been không xài được địt mẹ mày.");
+                throw new CustomException.InvalidDataException("You Subcription has been không xài được địt mẹ mày.");
             }
             else
             {
+                studentsub.StudentId = student.Id;
                 studentsub.CurrentQuestion = 0;
                 studentsub.CurrentMeeting = 0;
                 studentsub.StartDate = DateTime.Now;

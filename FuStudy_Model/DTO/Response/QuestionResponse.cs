@@ -9,7 +9,9 @@ namespace FuStudy_Model.DTO.Response
     public class QuestionResponse
     {
         public long Id;
-        
+
+        public long UserId { get; set; }
+
         public long StudentId { get; set; }
 
         public long CategoryId { get; set; }

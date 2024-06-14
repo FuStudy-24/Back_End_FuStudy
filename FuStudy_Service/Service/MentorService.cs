@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Org.BouncyCastle.Crypto;
 using Tools;
 
 namespace FuStudy_Service.Service
@@ -16,11 +18,13 @@ namespace FuStudy_Service.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MentorService(IUnitOfWork unitOfWork, IMapper mapper)
+        public MentorService(IUnitOfWork unitOfWork, IMapper mapper,  IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<MentorResponse>> GetAllMentorVerify(QueryObject queryObject)
@@ -69,10 +73,33 @@ namespace FuStudy_Service.Service
             return mentorResponse;
         }
 
-        public Task<MentorResponse> UpdateMentor(long id, MentorRequest mentorRequest)
+        public async Task<MentorResponse> UpdateMentor(long id, MentorRequest mentorRequest)
         {
-            throw new NotImplementedException();
+            var mentor = _unitOfWork.MentorRepository.GetByID(id);
+
+            if (mentor == null)
+            {
+                throw new CustomException.InvalidDataException($"Mentor with ID: {id} not found!");
+            }
+            _mapper.Map(mentorRequest, mentor);
+            _unitOfWork.MentorRepository.Update(mentor);
+            return _mapper.Map<MentorResponse>(mentor);
         }
+
+        public async Task<MentorResponse> UpdateMentorLoggingIn(MentorRequest mentorRequest)
+        { 
+            var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
+            var mentor = _unitOfWork.MentorRepository.GetByID(userId);
+
+            if (mentor == null)
+            {
+                throw new CustomException.InvalidDataException("This user is not a mentor!!");
+            }
+            _mapper.Map(mentorRequest, mentor);
+            _unitOfWork.MentorRepository.Update(mentor);
+            return _mapper.Map<MentorResponse>(mentor);
+        }
+
         public Task<bool> DeleteMentor(long id)
         {
             throw new NotImplementedException();

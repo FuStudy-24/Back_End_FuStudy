@@ -17,6 +17,8 @@ namespace FuStudy_Service.Interface
         Task<IEnumerable<MentorResponse>> GetAllMentorWaiting(QueryObject queryObject);
         Task<MentorResponse> GetMentorById(long id);
         Task<MentorResponse> UpdateMentor(long id, MentorRequest mentorRequest);
+        Task<MentorResponse> UpdateMentorLoggingIn(MentorRequest mentorRequest);
+
         Task<bool> DeleteMentor(long id);
     }
 }

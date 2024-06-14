@@ -1,14 +1,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FuStudy_Model.DTO.Request;
+using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
+using Tools;
 
 namespace FuStudy_Service.Interface;
 
 public interface IUserService
 {
     Task<User> CreateUser(CreateAccountDTORequest createAccountRequest);
-    Task<IEnumerable<User>> GetAllUsers();
+    Task<IEnumerable<UserDTOResponse>> GetAllUsers(QueryObject queryObject);
     Task<User> GetUserById(long id);
     Task<User> UpdateUser(long id, UpdateAccountDTORequest updateAccountDTORequest);
     string GetUserID();

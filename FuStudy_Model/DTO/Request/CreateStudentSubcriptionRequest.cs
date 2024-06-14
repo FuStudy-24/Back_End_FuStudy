@@ -8,7 +8,7 @@ namespace FuStudy_Model.DTO.Request
 {
     public class CreateStudentSubcriptionRequest
     {
-        public long StudentId { get; set; }
+        public long UserId { get; set; }
 
         public long SubcriptionId { get; set; }
     }
