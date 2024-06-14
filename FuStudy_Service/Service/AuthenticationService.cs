@@ -52,7 +52,7 @@ public class AuthenticationService: IAuthenticationService
         
         user.Password = EncryptPassword.Encrypt(createAccountDTORequest.Password);
         user.Status = true;
-        var role = _unitOfWork.RoleRepository.Get(role => role.RoleName == createAccountDTORequest.RoleName)
+        var role = _unitOfWork.RoleRepository.Get(role => role.RoleName.Trim().ToLower() == createAccountDTORequest.RoleName.Trim().ToLower())
             .FirstOrDefault();
         if (role == null)
         {
