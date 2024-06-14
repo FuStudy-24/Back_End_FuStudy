@@ -130,19 +130,6 @@ namespace FuStudy_API.Controllers.Authentication
 
             return Ok(result);
         }
-
-        [HttpGet("GetAllUsers")]
-        public async Task<IActionResult> GetAllUsers([FromQuery]QueryObject queryObject)
-        {
-            try
-            {
-                var users = await _userService.GetAllUsers(queryObject);
-                return CustomResult("Data loaded", users);
-            }
-            catch (Exception e)
-            {
-                return CustomResult(e.Message, HttpStatusCode.InternalServerError);
-            }
-        }
+        
     }
 }

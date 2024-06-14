@@ -71,7 +71,7 @@ namespace FuStudy_API.Controllers.Admin
         }
 
         [HttpGet("GetAllUsers")]
-        public async Task<IActionResult> GetAllUsers(QueryObject queryObject)
+        public async Task<IActionResult> GetAllUsers([FromQuery]QueryObject queryObject)
         {
             try
             {
