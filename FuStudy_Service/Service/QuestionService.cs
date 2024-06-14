@@ -47,13 +47,22 @@ namespace FuStudy_Service.Service
                 throw new CustomException.DataNotFoundException("The question list is empty!");
             }
 
-            return _mapper.Map<IEnumerable<QuestionResponse>>(questions);
+            var questionResponses = _mapper.Map<IEnumerable<QuestionResponse>>(questions);
+            foreach (var question in questionResponses)
+            {
+                question.UserId = GetUserIdByStudentId(question.StudentId);
+            }
+        
+        return questionResponses;
         }
 
         public async Task<QuestionResponse> GetQuestionByIdAsync(long id)
         {
             var question = _unitOfWork.QuestionRepository.GetByID(id);
-            return _mapper.Map<QuestionResponse>(question);
+            var questionResponse = _mapper.Map<QuestionResponse>(question);
+            questionResponse.UserId = GetUserIdByStudentId(question.StudentId);
+            return questionResponse; 
+
         }
 
 
@@ -190,6 +199,16 @@ namespace FuStudy_Service.Service
                 throw new CustomException.DataNotFoundException("This user is not a student <3");
             }
             return student.Id;
+        }
+        
+        public long GetUserIdByStudentId(long studentId)
+        {
+            var user =  _unitOfWork.StudentRepository.Get(s => s.Id == studentId).FirstOrDefault();
+            if (user == null)
+            {
+                throw new CustomException.DataNotFoundException("This user is not a student <3");
+            }
+            return user.UserId;
         }
     }
 }
