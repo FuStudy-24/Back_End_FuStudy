@@ -61,56 +61,58 @@ namespace FuStudy_Service.Service
         {
             var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
             var studentId = GetStudentIdByUserId(userId);
+            var category = _unitOfWork.CategoryRepository.Get(c => c.CategoryName == questionRequest.CategoryName).FirstOrDefault();
             if (_unitOfWork.StudentRepository.GetByID(studentId) == null)
             {
                 throw new CustomException.DataNotFoundException($"Student with ID: {studentId} not found!");
             }
-            if (_unitOfWork.CategoryRepository.GetByID(questionRequest.CategoryId) == null)
+            if (_unitOfWork.CategoryRepository.GetByID(category.Id) == null)
             {
-                throw new CustomException.DataNotFoundException($"Category with ID: {questionRequest.CategoryId} not found!");
+                throw new CustomException.DataNotFoundException($"Category with ID: {category.Id} not found!");
             }
             //check if student having subscription
-            var studentSubscription = await _unitOfWork.StudentSubcriptionRepository.GetByFilterAsync(s => s.StudentId == studentId && s.Status == true);
-            var selectedStudentSubscription = studentSubscription.FirstOrDefault();
-            var selectedSubscription =
-                _unitOfWork.SubcriptionRepository.GetByID(selectedStudentSubscription.SubcriptionId);
+            
+            var studentSubscription = _unitOfWork.StudentSubcriptionRepository
+                .Get(s => s.StudentId == studentId && s.Status == true).FirstOrDefault();
 
-            if (!(selectedStudentSubscription == null))
+            if (studentSubscription == null)
             {
-
-                //check if current question equal to limit subscription
-                if (selectedStudentSubscription.CurrentQuestion == selectedSubscription.LimitQuestion)
-                {
-                    throw new CustomException.InvalidDataException("The student's current question have reach limit!");
-                }
-                selectedStudentSubscription.CurrentQuestion++;
+                throw new CustomException.InvalidDataException("This Student does not have subscription");
             }
-            else
+
+            var subscription = _unitOfWork.SubcriptionRepository.GetByID(studentSubscription.SubcriptionId);
+
+            //check if current question equal to limit subscription
+            if (studentSubscription.CurrentQuestion == subscription.LimitQuestion)
             {
-                throw new CustomException.InvalidDataException("This User does not have valid subscription!");
+                throw new CustomException.InvalidDataException("The student's current question have reach limit!");
             }
             
+            studentSubscription.CurrentQuestion++;
+ 
             var questionWithCoin = _mapper.Map<Question>(questionRequest);
             questionWithCoin.CreateDate = DateTime.Now;
             questionWithCoin.TotalRating = 0;
             _unitOfWork.QuestionRepository.Insert(questionWithCoin);
-            _unitOfWork.Save();
-
+            _unitOfWork.Save();            
             return _mapper.Map<QuestionResponse>(questionWithCoin);
+
         }
+        
 
         public async Task<QuestionResponse> CreateQuestionByCoin(QuestionRequest questionRequest)
         {
             var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
             var studentId = GetStudentIdByUserId(userId);
+            var category = _unitOfWork.CategoryRepository.Get(c => c.CategoryName == questionRequest.CategoryName).FirstOrDefault();
 
             if (_unitOfWork.StudentRepository.GetByID(studentId) == null)
             {
                 throw new CustomException.DataNotFoundException($"Student with ID: {studentId} not found!");
             }
-            if (_unitOfWork.CategoryRepository.GetByID(questionRequest.CategoryId) == null)
+            if (_unitOfWork.CategoryRepository.GetByID(category.Id) == null)
             {
-                throw new CustomException.DataNotFoundException($"Category with ID: {questionRequest.CategoryId} not found!");
+                throw new CustomException.DataNotFoundException($"Category with ID: {category.Id} not found!");
             }
             
             var student = _unitOfWork.StudentRepository.GetByID(studentId);

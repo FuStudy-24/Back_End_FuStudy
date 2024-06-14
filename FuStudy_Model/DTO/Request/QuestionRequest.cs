@@ -10,7 +10,7 @@ namespace FuStudy_Model.DTO.Request
     public class QuestionRequest
     {
         [Required(ErrorMessage = "Category is required!")]
-        public long CategoryId { get; set; }
+        public string CategoryName { get; set; }
         
         [Required(ErrorMessage = "Content is required!")]
         public string Content { get; set; }

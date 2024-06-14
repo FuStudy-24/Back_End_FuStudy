@@ -112,6 +112,11 @@ namespace FuStudy_Service.Service
             return mentorResponse;
         }
 
+        public Task<bool> DeleteMentor(long id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<UpdateMentorOnlineStatusResponse> UpdateOnlineStatus(long id, UpdateMentorOnlineStatusResquest updateMentorOnlineStatusResquest)
         {
             var existingMentor = _unitOfWork.MentorRepository.GetByID(id);

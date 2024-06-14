@@ -6,6 +6,7 @@ using FuStudy_Service.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Tools;
 
 namespace FuStudy_API.Controllers.Mentor
