@@ -96,8 +96,10 @@ namespace FuStudy_Service.Service
             questionWithSubscription.StudentId = studentId;
             questionWithSubscription.CategoryId = category.Id;
             _unitOfWork.QuestionRepository.Insert(questionWithSubscription);
-            _unitOfWork.Save();            
-            return _mapper.Map<QuestionResponse>(questionWithSubscription);
+            _unitOfWork.Save();
+            var questionResponse = _mapper.Map<QuestionResponse>(questionWithSubscription);
+            questionResponse.UserId = userId;
+            return questionResponse;
 
         }
         
@@ -136,7 +138,9 @@ namespace FuStudy_Service.Service
             _unitOfWork.QuestionRepository.Insert(questionWithCoin);
             _unitOfWork.Save();
             
-            return _mapper.Map<QuestionResponse>(questionWithCoin);
+            var questionResponse = _mapper.Map<QuestionResponse>(questionWithCoin);
+            questionResponse.UserId = userId;
+            return questionResponse;
 
         }
 
