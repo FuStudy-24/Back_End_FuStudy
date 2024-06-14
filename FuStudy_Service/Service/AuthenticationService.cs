@@ -52,6 +52,13 @@ public class AuthenticationService: IAuthenticationService
         
         user.Password = EncryptPassword.Encrypt(createAccountDTORequest.Password);
         user.Status = true;
+        var role = _unitOfWork.RoleRepository.Get(role => role.RoleName == createAccountDTORequest.RoleName)
+            .FirstOrDefault();
+        if (role == null)
+        {
+            throw new CustomException.InvalidDataException( "500", "This role name does not exist");
+        }
+        user.RoleId = role.Id;
         user.CreateDate = DateTime.Now.Date;
 
 
