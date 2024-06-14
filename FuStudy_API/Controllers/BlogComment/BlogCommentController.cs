@@ -16,12 +16,12 @@ namespace FuStudy_API.Controllers.BlogComment
             _blogCommentService = blogCommentService;
         }
 
-        [HttpGet("GetAllCommentABlog/{id}")]
-        public async Task<IActionResult> GetAllCommentABlog(long id)
+        [HttpGet("GetAllCommentABlog")]
+        public async Task<IActionResult> GetAllCommentABlog([FromQuery] QueryObject queryObject)
         {
             try
             {
-                var response = await _blogCommentService.GetAllCommentABlog(id);
+                var response = await _blogCommentService.GetAllCommentABlog(queryObject);
                 if (response == null)
                 {
                     return CustomResult("Data not loaded", response);
@@ -35,7 +35,7 @@ namespace FuStudy_API.Controllers.BlogComment
         }
 
         [HttpPost("CreateBlogComment")]
-        public async Task<IActionResult> CreateBlogComment([FromBody] BlogCommentRequest request)
+        public async Task<IActionResult> CreateBlogComment([FromForm] BlogCommentRequest request)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace FuStudy_API.Controllers.BlogComment
         }
 
         [HttpPost("UpdateBlogComment/{id}")]
-        public async Task<IActionResult> UpdateBlogComment([FromBody] BlogCommentRequest request, long id)
+        public async Task<IActionResult> UpdateBlogComment([FromForm] BlogCommentRequest request, long id)
         {
             try
             {
