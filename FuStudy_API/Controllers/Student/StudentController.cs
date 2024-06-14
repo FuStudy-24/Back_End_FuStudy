@@ -55,4 +55,5 @@ namespace FuStudy_API.Controllers.Student
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
+    }
 }
