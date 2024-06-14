@@ -46,7 +46,7 @@ public class CategoryController : BaseController
 
             if (category == null)
             {
-                return CustomResult("Question not found", HttpStatusCode.NotFound);
+                return CustomResult("Category not found", HttpStatusCode.NotFound);
             }
 
             return CustomResult("Data loaded!", category);
@@ -115,7 +115,7 @@ public class CategoryController : BaseController
             try
             {
                 await _categoryService.DeleteCategoryAsync(categoryId);
-                return CustomResult("Delete category successfully", HttpStatusCode.NoContent);
+                return CustomResult("Delete category successfully");
             }
             catch (CustomException.DataNotFoundException e)
             {
