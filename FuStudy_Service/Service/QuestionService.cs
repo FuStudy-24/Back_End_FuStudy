@@ -90,12 +90,14 @@ namespace FuStudy_Service.Service
             
             studentSubscription.CurrentQuestion++;
  
-            var questionWithCoin = _mapper.Map<Question>(questionRequest);
-            questionWithCoin.CreateDate = DateTime.Now;
-            questionWithCoin.TotalRating = 0;
-            _unitOfWork.QuestionRepository.Insert(questionWithCoin);
+            var questionWithSubscription = _mapper.Map<Question>(questionRequest);
+            questionWithSubscription.CreateDate = DateTime.Now;
+            questionWithSubscription.TotalRating = 0;
+            questionWithSubscription.StudentId = studentId;
+            questionWithSubscription.CategoryId = category.Id;
+            _unitOfWork.QuestionRepository.Insert(questionWithSubscription);
             _unitOfWork.Save();            
-            return _mapper.Map<QuestionResponse>(questionWithCoin);
+            return _mapper.Map<QuestionResponse>(questionWithSubscription);
 
         }
         
@@ -127,6 +129,8 @@ namespace FuStudy_Service.Service
             userWallet.Balance -= 20;
             //save to database
             var questionWithCoin = _mapper.Map<Question>(questionRequest);
+            questionWithCoin.CategoryId = category.Id;
+            questionWithCoin.StudentId = studentId;
             questionWithCoin.CreateDate = DateTime.Now;
             questionWithCoin.TotalRating = 0;
             _unitOfWork.QuestionRepository.Insert(questionWithCoin);
