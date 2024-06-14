@@ -19,6 +19,8 @@ namespace FuStudy_Model.DTO.Response
 
         public string Skill { get; set; }
 
+        public string OnlineStatus { get; set; }
+
         public string Video { get; set; }
 
         public bool VerifyStatus { get; set; }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FuStudy_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240609073224_Kaneki")]
+    [Migration("20240614150559_Kaneki")]
     partial class Kaneki
     {
         /// <inheritdoc />
@@ -58,7 +58,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("ConversationMessageId");
 
-                    b.ToTable("Attachments");
+                    b.ToTable("Attachment");
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Blog", b =>
@@ -90,14 +90,14 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Blogs");
+                    b.ToTable("Blog");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             BlogContent = "How to be a better mentor",
-                            CreateDate = new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7924),
+                            CreateDate = new DateTime(2024, 6, 14, 22, 5, 58, 178, DateTimeKind.Local).AddTicks(3065),
                             Image = "ahihi",
                             TotalLike = 1,
                             UserId = 2L
@@ -137,7 +137,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BlogComments");
+                    b.ToTable("BlogComment");
 
                     b.HasData(
                         new
@@ -145,7 +145,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             BlogId = 1L,
                             Comment = "Great post!",
-                            CreateDate = new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7975),
+                            CreateDate = new DateTime(2024, 6, 14, 22, 5, 58, 178, DateTimeKind.Local).AddTicks(3088),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = false,
                             UserId = 1L
@@ -175,7 +175,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BlogLikes");
+                    b.ToTable("BlogLike");
 
                     b.HasData(
                         new
@@ -220,7 +220,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Booking");
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Category", b =>
@@ -237,7 +237,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
 
                     b.HasData(
                         new
@@ -279,7 +279,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("BlogCommentId");
 
-                    b.ToTable("CommentImages");
+                    b.ToTable("CommentImage");
 
                     b.HasData(
                         new
@@ -327,13 +327,13 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("User2Id");
 
-                    b.ToTable("Conversations");
+                    b.ToTable("Conversation");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
-                            CreateAt = new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(8237),
+                            CreateAt = new DateTime(2024, 6, 14, 22, 5, 58, 178, DateTimeKind.Local).AddTicks(3198),
                             Duration = new TimeSpan(0, 0, 0, 0, 0),
                             EndTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsClose = false,
@@ -379,7 +379,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("ConversationMessages");
+                    b.ToTable("ConversationMessage");
 
                     b.HasData(
                         new
@@ -387,7 +387,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             Content = "Hello!",
                             ConversationId = 1L,
-                            CreateTime = new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(8272),
+                            CreateTime = new DateTime(2024, 6, 14, 22, 5, 58, 178, DateTimeKind.Local).AddTicks(3217),
                             DeleteAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDelete = false,
                             IsSeen = false,
@@ -409,7 +409,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Majors");
+                    b.ToTable("Major");
 
                     b.HasData(
                         new
@@ -463,7 +463,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("MeetingHistories");
+                    b.ToTable("MeetingHistory");
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Mentor", b =>
@@ -504,7 +504,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Mentors");
+                    b.ToTable("Mentor");
 
                     b.HasData(
                         new
@@ -540,7 +540,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("MentorId");
 
-                    b.ToTable("MentorMajors");
+                    b.ToTable("MentorMajor");
 
                     b.HasData(
                         new
@@ -578,14 +578,14 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("MessageReactions");
+                    b.ToTable("MessageReaction");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             ConversationMessageId = 1L,
-                            CreateAt = new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(8339),
+                            CreateAt = new DateTime(2024, 6, 14, 22, 5, 58, 178, DateTimeKind.Local).AddTicks(3252),
                             ReactionType = "like",
                             UserId = 2L
                         });
@@ -623,13 +623,13 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("TransactionId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Order");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7906),
+                            CreateDate = new DateTime(2024, 6, 14, 22, 5, 58, 178, DateTimeKind.Local).AddTicks(3055),
                             Description = "Payment for Basic subscription",
                             Money = 9.9900000000000002,
                             PaymentCode = "PAY12345",
@@ -652,7 +652,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions");
+                    b.ToTable("Permission");
 
                     b.HasData(
                         new
@@ -717,7 +717,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Question");
 
                     b.HasData(
                         new
@@ -725,7 +725,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             CategoryId = 1L,
                             Content = "How to sort an array in C#?",
-                            CreateDate = new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7504),
+                            CreateDate = new DateTime(2024, 6, 14, 22, 5, 58, 178, DateTimeKind.Local).AddTicks(2823),
                             Image = "ahihi",
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = false,
@@ -767,14 +767,14 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("QuestionComments");
+                    b.ToTable("QuestionComment");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             Content = "Good question!",
-                            CreateDate = new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(8189),
+                            CreateDate = new DateTime(2024, 6, 14, 22, 5, 58, 178, DateTimeKind.Local).AddTicks(3168),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             QuestionId = 1L,
                             Status = false,
@@ -805,7 +805,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("QuestionRatings");
+                    b.ToTable("QuestionRating");
 
                     b.HasData(
                         new
@@ -831,7 +831,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Role");
 
                     b.HasData(
                         new
@@ -876,7 +876,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RolePermissions");
+                    b.ToTable("RolePermission");
 
                     b.HasData(
                         new
@@ -914,7 +914,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Student");
 
                     b.HasData(
                         new
@@ -959,7 +959,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("SubcriptionId");
 
-                    b.ToTable("StudentSubcriptions");
+                    b.ToTable("StudentSubcription");
 
                     b.HasData(
                         new
@@ -967,8 +967,8 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             CurrentMeeting = 0,
                             CurrentQuestion = 0,
-                            EndDate = new DateTime(2024, 7, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7722),
-                            StartDate = new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7721),
+                            EndDate = new DateTime(2024, 7, 14, 22, 5, 58, 178, DateTimeKind.Local).AddTicks(2900),
+                            StartDate = new DateTime(2024, 6, 14, 22, 5, 58, 178, DateTimeKind.Local).AddTicks(2899),
                             Status = true,
                             StudentId = 1L,
                             SubcriptionId = 1L
@@ -1001,7 +1001,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subcriptions");
+                    b.ToTable("Subcription");
 
                     b.HasData(
                         new
@@ -1052,7 +1052,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tokens");
+                    b.ToTable("Token");
                 });
 
             modelBuilder.Entity("FuStudy_Repository.Entity.Transaction", b =>
@@ -1084,14 +1084,14 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("WalletId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transaction");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             Ammount = 9.9900000000000002,
-                            CreateTime = new DateTime(2024, 6, 9, 14, 32, 23, 127, DateTimeKind.Local).AddTicks(7834),
+                            CreateTime = new DateTime(2024, 6, 14, 22, 5, 58, 178, DateTimeKind.Local).AddTicks(3012),
                             Description = "Subscription payment",
                             Type = "Deposit",
                             WalletId = 1L
@@ -1154,7 +1154,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
 
                     b.HasData(
                         new
@@ -1228,7 +1228,7 @@ namespace FuStudy_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Wallets");
+                    b.ToTable("Wallet");
 
                     b.HasData(
                         new

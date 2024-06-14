@@ -22,11 +22,11 @@ namespace FuStudy_API.Controllers.Contact
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetAllSubcriptions()
+        public async Task<IActionResult> GetAllSubcriptions(QueryObject queryObject)
         {
             try
             {
-                var subcriptions = await _subcriptionService.GetAllSubcriptions();
+                var subcriptions = await _subcriptionService.GetAllSubcriptions(queryObject);
                 return CustomResult("Get Subcription Success", subcriptions, HttpStatusCode.OK);
             }
             catch (Exception ex)
