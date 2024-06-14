@@ -8,6 +8,7 @@ using FuStudy_Service.Service;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
+using Tools;
 
 namespace FuStudy_API.Controllers.Subcription
 {
@@ -23,11 +24,11 @@ namespace FuStudy_API.Controllers.Subcription
         }
 
         [HttpGet("GetAllStudentSubcription")]
-        public async Task<IActionResult> GetAllStudentSubcription()
+        public async Task<IActionResult> GetAllStudentSubcription([FromQuery] QueryObject queryObject)
         {
             try
             {
-                var studentsubcrption = await _studentSubcriptionService.GetAllStudentSubcription();
+                var studentsubcrption = await _studentSubcriptionService.GetAllStudentSubcription(queryObject);
                 return CustomResult("Load Data Successful", studentsubcrption, HttpStatusCode.OK);
             }
             catch (Exception ex)

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
 namespace FuStudy_Service.Interfaces
 {
@@ -13,7 +14,7 @@ namespace FuStudy_Service.Interfaces
     {
         Task<StudentSubcriptionResponse> CreateStudentSubcription(CreateStudentSubcriptionRequest studentSubcriptionRequest);
         Task<StudentSubcriptionResponse> DeleteStudentSubcription(long id, UpdateStudentSubcriptionRequest updateStudentSubcriptionRequest);
-        Task<IEnumerable<StudentSubcription>> GetAllStudentSubcription();
+        Task<IEnumerable<StudentSubcriptionResponse>> GetAllStudentSubcription(QueryObject queryObject);
         Task<StudentSubcriptionResponse> GetStudentSubcriptionByID(long id);
         Task<StudentSubcriptionResponse> UpdateStudentSubcription(long id, UpdateStudentSubcriptionRequest updateStudentSubcriptionRequest);
     }

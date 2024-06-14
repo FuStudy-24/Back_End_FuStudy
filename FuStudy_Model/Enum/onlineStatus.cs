@@ -10,6 +10,7 @@ namespace FuStudy_Model.Enum
     {
         Online,
         Idle,
+        BeingBook,
         Busy,
         Invisible
     }
