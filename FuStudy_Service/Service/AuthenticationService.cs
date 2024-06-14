@@ -84,7 +84,7 @@ public class AuthenticationService: IAuthenticationService
                 AcademicLevel = "",
                 WorkPlace = "",
                 VerifyStatus = false,
-                OnlineStatus = "Inactive",
+                OnlineStatus = onlineStatus.Invisible.ToString(),
                 Skill = "",
                 Video = ""
             };
