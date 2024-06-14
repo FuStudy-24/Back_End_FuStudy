@@ -6,7 +6,6 @@ using FuStudy_Service.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using Microsoft.AspNetCore.Authorization;
 using Tools;
 
 namespace FuStudy_API.Controllers.Mentor
@@ -78,7 +77,7 @@ namespace FuStudy_API.Controllers.Mentor
         }
 
         [HttpPatch("UpdateMentor/{id}")]
-        public async Task<IActionResult> UpdateMentor(long id, MentorRequest mentorRequest)
+        public async Task<IActionResult> UpdateMentor(long id, [FromForm] MentorRequest mentorRequest)
         {
             try
             {
@@ -103,26 +102,21 @@ namespace FuStudy_API.Controllers.Mentor
             }
         }
 
-        /*[HttpPatch("UpdateOnlineStatus/{id}")]
-        public async Task<IActionResult> UpdateOnlineStatus(long id)
+        [HttpPatch("UpdateOnlineStatus/{id}")]
+        public async Task<IActionResult> UpdateOnlineStatus(long id, UpdateMentorOnlineStatusResquest updateMentorOnlineStatusResquest)
         {
             try
             {
-                Men
-            }
-        }*/
-
-        [HttpDelete("DeleteMentor/{id}")]
-        public async Task<IActionResult> DeleteMentor(long id)
-        {
-            try
-            {
-                var mentor = await _mentorService.DeleteMentor(id);
-                return CustomResult("Delete Role Successfull (Status)", mentor, HttpStatusCode.OK);
+                UpdateMentorOnlineStatusResponse onlineStatus = await _mentorService.UpdateOnlineStatus(id, updateMentorOnlineStatusResquest);
+                return CustomResult("Update Successfully", onlineStatus, HttpStatusCode.OK);
             }
             catch (CustomException.DataNotFoundException ex)
             {
-                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+                return CustomResult(ex.Message, id, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
             }
             catch (Exception ex)
             {
@@ -149,6 +143,6 @@ namespace FuStudy_API.Controllers.Mentor
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
-        
+
     }
 }

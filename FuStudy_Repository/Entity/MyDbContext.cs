@@ -27,7 +27,6 @@ namespace FuStudy_Repository.Entity
         public DbSet<BlogComment> BlogsComments { get; set; }
         public DbSet<BlogLike> BlogsLikes { get; set; }
         public DbSet<CommentImage> CommentImages { get; set; }
-
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
@@ -140,7 +139,7 @@ namespace FuStudy_Repository.Entity
             modelBuilder.Entity<Major>().HasData(majors);
             var mentors = new List<Mentor>
                 { new Mentor {Id = 1, UserId = users[2].Id, AcademicLevel = "Master's"
-                    , WorkPlace = "Tech Company", OnlineStatus = "offline", Skill = "Ahihi", Video = "ahihi", VerifyStatus = true} };
+                    , WorkPlace = "Tech Company", OnlineStatus = "Invisible", Skill = "Ahihi", Video = "ahihi", VerifyStatus = true} };
 
             var mentorMajor = new MentorMajor {Id = 1, MentorId = mentors[0].Id, MajorId = majors[0].Id };
 

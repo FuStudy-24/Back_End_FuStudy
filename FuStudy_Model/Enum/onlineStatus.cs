@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace FuStudy_Model.Enum
 {
-    public enum onlineStatus
+    public enum OnlineStatus
     {
         Online,
         Idle,
+        BeingBook,
         Busy,
         Invisible
     }

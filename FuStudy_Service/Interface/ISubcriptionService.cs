@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
 namespace FuStudy_Service.Interface
 {
@@ -13,7 +14,7 @@ namespace FuStudy_Service.Interface
     {
         Task<SubcriptionResponse> CreateSubcription(CreateSubcriptionRequest subcriptionRequest);
         Task<SubcriptionResponse> DeleteSubcription(long id);
-        Task<IEnumerable<Subcription>> GetAllSubcriptions();
+        Task<IEnumerable<SubcriptionResponse>> GetAllSubcriptions(QueryObject queryObject);
         Task<Subcription> GetSubCriptionById(long id);
         Task<SubcriptionResponse> UpdateSubcription(long id, UpdateSubcriptionRequest updateSubcriptionRequest);
     }

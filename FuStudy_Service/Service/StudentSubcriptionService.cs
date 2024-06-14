@@ -7,6 +7,7 @@ using FuStudy_Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
@@ -24,11 +25,22 @@ namespace FuStudy_Service.Service
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<StudentSubcription>> GetAllStudentSubcription()
+        public async Task<IEnumerable<StudentSubcriptionResponse>> GetAllStudentSubcription(QueryObject queryObject)
         {
             var getall = _unitOfWork.StudentSubcriptionRepository.Get(
-                filter: p => p.Status == true, includeProperties: "Student,Subcription");
-            return await Task.FromResult(getall);
+                filter: p => p.Status == true, includeProperties: "Student,Subcription",
+                pageIndex: queryObject.PageIndex,
+                pageSize: queryObject.PageSize)
+                .ToList();
+
+            if (!getall.Any())
+            {
+                throw new CustomException.DataNotFoundException("No StudentSubcription in Database");
+            }
+
+            var studentSubcriptionResponses = _mapper.Map<IEnumerable<StudentSubcriptionResponse>>(getall);
+
+            return studentSubcriptionResponses;
         }
 
         public async Task<StudentSubcriptionResponse> GetStudentSubcriptionByID(long id)
