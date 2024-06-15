@@ -1,6 +1,7 @@
 ﻿using CoreApiResponse;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tools;
 
@@ -35,7 +36,8 @@ namespace FuStudy_API.Controllers.BlogComment
         }
 
         [HttpPost("CreateBlogComment")]
-        public async Task<IActionResult> CreateBlogComment([FromForm] BlogCommentRequest request)
+        [Authorize]
+        public async Task<IActionResult> CreateBlogComment([FromBody] BlogCommentRequest request)
         {
             try
             {
@@ -58,7 +60,8 @@ namespace FuStudy_API.Controllers.BlogComment
         }
 
         [HttpPost("UpdateBlogComment/{id}")]
-        public async Task<IActionResult> UpdateBlogComment([FromForm] BlogCommentRequest request, long id)
+        [Authorize]
+        public async Task<IActionResult> UpdateBlogComment([FromBody] BlogCommentRequest request, long id)
         {
             try
             {
@@ -80,6 +83,7 @@ namespace FuStudy_API.Controllers.BlogComment
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteBlogComment(long id)
         {
             try
