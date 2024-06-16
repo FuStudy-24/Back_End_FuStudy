@@ -7,6 +7,7 @@ using FuStudy_Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -98,17 +99,27 @@ namespace FuStudy_Service.Service
             }
         }
 
-        public async Task<IEnumerable<BlogCommentResponse>> GetAllCommentABlog(long id)
+        public async Task<IEnumerable<BlogCommentResponse>> GetAllCommentABlog(QueryObject queryObject)
         {
             try
             {
-                var checkBlog = _unitOfWork.BlogRepository.GetByID(id);
-                if(checkBlog == null)
+                Expression<Func<Blog, bool>> filter = null;
+                if (!string.IsNullOrWhiteSpace(queryObject.Search))
+                {
+                    filter = blogCmt => blogCmt.Id.ToString().Contains(queryObject.Search);
+                }
+
+                var checkBlog = _unitOfWork.BlogRepository.Get(
+                                                filter: filter,
+                                                pageIndex: queryObject.PageIndex,
+                                                pageSize: queryObject.PageSize)
+                                                        .FirstOrDefault();
+                if (checkBlog == null)
                 {
                     throw new CustomException.InvalidDataException("Bad request!");
                 }
                 var commentContent = _unitOfWork.BlogCommentRepository
-                                .Get(filter: p => p.BlogId == id && p.Status == true,
+                                .Get(filter: p => p.BlogId == checkBlog.Id && p.Status == true,
                                 includeProperties: "User");
 
                 var response = _mapper.Map<IEnumerable<BlogCommentResponse>>(commentContent);
