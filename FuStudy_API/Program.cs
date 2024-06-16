@@ -83,6 +83,8 @@ builder.Services.AddScoped<IMentorService, MentorService>();
 builder.Services.AddScoped<IMajorService, MajorService>();
 builder.Services.AddScoped<IMentorService, MentorService>();
 builder.Services.AddScoped<IMentorMajorService, MentorMajorService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IMeetingHistory, MeetingHistoryService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IWalletService, WalletService>();
