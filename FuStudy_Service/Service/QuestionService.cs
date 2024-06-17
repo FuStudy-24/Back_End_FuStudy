@@ -21,12 +21,13 @@ namespace FuStudy_Service.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public QuestionService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        private readonly Tools.Firebase _firebase;
+        public QuestionService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, Tools.Firebase firebase)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
-
+            _firebase = firebase;
         }
 
         public async Task<IEnumerable<QuestionResponse>> GetAllQuestionsAsync(QueryObject queryObject)
@@ -75,7 +76,7 @@ namespace FuStudy_Service.Service
             {
                 throw new CustomException.DataNotFoundException($"Student with ID: {studentId} not found!");
             }
-            if (_unitOfWork.CategoryRepository.GetByID(category.Id) == null)
+            if (category == null)
             {
                 throw new CustomException.DataNotFoundException($"Category with ID: {category.Id} not found!");
             }
@@ -98,8 +99,25 @@ namespace FuStudy_Service.Service
             }
             
             studentSubscription.CurrentQuestion++;
- 
+
+            //save to database
             var questionWithSubscription = _mapper.Map<Question>(questionRequest);
+            if (questionRequest.Image != null)
+            {
+                string[] imgExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+                if (!imgExtensions.Contains(Path.GetExtension(questionRequest.Image.FileName)))
+                {
+                    throw new CustomException.InvalidDataException("Just accept image!");
+                }
+                var imageurl = await _firebase.UploadImageAsync(questionRequest.Image);
+                questionWithSubscription.Image = imageurl;
+            }
+            else
+            {
+                questionWithSubscription.Image = null;
+
+            }
+
             questionWithSubscription.CreateDate = DateTime.Now;
             questionWithSubscription.TotalRating = 0;
             questionWithSubscription.StudentId = studentId;
@@ -123,10 +141,11 @@ namespace FuStudy_Service.Service
             {
                 throw new CustomException.DataNotFoundException($"Student with ID: {studentId} not found!");
             }
-            if (_unitOfWork.CategoryRepository.GetByID(category.Id) == null)
+            if (category == null)
             {
-                throw new CustomException.DataNotFoundException($"Category with ID: {category.Id} not found!");
+                throw new CustomException.DataNotFoundException($"Category: {questionRequest.CategoryName} not found!");
             }
+            
             
             var student = _unitOfWork.StudentRepository.GetByID(studentId);
             //If having coin
@@ -140,6 +159,22 @@ namespace FuStudy_Service.Service
             userWallet.Balance -= 20;
             //save to database
             var questionWithCoin = _mapper.Map<Question>(questionRequest);
+            if (questionRequest.Image != null)
+            {
+                string[] imgExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+                if (!imgExtensions.Contains(Path.GetExtension(questionRequest.Image.FileName)))
+                {
+                    throw new CustomException.InvalidDataException("Just accept image!");
+                }
+                var imageurl = await _firebase.UploadImageAsync(questionRequest.Image);
+                questionWithCoin.Image = imageurl;
+            }
+            else
+            {
+                questionWithCoin.Image = null;
+
+            }
+            
             questionWithCoin.CategoryId = category.Id;
             questionWithCoin.StudentId = studentId;
             questionWithCoin.CreateDate = DateTime.Now;
@@ -164,6 +199,22 @@ namespace FuStudy_Service.Service
             }
 
             _mapper.Map(questionRequest, question);
+            if (questionRequest.Image != null)
+            {
+                string[] imgExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+                if (!imgExtensions.Contains(Path.GetExtension(questionRequest.Image.FileName)))
+                {
+                    throw new CustomException.InvalidDataException("Just accept image!");
+                }
+                var imageurl = await _firebase.UploadImageAsync(questionRequest.Image);
+                question.Image = imageurl;
+            }
+            else
+            {
+                question.Image = null;
+            }
+            
+
             question.ModifiedDate = DateTime.Now;
             _unitOfWork.QuestionRepository.Update(question);
             _unitOfWork.Save();

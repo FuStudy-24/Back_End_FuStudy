@@ -69,7 +69,8 @@ namespace FuStudy_Repository.Entity
         {
             
             base.OnModelCreating(modelBuilder);
-           
+            modelBuilder.Entity<Question>().Property(question => question.Image).IsRequired(false);
+
             
             // -- Roles & Permissions --
             var roles = new List<Role>

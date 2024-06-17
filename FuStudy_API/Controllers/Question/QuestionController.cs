@@ -64,7 +64,7 @@ namespace FuStudy_API.Controllers.Question
 
     [HttpPost("CreateQuestionWithSubscription")]
     [Authorize]
-        public async Task<IActionResult> CreateQuestionWithSubscription([FromBody] QuestionRequest questionRequest)
+        public async Task<IActionResult> CreateQuestionWithSubscription([FromForm] QuestionRequest questionRequest)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace FuStudy_API.Controllers.Question
 
         [HttpPost("CreateQuestionByCoin")]
         [Authorize]
-        public async Task<IActionResult> CreateQuestionByCoin([FromBody] QuestionRequest questionRequest)
+        public async Task<IActionResult> CreateQuestionByCoin([FromForm] QuestionRequest questionRequest)
         {
             try
             {
@@ -126,7 +126,7 @@ namespace FuStudy_API.Controllers.Question
         
         [HttpPatch("UpdateQuestion/{questionId}")]
         [Authorize]
-        public async Task<IActionResult> UpdateQuestion(long questionId, [FromBody] QuestionRequest questionRequest)
+        public async Task<IActionResult> UpdateQuestion(long questionId, [FromForm] QuestionRequest questionRequest)
         {
             if (!ModelState.IsValid)
             {
