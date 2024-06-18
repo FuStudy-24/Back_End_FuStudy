@@ -22,7 +22,7 @@ namespace FuStudy_API.Controllers.Contact
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetAllSubcriptions(QueryObject queryObject)
+        public async Task<IActionResult> GetAllSubcriptions([FromQuery] QueryObject queryObject)
         {
             try
             {
