@@ -87,6 +87,10 @@ public class QuestionCommentService : IQuestionCommentService
     public async Task<QuestionCommentResponse> GetQuestionCommentById(long id)
     {
         var questionComment = await _unitOfWork.QuestionCommentRepository.GetByIdWithInclude(id, includeProperties:"Question");
+        if (questionComment == null)
+        {
+            throw new CustomException.DataNotFoundException($"Question Comment ID: {id} not found");
+        }
         var response = _mapper.Map<QuestionCommentResponse>(questionComment);
         IsMentorFromUserId(response);
         var question = _unitOfWork.QuestionRepository.Get(q => q.Id == response.QuestionId, includeProperties:"Category").FirstOrDefault();

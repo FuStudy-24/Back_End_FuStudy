@@ -49,12 +49,6 @@ public class QuestionCommentController : BaseController
         try
         {
             var question = await _questionCommentService.GetQuestionCommentById(id);
-
-            if (question == null)
-            {
-                return CustomResult("Question not found", HttpStatusCode.NotFound);
-            }
-
             return CustomResult("Data loaded!", question);
         }
         catch (CustomException.DataNotFoundException e)
