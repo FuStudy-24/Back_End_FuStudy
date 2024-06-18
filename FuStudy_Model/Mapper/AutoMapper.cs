@@ -183,6 +183,12 @@ namespace FuStudy_Model.Mapper
             CreateMap<MessageReaction, MessageReactionResponse>().ReverseMap();
 
             CreateMap<Attachment, AttachmentResponse>();
+
+            #region StudentResponse
+
+            CreateMap<Student, StudentResponse>().ReverseMap();
+
+            #endregion
         }
     }
 }
