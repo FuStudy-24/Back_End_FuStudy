@@ -10,10 +10,8 @@ namespace FuStudy_Model.DTO.Response
     {
         public long Id { get; set; }
         public long UserId { get; set; }
-
+        public string CategoryName { get; set; }
         public long StudentId { get; set; }
-
-        public long CategoryId { get; set; }
 
         public string Content { get; set; }
 

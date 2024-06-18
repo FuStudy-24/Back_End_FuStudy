@@ -41,6 +41,7 @@ namespace FuStudy_Service.Service
 
             var questions = _unitOfWork.QuestionRepository.Get(
                 filter: filter,
+                includeProperties:"Category",
                 pageIndex: queryObject.PageIndex,
                 pageSize: queryObject.PageSize);
             if (questions.IsNullOrEmpty())
@@ -60,11 +61,15 @@ namespace FuStudy_Service.Service
         public async Task<QuestionResponse> GetQuestionByIdAsync(long id)
         {
             var question = _unitOfWork.QuestionRepository.GetByID(id);
+
+
             if (question == null)
             {
                 throw new CustomException.DataNotFoundException($"Question with ID: {id} not found!");
 
             }
+            var category = _unitOfWork.CategoryRepository.Get(c => c.Id == question.CategoryId, includeProperties:"Category").FirstOrDefault();
+            if (category != null) question.Category = category;
             var questionResponse = _mapper.Map<QuestionResponse>(question);
             questionResponse.UserId = GetUserIdByStudentId(question.StudentId);
             return questionResponse; 

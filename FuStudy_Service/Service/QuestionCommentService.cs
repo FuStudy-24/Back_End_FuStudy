@@ -45,12 +45,13 @@ public class QuestionCommentService : IQuestionCommentService
         {
             throw new CustomException.DataNotFoundException("The question comment list is empty!");
         }
-
         var response = _mapper.Map<IEnumerable<QuestionCommentResponse>>(questionComments);
-  
+        
         foreach (var comment in response)
         {
             IsMentorFromUserId(comment);
+            var question = _unitOfWork.QuestionRepository.Get(q => q.Id == comment.QuestionId, includeProperties:"Category").FirstOrDefault();
+            comment.QuestionResponse = _mapper.Map<QuestionResponse>(question);
         }
         return response;
 
@@ -77,6 +78,8 @@ public class QuestionCommentService : IQuestionCommentService
         foreach (var comment in response)
         {
             IsMentorFromUserId(comment);
+            var question = _unitOfWork.QuestionRepository.Get(q => q.Id == comment.QuestionId, includeProperties:"Category").FirstOrDefault();
+            comment.QuestionResponse = _mapper.Map<QuestionResponse>(question);
         }
         return response;
     }
@@ -86,6 +89,8 @@ public class QuestionCommentService : IQuestionCommentService
         var questionComment = await _unitOfWork.QuestionCommentRepository.GetByIdWithInclude(id, includeProperties:"Question");
         var response = _mapper.Map<QuestionCommentResponse>(questionComment);
         IsMentorFromUserId(response);
+        var question = _unitOfWork.QuestionRepository.Get(q => q.Id == response.QuestionId, includeProperties:"Category").FirstOrDefault();
+        response.QuestionResponse = _mapper.Map<QuestionResponse>(question);
         return response;
     }
 
@@ -103,6 +108,7 @@ public class QuestionCommentService : IQuestionCommentService
         }
 
         var questionComment = _mapper.Map<QuestionComment>(questionCommentRequest);
+        questionComment.UserId = userId;
         questionComment.CreateDate = DateTime.Now;
         questionComment.Status = true;
         _unitOfWork.QuestionCommentRepository.Insert(questionComment);
@@ -110,6 +116,8 @@ public class QuestionCommentService : IQuestionCommentService
 
         var response = _mapper.Map<QuestionCommentResponse>(questionComment);
         IsMentorFromUserId(response);
+        var question = _unitOfWork.QuestionRepository.Get(q => q.Id == response.QuestionId, includeProperties:"Category").FirstOrDefault();
+        response.QuestionResponse = _mapper.Map<QuestionResponse>(question);
         return response;
     }
 
@@ -143,6 +151,8 @@ public class QuestionCommentService : IQuestionCommentService
 
         var response = _mapper.Map<QuestionCommentResponse>(questionComment);
         IsMentorFromUserId(response);
+        var question = _unitOfWork.QuestionRepository.Get(q => q.Id == response.QuestionId, includeProperties:"Category").FirstOrDefault();
+        response.QuestionResponse = _mapper.Map<QuestionResponse>(question);
         return response;
     }
 

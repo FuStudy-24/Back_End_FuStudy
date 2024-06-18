@@ -51,6 +51,21 @@ namespace FuStudy_API.Controllers.Subcription
             }
         }
 
+        [HttpGet("findStudentSubcription/{userId}")]
+        public async Task<IActionResult> GetStudentSubcriptionByUserID(long userId)
+        {
+            try
+            {
+                var studentsubcription = await _studentSubcriptionService.GetStudentSubcriptionByUserID(userId);
+                return CustomResult("ID has Found", studentsubcription, HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+
         [HttpPost("CreateStudentSubcription")]
         public async Task<IActionResult> CreateStudentSubcription([FromBody] CreateStudentSubcriptionRequest studentSubcriptionRequest)
         {
