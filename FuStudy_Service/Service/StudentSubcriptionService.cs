@@ -28,7 +28,7 @@ namespace FuStudy_Service.Service
         public async Task<IEnumerable<StudentSubcriptionResponse>> GetAllStudentSubcription(QueryObject queryObject)
         {
             var getall = _unitOfWork.StudentSubcriptionRepository.Get(
-                filter: p => p.Status == true, includeProperties: "Student,Subcription",
+                filter: p => p.Status == true, includeProperties: "Student.User,Subcription",
                 pageIndex: queryObject.PageIndex,
                 pageSize: queryObject.PageSize)
                 .ToList();
@@ -47,7 +47,7 @@ namespace FuStudy_Service.Service
         {
 
             var studentsubcriptionByID = _unitOfWork.StudentSubcriptionRepository.Get(
-            filter: p => p.Id == id && p.Status == true, includeProperties: "Student,Subcription").FirstOrDefault();
+            filter: p => p.Id == id && p.Status == true, includeProperties: "Student.User,Subcription").FirstOrDefault();
             if (studentsubcriptionByID == null)
             {
                 throw new CustomException.DataNotFoundException("ID Is not Found.");
@@ -59,7 +59,8 @@ namespace FuStudy_Service.Service
         public async Task<StudentSubcriptionResponse> CreateStudentSubcription(CreateStudentSubcriptionRequest studentSubcriptionRequest)
         {
             var studentsub = _mapper.Map<StudentSubcription>(studentSubcriptionRequest);
-            var student = _unitOfWork.StudentRepository.Get(s => s.UserId == studentSubcriptionRequest.UserId).FirstOrDefault();
+            var student = _unitOfWork.StudentSubcriptionRepository.Get(s => s.Student.Id == studentSubcriptionRequest.UserId,
+                includeProperties: "Student.User,Subcription").FirstOrDefault();
             if (student == null)
             {
                 throw new CustomException.DataNotFoundException("This User is not a student!!");
