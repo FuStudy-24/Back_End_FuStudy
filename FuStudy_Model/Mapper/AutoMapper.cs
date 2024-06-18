@@ -96,6 +96,11 @@ namespace FuStudy_Model.Mapper
                 .ReverseMap();
             #endregion
 
+            #region Booking 
+            CreateMap<CreateBookingRequest, Booking>().ReverseMap();
+            CreateMap<BookingResponse, Booking>().ReverseMap();
+            #endregion
+
             #region Comment Image
             CreateMap<CommentImageRequest, CommentImage>();
             CreateMap<CommentImage, CommentImageResponse>();

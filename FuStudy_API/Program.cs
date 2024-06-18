@@ -22,6 +22,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure();
 
+
+// Thêm đoạn mã sau để đăng ký TimeSpanConverter
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true; // Optional: Make property names case insensitive
+    });
+
 /*builder.Services.AddTransient<UpdateConversationIsCloseJob>();
 
 // Cấu hình lịch trình
@@ -70,6 +79,7 @@ builder.Services.AddScoped<ISubcriptionService, SubcriptionService>();
 builder.Services.AddScoped<IStudentSubcriptionService, StudentSubcriptionService>();
 builder.Services.AddScoped<IBlogService,BlogService>();
 builder.Services.AddScoped<IBlogLikeService, BlogLikeService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IConversationService, ConversationService>();
 
 builder.Services.AddScoped<IConversationMessageService, ConversationMessageService>();
@@ -80,6 +90,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 builder.Services.AddScoped<IMentorService, MentorService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IMajorService, MajorService>();
 builder.Services.AddScoped<IMentorService, MentorService>();
 builder.Services.AddScoped<IMentorMajorService, MentorMajorService>();

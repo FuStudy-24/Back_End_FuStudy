@@ -4,6 +4,7 @@ using FuStudy_Repository.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FuStudy_API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240617170940_Harmony")]
+    partial class Harmony
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,7 +97,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             BlogContent = "How to be a better mentor",
-                            CreateDate = new DateTime(2024, 6, 17, 19, 46, 30, 957, DateTimeKind.Local).AddTicks(4825),
+                            CreateDate = new DateTime(2024, 6, 18, 0, 9, 39, 930, DateTimeKind.Local).AddTicks(8640),
                             Image = "ahihi",
                             TotalLike = 1,
                             UserId = 2L
@@ -142,7 +145,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             BlogId = 1L,
                             Comment = "Great post!",
-                            CreateDate = new DateTime(2024, 6, 17, 19, 46, 30, 957, DateTimeKind.Local).AddTicks(4855),
+                            CreateDate = new DateTime(2024, 6, 18, 0, 9, 39, 930, DateTimeKind.Local).AddTicks(8697),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = false,
                             UserId = 1L
@@ -330,7 +333,7 @@ namespace FuStudy_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateAt = new DateTime(2024, 6, 17, 19, 46, 30, 957, DateTimeKind.Local).AddTicks(4991),
+                            CreateAt = new DateTime(2024, 6, 18, 0, 9, 39, 930, DateTimeKind.Local).AddTicks(8825),
                             Duration = new TimeSpan(0, 0, 0, 0, 0),
                             EndTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsClose = false,
@@ -384,7 +387,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             Content = "Hello!",
                             ConversationId = 1L,
-                            CreateTime = new DateTime(2024, 6, 17, 19, 46, 30, 957, DateTimeKind.Local).AddTicks(5018),
+                            CreateTime = new DateTime(2024, 6, 18, 0, 9, 39, 930, DateTimeKind.Local).AddTicks(8847),
                             DeleteAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDelete = false,
                             IsSeen = false,
@@ -582,7 +585,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             ConversationMessageId = 1L,
-                            CreateAt = new DateTime(2024, 6, 17, 19, 46, 30, 957, DateTimeKind.Local).AddTicks(5093),
+                            CreateAt = new DateTime(2024, 6, 18, 0, 9, 39, 930, DateTimeKind.Local).AddTicks(8892),
                             ReactionType = "like",
                             UserId = 2L
                         });
@@ -626,7 +629,7 @@ namespace FuStudy_API.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 6, 17, 19, 46, 30, 957, DateTimeKind.Local).AddTicks(4813),
+                            CreateDate = new DateTime(2024, 6, 18, 0, 9, 39, 930, DateTimeKind.Local).AddTicks(8627),
                             Description = "Payment for Basic subscription",
                             Money = 9.9900000000000002,
                             PaymentCode = "PAY12345",
@@ -693,7 +696,6 @@ namespace FuStudy_API.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -722,7 +724,7 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             CategoryId = 1L,
                             Content = "How to sort an array in C#?",
-                            CreateDate = new DateTime(2024, 6, 17, 19, 46, 30, 957, DateTimeKind.Local).AddTicks(4538),
+                            CreateDate = new DateTime(2024, 6, 18, 0, 9, 39, 930, DateTimeKind.Local).AddTicks(8374),
                             Image = "ahihi",
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = false,
@@ -771,7 +773,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             Content = "Good question!",
-                            CreateDate = new DateTime(2024, 6, 17, 19, 46, 30, 957, DateTimeKind.Local).AddTicks(4954),
+                            CreateDate = new DateTime(2024, 6, 18, 0, 9, 39, 930, DateTimeKind.Local).AddTicks(8794),
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             QuestionId = 1L,
                             Status = false,
@@ -964,8 +966,8 @@ namespace FuStudy_API.Migrations
                             Id = 1L,
                             CurrentMeeting = 0,
                             CurrentQuestion = 0,
-                            EndDate = new DateTime(2024, 7, 17, 19, 46, 30, 957, DateTimeKind.Local).AddTicks(4641),
-                            StartDate = new DateTime(2024, 6, 17, 19, 46, 30, 957, DateTimeKind.Local).AddTicks(4640),
+                            EndDate = new DateTime(2024, 7, 18, 0, 9, 39, 930, DateTimeKind.Local).AddTicks(8464),
+                            StartDate = new DateTime(2024, 6, 18, 0, 9, 39, 930, DateTimeKind.Local).AddTicks(8462),
                             Status = true,
                             StudentId = 1L,
                             SubcriptionId = 1L
@@ -1088,7 +1090,7 @@ namespace FuStudy_API.Migrations
                         {
                             Id = 1L,
                             Ammount = 9.9900000000000002,
-                            CreateTime = new DateTime(2024, 6, 17, 19, 46, 30, 957, DateTimeKind.Local).AddTicks(4763),
+                            CreateTime = new DateTime(2024, 6, 18, 0, 9, 39, 930, DateTimeKind.Local).AddTicks(8579),
                             Description = "Subscription payment",
                             Type = "Deposit",
                             WalletId = 1L
