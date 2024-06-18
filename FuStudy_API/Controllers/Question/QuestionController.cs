@@ -51,14 +51,24 @@ namespace FuStudy_API.Controllers.Question
         [AllowAnonymous]
         public async Task<IActionResult> GetQuestionById(long id)
         {
-            var question = await _questionService.GetQuestionByIdAsync(id);
-
-            if (question == null)
+            try
             {
-                return CustomResult("Question not found", HttpStatusCode.NotFound);
+                var question = await _questionService.GetQuestionByIdAsync(id);
+                return CustomResult("Data loaded!", question);
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
             }
 
-            return CustomResult("Data loaded!", question);
+            
+
+
 
         }
 

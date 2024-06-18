@@ -60,6 +60,11 @@ namespace FuStudy_Service.Service
         public async Task<QuestionResponse> GetQuestionByIdAsync(long id)
         {
             var question = _unitOfWork.QuestionRepository.GetByID(id);
+            if (question == null)
+            {
+                throw new CustomException.DataNotFoundException($"Question with ID: {id} not found!");
+
+            }
             var questionResponse = _mapper.Map<QuestionResponse>(question);
             questionResponse.UserId = GetUserIdByStudentId(question.StudentId);
             return questionResponse; 
