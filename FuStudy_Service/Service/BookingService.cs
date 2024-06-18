@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tools;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace FuStudy_Service.Service
 {
@@ -33,6 +34,24 @@ namespace FuStudy_Service.Service
             {
                 throw new Exception("User ID claim invalid.");
             }
+
+            // hàm để check role trong HttpContext
+            var userRoles = _httpContextAccessor.HttpContext.User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value).ToList();
+
+            if (!userRoles.Contains("Student"))
+            {
+                throw new Exception("User does not have the required role to create a booking.");
+            }
+
+            // Kiểm tra xem MentorId có tồn tại hay không
+            bool mentorExists = await _unitOfWork.MentorRepository.ExistsAsync(m => m.Id == request.MentorId);
+            if (!mentorExists)
+            {
+                throw new Exception($"Mentor with ID {request.MentorId} does not exist.");
+            }
+
             // biến tìm thông tin student và mentor
             var mentorInformation = _unitOfWork.BookingRepository.Get(
                 filter: mi => mi.User.Id == userId, includeProperties:"User,Mentor");
