@@ -8,6 +8,9 @@ namespace FuStudy_Model.DTO.Response
 {
     public class StudentResponse
     {
+        public long Id { get; set; }
 
+        public long UserId { get; set; }
+        
     }
 }
