@@ -78,7 +78,7 @@ namespace FuStudy_Service.Service
             }
             if (category == null)
             {
-                throw new CustomException.DataNotFoundException($"Category with ID: {category.Id} not found!");
+                throw new CustomException.DataNotFoundException($"Category: {questionRequest.CategoryName} not found!");
             }
             //check if student having subscription
             
