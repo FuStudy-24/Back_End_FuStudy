@@ -59,14 +59,18 @@ public class QuestionRatingService : IQuestionRatingService
             throw new CustomException.InvalidDataException("500", "This Rating is duplicated!");
         }
         questionRating.Status = true;
+        questionRating.UserId = userId;
         _unitOfWork.QuestionRatingRepository.Insert(questionRating);
-        var question = _unitOfWork.QuestionRepository.GetByID(questionRating.QuestionId);
+        var question = _unitOfWork.QuestionRepository.Get(q => q.Id == questionRatingRequest.QuestionId, includeProperties:"Category").FirstOrDefault();
         //add total like into question
         question.TotalRating++;
         _unitOfWork.QuestionRepository.Update(question);
         _unitOfWork.Save();
 
-        return _mapper.Map<QuestionRatingResponse>(questionRating);
+        var response = _mapper.Map<QuestionRatingResponse>(questionRating);
+        response.Question = _mapper.Map<QuestionResponse>(question);
+        
+        return response;
     }
 
     public async Task UnlikeQuestion(QuestionRatingRequest questionRatingRequest)
@@ -81,16 +85,16 @@ public class QuestionRatingService : IQuestionRatingService
         {
             throw new CustomException.DataNotFoundException($"Category with this {questionRatingRequest.QuestionId} not found!");
         }
-
-        var questionRating = _mapper.Map<QuestionRating>(questionRatingRequest);
         
         //check if rating is exist
-        bool isExist = await RatingExists(questionRating.QuestionId, userId);
+        bool isExist = await RatingExists(questionRatingRequest.QuestionId, userId);
         if (!isExist)
         {
             throw new CustomException.DataNotFoundException($"This QuestionRating not found!");
 
         }
+        var questionRating = _unitOfWork.QuestionRatingRepository.Get(rating => rating.QuestionId == questionRatingRequest.QuestionId 
+            && rating.UserId == userId).FirstOrDefault();
         //delete question rating
         _unitOfWork.QuestionRatingRepository.Delete(questionRating);
         
@@ -108,8 +112,20 @@ public class QuestionRatingService : IQuestionRatingService
         {
             throw new CustomException.DataNotFoundException($"Question with Id: {questionId} not found!");
         }
-        var questionRatings =_unitOfWork.QuestionRatingRepository.Get(rating => rating.QuestionId == questionId);
-        return _mapper.Map<IEnumerable<QuestionRatingResponse>>(questionRatings);
+        var questionRatings =_unitOfWork.QuestionRatingRepository.Get(rating => rating.QuestionId == questionId, includeProperties:"Question");
+        if (questionRatings == null)
+        {
+            throw new CustomException.DataNotFoundException($"The question rating list is empty!");
+
+        }
+
+        var ratingResponses = _mapper.Map<IEnumerable<QuestionRatingResponse>>(questionRatings);
+        foreach (var response in ratingResponses)
+        {
+            var question = _unitOfWork.QuestionRepository.Get(q => q.Id == response.QuestionId, includeProperties:"Category").FirstOrDefault();
+            response.Question = _mapper.Map<QuestionResponse>(question);
+        }
+        return ratingResponses;
     }
 
     public async Task<bool> RatingExists(long questionId, long userId)

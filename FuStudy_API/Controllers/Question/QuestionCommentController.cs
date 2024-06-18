@@ -91,8 +91,8 @@ public class QuestionCommentController : BaseController
     [Authorize]
     public async Task<IActionResult> CreateQuestionComment([FromBody] QuestionCommentRequest questionCommentRequest)
     {
-        try
-        {
+        //try
+        //{
             if (!ModelState.IsValid)
             {
                 return CustomResult(ModelState, HttpStatusCode.BadRequest);
@@ -103,15 +103,15 @@ public class QuestionCommentController : BaseController
 
 
             return CustomResult("Created successfully", createdQuestionComment);
-        }
-        catch (CustomException.DataNotFoundException e)
+        //}
+        /*catch (CustomException.DataNotFoundException e)
         {
             return CustomResult(e.Message, HttpStatusCode.NotFound);
         }
         catch (Exception exception)
         {
             return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
-        }
+        }*/
     }
 
     [HttpPatch("UpdateQuestionComment/{questionCommentId}")]

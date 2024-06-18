@@ -9,4 +9,6 @@ public class QuestionRatingResponse
     public long QuestionId { get; set; }
 
     public bool Status { get; set; }
+    
+    public QuestionResponse Question { get; set; } 
 }
