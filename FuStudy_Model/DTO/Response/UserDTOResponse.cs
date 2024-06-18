@@ -2,7 +2,7 @@ namespace FuStudy_Model.DTO.Response;
 
 public class UserDTOResponse
 {
-    
+    public long Id { get; set; }
     public string Username { get; set; }
     public string Fullname { get; set; }
     public string Email { get; set; }
