@@ -21,7 +21,7 @@ namespace FuStudy_API.Controllers.Role
         }
 
         [HttpGet("GetAllRole")]
-        public IActionResult GetAllRole([FromQuery] QueryObject queryObject) 
+        public async Task<IActionResult> GetAllRole([FromQuery] QueryObject queryObject) 
         {
             try
             {

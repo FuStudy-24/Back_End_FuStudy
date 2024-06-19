@@ -22,7 +22,7 @@ namespace FuStudy_API.Controllers.Major
         }
 
         [HttpGet("GetAllMentorMajor")]
-        public IActionResult GetAllMentorMajor([FromQuery] QueryObject queryPbject)
+        public async Task<IActionResult> GetAllMentorMajor([FromQuery] QueryObject queryPbject)
         {
             try
             {

@@ -24,19 +24,18 @@ namespace FuStudy_Service.Service
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<MentorMajorResponse>> GetAllMentorMajor(QueryObject queryObject)
+        public async Task<List<MentorMajorResponse>> GetAllMentorMajor(QueryObject queryObject)
         {
             var mms = _unitOfWork.MentorMajorRepository.Get(includeProperties: "Mentor,Major",
                 pageIndex: queryObject.PageIndex,
-                pageSize: queryObject.PageSize)
-                .ToList();
+                pageSize: queryObject.PageSize);
 
             if (!mms.Any())
             {
                 throw new CustomException.DataNotFoundException("No MentorMajor in Database");
             }
 
-            var mentorMajorResponses = _mapper.Map<IEnumerable<MentorMajorResponse>>(mms);
+            var mentorMajorResponses = _mapper.Map<List<MentorMajorResponse>>(mms);
 
             return mentorMajorResponses;
         }
