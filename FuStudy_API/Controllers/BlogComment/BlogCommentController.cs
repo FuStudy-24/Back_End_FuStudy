@@ -37,7 +37,7 @@ namespace FuStudy_API.Controllers.BlogComment
 
         [HttpPost("CreateBlogComment")]
         [Authorize]
-        public async Task<IActionResult> CreateBlogComment([FromBody] BlogCommentRequest request)
+        public async Task<IActionResult> CreateBlogComment([FromForm] BlogCommentRequest request)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace FuStudy_API.Controllers.BlogComment
 
         [HttpPost("UpdateBlogComment/{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateBlogComment([FromBody] BlogCommentRequest request, long id)
+        public async Task<IActionResult> UpdateBlogComment([FromForm] BlogCommentRequest request, long id)
         {
             try
             {

@@ -13,5 +13,6 @@ namespace FuStudy_Service.Interface
         Task<BlogLikeResponse> GetBlogLikeByIdAsync(long id);
         Task<BlogLikeResponse> CreateBlogLikeAsync(BlogLikeRequest request);
         Task<BlogLikeResponse> DeleteBlogLikeAsync(BlogLikeRequest request);
+        Task<IEnumerable<BlogLikeResponse>> GetAllBlogLikeByBlogId(long id);
     }
 }
