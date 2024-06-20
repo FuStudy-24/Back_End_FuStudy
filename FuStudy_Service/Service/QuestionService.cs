@@ -55,7 +55,7 @@ namespace FuStudy_Service.Service
                 question.UserId = GetUserIdByStudentId(question.StudentId);
             }
         
-        return questionResponses;
+            return questionResponses;
         }
 
         public async Task<QuestionResponse> GetQuestionByIdAsync(long id)
@@ -68,7 +68,7 @@ namespace FuStudy_Service.Service
                 throw new CustomException.DataNotFoundException($"Question with ID: {id} not found!");
 
             }
-            var category = _unitOfWork.CategoryRepository.Get(c => c.Id == question.CategoryId, includeProperties:"Category").FirstOrDefault();
+            var category = _unitOfWork.CategoryRepository.Get(c => c.Id == question.CategoryId).FirstOrDefault();
             if (category != null) question.Category = category;
             var questionResponse = _mapper.Map<QuestionResponse>(question);
             questionResponse.UserId = GetUserIdByStudentId(question.StudentId);

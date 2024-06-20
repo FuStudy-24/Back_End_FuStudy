@@ -21,7 +21,7 @@ namespace FuStudy_API.Controllers.Role
         }
 
         [HttpGet("GetAllPermission")]
-        public IActionResult GetAllPermission([FromQuery] QueryObject queryObject)
+        public async Task<IActionResult> GetAllPermission([FromQuery] QueryObject queryObject)
         {
             try
             {

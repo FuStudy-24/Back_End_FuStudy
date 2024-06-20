@@ -36,8 +36,7 @@ namespace FuStudy_Service.Service
             var permissions = _unitOfWork.PermissionRepository.Get(
                 filter: filter,
                 pageIndex: queryObject.PageIndex,
-                pageSize: queryObject.PageSize)
-                .ToList();
+                pageSize: queryObject.PageSize);
 
             if (!permissions.Any())
             {

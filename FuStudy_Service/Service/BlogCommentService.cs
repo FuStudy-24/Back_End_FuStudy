@@ -19,11 +19,13 @@ namespace FuStudy_Service.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly Tools.Firebase _firebase;
 
-        public BlogCommentService(IUnitOfWork unitOfWork, IMapper mapper)
+        public BlogCommentService(IUnitOfWork unitOfWork, IMapper mapper, Tools.Firebase firebase)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _firebase = firebase;
         }
 
         public async Task<BlogCommentResponse> CreateBlogComment(BlogCommentRequest request)
@@ -37,11 +39,6 @@ namespace FuStudy_Service.Service
                     throw new CustomException.DataNotFoundException("Bad request! Blog doest not exist !");
                 }
 
-                if (request.CommentImage?.Image.Count() > 1)
-                {
-                    throw new CustomException.DataNotFoundException("Bad request! Just one image !");
-                }
-
                 var blogCmt = _mapper.Map<BlogComment>(request);
                 blogCmt.CreateDate = DateTime.Now;
                 blogCmt.ModifiedDate = blogCmt.CreateDate;
@@ -50,11 +47,23 @@ namespace FuStudy_Service.Service
                 await _unitOfWork.BlogCommentRepository.AddAsync(blogCmt);
                 var response = _mapper.Map<BlogCommentResponse>(blogCmt);
 
-                if (request.CommentImage != null)
+                string imageUrl = null;
+
+                if (request.CommentImage.FormFile != null)
                 {
-                    request.CommentImage.BlogCommentId = blogCmt.Id;
+                    if (request.CommentImage.FormFile.Length > 10 * 1024 * 1024)
+                    {
+                        throw new CustomException.InvalidDataException("File size exceeds the maximum allowed limit.");
+                    }
+
+                    imageUrl = await _firebase.UploadImageAsync(request.CommentImage.FormFile);
+
                     var cmtImg = _mapper.Map<CommentImage>(request.CommentImage);
+                    cmtImg.Image = imageUrl;
+                    cmtImg.BlogCommentId = blogCmt.Id;
+                    cmtImg.Status = true;
                     await _unitOfWork.CommentImageRepository.AddAsync(cmtImg);
+
                     var responsecmtImg = _mapper.Map<CommentImageResponse>(cmtImg);
                     response.CommentImage = responsecmtImg;
                     _unitOfWork.Save();
@@ -147,14 +156,28 @@ namespace FuStudy_Service.Service
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                var getBlogComment = _unitOfWork.BlogCommentRepository.GetByID(id);
+                var getBlogComment = _unitOfWork.BlogCommentRepository
+                                                    .Get(filter: x => x.Id == id
+                                                            && x.Status)
+                                                    .FirstOrDefault();
                 var getCommentImgExist = _unitOfWork.CommentImageRepository
-                                         .Get(filter: x => x.BlogCommentId == id)
+                                         .Get(filter: x => x.BlogCommentId == id
+                                                    && x.Status)
                                          .FirstOrDefault();
 
+                string imageUrl = null;
                 if (getCommentImgExist != null)
                 {
-                    getCommentImgExist.Image = request.CommentImage.Image;
+                    if (request.CommentImage.FormFile != null)
+                    {
+                        if (request.CommentImage.FormFile.Length > 10 * 1024 * 1024)
+                        {
+                            throw new CustomException.InvalidDataException("File size exceeds the maximum allowed limit.");
+                        }
+
+                        imageUrl = await _firebase.UploadImageAsync(request.CommentImage.FormFile);
+                    }
+                    getCommentImgExist.Image = imageUrl;
                     _unitOfWork.CommentImageRepository.Update(getCommentImgExist);
                     _unitOfWork.Save();
                 }

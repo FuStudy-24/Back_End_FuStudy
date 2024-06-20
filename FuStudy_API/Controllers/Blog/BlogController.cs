@@ -3,6 +3,7 @@ using CoreApiResponse;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FuStudy_API.Controllers.Blog
@@ -38,7 +39,8 @@ namespace FuStudy_API.Controllers.Blog
         }
 
         [HttpPost("/CreateBlog")]
-        public async Task<IActionResult> CreateBlog([FromBody] BlogRequest request)
+        [Authorize]
+        public async Task<IActionResult> CreateBlog([FromForm] BlogRequest request)
         {
             var reponse = await _blogService.CreateBlog(request);
             if(reponse == null)
@@ -49,7 +51,8 @@ namespace FuStudy_API.Controllers.Blog
         }
 
         [HttpPost("/UpdateBlog/{id}")]
-        public async Task<IActionResult> UpdateBlog(long id, [FromBody]BlogRequest request)
+        [Authorize]
+        public async Task<IActionResult> UpdateBlog(long id, [FromForm] BlogRequest request)
         {
             var reponse = await _blogService.UpdateBlog(id, request);
             if (reponse == null)
@@ -60,6 +63,7 @@ namespace FuStudy_API.Controllers.Blog
         }
 
         [HttpDelete("{id}/{userId}")]
+        [Authorize]
         public async Task<IActionResult> DeleteOneBlog(long id, long userId)
         {
             var reponse = await _blogService.DeleteBlog(id, userId);

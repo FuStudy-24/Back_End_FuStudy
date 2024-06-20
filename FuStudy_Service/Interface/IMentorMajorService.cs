@@ -11,7 +11,7 @@ namespace FuStudy_Service.Interface
 {
     public interface IMentorMajorService
     {
-        Task<IEnumerable<MentorMajorResponse>> GetAllMentorMajor(QueryObject queryObject);
+        Task<List<MentorMajorResponse>> GetAllMentorMajor(QueryObject queryObject);
         Task<List<MentorMajorResponse>> GetAllMajorByMentorId(long id);
         Task<List<MentorMajorResponse>> GetAllMentorByMajorId(long id);
         Task<List<MentorMajorResponse>> GetMentorMajorById(long id);

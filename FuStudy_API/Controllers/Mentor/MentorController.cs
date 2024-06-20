@@ -23,7 +23,7 @@ namespace FuStudy_API.Controllers.Mentor
         }
 
         [HttpGet("GetAllMentorVerify")]
-        public IActionResult GetAllMentorVerify([FromQuery] QueryObject queryPbject)
+        public async Task<IActionResult> GetAllMentorVerify([FromQuery] QueryObject queryPbject)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace FuStudy_API.Controllers.Mentor
         
         [HttpPatch("UpdateMentorLoggingIn")]
         [Authorize]
-        public async Task<IActionResult> UpdateMentorLoggingIn([FromBody] MentorRequest mentorRequest)
+        public async Task<IActionResult> UpdateMentorLoggingIn([FromForm] MentorRequest mentorRequest)
         {
             try
             {
