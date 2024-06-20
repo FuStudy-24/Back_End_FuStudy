@@ -28,10 +28,10 @@ namespace FuStudy_API.Controllers.Blog
             return CustomResult("Data loaded", response);
         }
 
-        [HttpGet("{id}/{userId}")]
-        public async Task<IActionResult> GetOneBlog(long id, long userId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOneBlog(long id)
         {
-            var response = await _blogService.GetOneBlog(id, userId);
+            var response = await _blogService.GetOneBlog(id);
             if(response == null) { 
                 return CustomResult("Data not found", System.Net.HttpStatusCode.NotFound);
             }
@@ -62,11 +62,11 @@ namespace FuStudy_API.Controllers.Blog
             return CustomResult("Update successfully", reponse);
         }
 
-        [HttpDelete("{id}/{userId}")]
+        [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteOneBlog(long id, long userId)
+        public async Task<IActionResult> DeleteOneBlog(long id)
         {
-            var reponse = await _blogService.DeleteBlog(id, userId);
+            var reponse = await _blogService.DeleteBlog(id);
             if (!reponse)
             {
                 return CustomResult("Delete is not success !", System.Net.HttpStatusCode.BadRequest);
