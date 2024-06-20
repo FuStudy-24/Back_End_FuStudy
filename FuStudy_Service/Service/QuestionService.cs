@@ -92,7 +92,8 @@ namespace FuStudy_Service.Service
             }
             
             //check if QueryObject search is not null
-            Expression<Func<Question, bool>> filter = null;
+            Expression<Func<Question, bool>> filter = question => question.StudentId == student.Id;
+            ;
             if (!string.IsNullOrWhiteSpace(queryObject.Search))
             {
                 filter = question => question.StudentId == student.Id && question.Content.Contains(queryObject.Search);
