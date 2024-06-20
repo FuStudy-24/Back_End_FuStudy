@@ -76,6 +76,46 @@ namespace FuStudy_Service.Service
 
         }
 
+        public async Task<IEnumerable<QuestionResponse>> GetAllQuestionsByUserId(QueryObject queryObject, long userId)
+        {
+            var user = _unitOfWork.UserRepository.GetByID(userId);
+            if (user == null)
+            {
+                throw new CustomException.DataNotFoundException("This User is not exist!");
+            }
+
+            var student = _unitOfWork.StudentRepository.Get(s => s.UserId == userId).FirstOrDefault();
+            if (student == null)
+            {
+                throw new CustomException.DataNotFoundException("This User is not a student!");
+
+            }
+            
+            //check if QueryObject search is not null
+            Expression<Func<Question, bool>> filter = null;
+            if (!string.IsNullOrWhiteSpace(queryObject.Search))
+            {
+                filter = question => question.StudentId == student.Id && question.Content.Contains(queryObject.Search);
+            }
+            var questions = _unitOfWork.QuestionRepository.Get(
+                filter: filter,
+                includeProperties:"Category",
+                pageIndex: queryObject.PageIndex,
+                pageSize: queryObject.PageSize);
+            if (questions.IsNullOrEmpty())
+            {
+                throw new CustomException.DataNotFoundException("The question list is empty!");
+            }
+            
+            var questionResponses = _mapper.Map<IEnumerable<QuestionResponse>>(questions);
+            foreach (var question in questionResponses)
+            {
+                question.UserId = GetUserIdByStudentId(question.StudentId);
+            }
+        
+            return questionResponses;
+        }
+
 
         public async Task<QuestionResponse> CreateQuestionWithSubscription(QuestionRequest questionRequest)
         {

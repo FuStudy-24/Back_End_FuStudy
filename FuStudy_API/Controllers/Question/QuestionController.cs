@@ -72,6 +72,26 @@ namespace FuStudy_API.Controllers.Question
 
         }
 
+        [HttpGet("GetAllQuestionsByUserId/{id}")]
+        public async Task<IActionResult> GetAllQuestionsByUserId([FromQuery]QueryObject queryObject, long id)
+        {
+            try
+            {
+                var questions = await _questionService.GetAllQuestionsByUserId(queryObject, id);
+                return CustomResult("Data loaded!", questions);
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
+
+        }
+
     [HttpPost("CreateQuestionWithSubscription")]
     [Authorize]
         public async Task<IActionResult> CreateQuestionWithSubscription([FromForm] QuestionRequest questionRequest)
