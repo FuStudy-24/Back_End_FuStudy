@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Firebase.Auth;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
@@ -19,17 +20,34 @@ namespace FuStudy_Service.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public BlogService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly Tools.Firebase _firebase;
+        public BlogService(IUnitOfWork unitOfWork, IMapper mapper,
+                            Tools.Firebase firebase)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _firebase = firebase;
         }
 
         public async Task<BlogResponse> CreateBlog(BlogRequest request)
         {
-            request.CreateDate = DateTime.Now;
+            string imageUrl = null;
+            if (request.FormFile != null)
+            {
+                if (request.FormFile.Length > 10 * 1024 * 1024)
+                {
+                    throw new CustomException.InvalidDataException("File size exceeds the maximum allowed limit.");
+                }
+
+                imageUrl = await _firebase.UploadImageAsync(request.FormFile);
+            }
+
             var respone = _mapper.Map<Blog>(request);
+
             respone.TotalLike = 0;
+            respone.Image = imageUrl;
+            respone.CreateDate = DateTime.UtcNow;
+
             await _unitOfWork.BlogRepository.AddAsync(respone);
             _unitOfWork.Save();
             return _mapper.Map<BlogResponse>(respone);
@@ -81,7 +99,21 @@ namespace FuStudy_Service.Service
             {
                 return null;
             }
+
+            string imageUrl = null;
+            if (request.FormFile != null)
+            {
+                if (request.FormFile.Length > 10 * 1024 * 1024)
+                {
+                    throw new CustomException.InvalidDataException("File size exceeds the maximum allowed limit.");
+                }
+
+                imageUrl = await _firebase.UploadImageAsync(request.FormFile);
+            }
+
             var response = _mapper.Map(request, existBlog);
+            response.Image = imageUrl;
+
             await _unitOfWork.BlogRepository.UpdateAsync(response);
             return _mapper.Map<BlogResponse>(response);
         }

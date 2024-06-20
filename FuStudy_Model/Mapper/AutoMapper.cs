@@ -68,6 +68,15 @@ namespace FuStudy_Model.Mapper
             CreateMap<MentorMajor, MentorMajorResponse>().ReverseMap();
             #endregion
 
+            #region Student
+
+            CreateMap<Student, StudentResponse>().ReverseMap();
+            #endregion
+
+            #region MeetingHistory
+
+            CreateMap<MeetingHistory, MeetingHistoryResponse>().ReverseMap();
+            #endregion
             #region Blog
             CreateMap<BlogRequest, Blog>();
             CreateMap<Blog, BlogResponse>()

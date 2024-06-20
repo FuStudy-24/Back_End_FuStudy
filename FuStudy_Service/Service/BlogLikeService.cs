@@ -41,7 +41,7 @@ namespace FuStudy_Service.Service
 
                 var blogLike = _mapper.Map(request, checkBlogLike);
                 blogLike.Status = true;
-                await _unitOfWork.BlogLikeRepository.AddAsync(blogLike);
+                _unitOfWork.BlogLikeRepository.Insert(blogLike);
 
                 var getBlog = _unitOfWork.BlogRepository.GetByID(request.BlogId);
                 getBlog.TotalLike += 1;
@@ -59,7 +59,7 @@ namespace FuStudy_Service.Service
             return _mapper.Map<BlogLikeResponse>(getById);
         }
 
-        public async Task<BlogLikeResponse> DeleteBlogLikeAsync(BlogLikeRequest request) // Change Status, NOT DELETE
+        public async Task<BlogLikeResponse> DeleteBlogLikeAsync(BlogLikeRequest request)
         {
 
             var checkBlogLike = _unitOfWork.BlogLikeRepository
@@ -67,22 +67,24 @@ namespace FuStudy_Service.Service
                                         && x.User.Id == request.UserId, includeProperties: "Blog")
                                     .FirstOrDefault();
 
-            checkBlogLike.Status = !checkBlogLike.Status;
+            if (checkBlogLike == null)
+            {
+                throw new CustomException.InvalidDataException("Invalid data");
+            }
 
-            if (checkBlogLike.Status)
-            {
-                checkBlogLike.Blog.TotalLike += 1;
-            }
-            else
-            {
-                var result = checkBlogLike.Blog.TotalLike <= 0 ? 0 : checkBlogLike.Blog.TotalLike -= 1;
-            }
+            checkBlogLike.Blog.TotalLike -= 1;
+            var blogLike = _mapper.Map<BlogLike>(checkBlogLike);
+            _unitOfWork.BlogLikeRepository.Delete(blogLike);
+
             _unitOfWork.Save();
 
-            var blogLike = _mapper.Map<BlogLike>(checkBlogLike);
-            await _unitOfWork.BlogLikeRepository.UpdateAsync(blogLike);
-
             return _mapper.Map<BlogLikeResponse>(blogLike);
+        }
+
+        public async Task<IEnumerable<BlogLikeResponse>> GetAllBlogLikeByBlogId(long id)
+        {
+            var getById = _unitOfWork.BlogLikeRepository.Get(filter: x => x.BlogId == id && x.Status);
+            return _mapper.Map<IEnumerable<BlogLikeResponse>>(getById);
         }
     }
 }
