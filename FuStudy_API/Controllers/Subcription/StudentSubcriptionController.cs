@@ -8,6 +8,7 @@ using FuStudy_Service.Service;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Tools;
 
 namespace FuStudy_API.Controllers.Subcription
@@ -67,6 +68,7 @@ namespace FuStudy_API.Controllers.Subcription
 
 
         [HttpPost("CreateStudentSubcription")]
+        [Authorize]
         public async Task<IActionResult> CreateStudentSubcription([FromBody] CreateStudentSubcriptionRequest studentSubcriptionRequest)
         {
             try

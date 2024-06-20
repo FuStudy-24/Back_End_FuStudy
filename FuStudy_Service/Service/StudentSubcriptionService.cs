@@ -10,6 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Tools;
 
 namespace FuStudy_Service.Service
@@ -18,11 +19,14 @@ namespace FuStudy_Service.Service
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public StudentSubcriptionService(IMapper mapper, IUnitOfWork unitOfWork)
+        public StudentSubcriptionService(IMapper mapper, IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
         public async Task<IEnumerable<StudentSubcriptionResponse>> GetAllStudentSubcription(QueryObject queryObject)
@@ -111,11 +115,18 @@ namespace FuStudy_Service.Service
         public async Task<StudentSubcriptionResponse> CreateStudentSubcription(CreateStudentSubcriptionRequest studentSubcriptionRequest)
         {
             var studentsub = _mapper.Map<StudentSubcription>(studentSubcriptionRequest);
-            var student = _unitOfWork.StudentSubcriptionRepository.Get(s => s.Student.Id == studentSubcriptionRequest.UserId,
-                includeProperties: "Student.User,Subcription").FirstOrDefault();
+            var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
+            var student = _unitOfWork.StudentRepository.Get(s => s.UserId == userId, includeProperties:"User").FirstOrDefault();
             if (student == null)
             {
                 throw new CustomException.DataNotFoundException("This User is not a student!!");
+            }
+            var studentSubscription = _unitOfWork.StudentSubcriptionRepository
+                .Get(s => s.StudentId == student.Id && s.Status == true).FirstOrDefault();
+            if (studentSubscription != null)
+            {
+                throw new CustomException.InvalidDataException("This student already have subscription!");
+
             }
             // Set trạng thái (limt cứng 20, câu đầu là 0)
             if (studentsub.CurrentQuestion >= 20)
@@ -137,6 +148,8 @@ namespace FuStudy_Service.Service
 
             //map request vào response
             StudentSubcriptionResponse studentSubcriptionResponse = _mapper.Map<StudentSubcriptionResponse>(studentsub);
+            studentSubcriptionResponse.Student = student;
+            studentSubcriptionResponse.Subcription = _unitOfWork.SubcriptionRepository.GetByID(studentSubcriptionRequest.SubcriptionId);
             return studentSubcriptionResponse;
         }
 
