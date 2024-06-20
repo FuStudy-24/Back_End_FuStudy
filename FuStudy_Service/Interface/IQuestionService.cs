@@ -12,6 +12,9 @@ namespace FuStudy_Service.Interface
         Task<IEnumerable<QuestionResponse>> GetAllQuestionsAsync(QueryObject queryObject);
 
         Task<QuestionResponse> GetQuestionByIdAsync(long id);
+        
+        Task<IEnumerable<QuestionResponse>> GetAllQuestionsByUserId(QueryObject queryObject, long userId);
+
 
         Task<QuestionResponse> CreateQuestionWithSubscription(QuestionRequest questionRequest);
         
