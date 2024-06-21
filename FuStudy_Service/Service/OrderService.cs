@@ -84,6 +84,27 @@ namespace FuStudy_Service.Service
 
             return _mapper.Map<OrderResponse>(order);
         }
+        public async Task<OrderResponse> UpdateOrderByTransAsync(OrderRequest orderRequest, long orderId)
+        {
+             var order = await _unitOfWork.OrderRepository.GetOrderByPaymentAsync(orderId);
+
+            if (order == null)
+            {
+                throw new CustomException.DataNotFoundException($"Order with ID: {orderId} not found");
+            }
+
+            _mapper.Map(orderRequest, order);
+            order.CreateDate = DateTime.Now;
+            _unitOfWork.OrderRepository.Update(order);
+            _unitOfWork.Save();
+
+            return _mapper.Map<OrderResponse>(order);
+        }
+        public async Task<OrderResponse> GetOrderByTransactionCodeAsync(long id)
+        {
+            var order = await _unitOfWork.OrderRepository.GetOrderByPaymentAsync(id);
+            return _mapper.Map<OrderResponse>(order);
+        }
 
         public async Task<bool> DeleteOrderAsync(long orderId)
         {

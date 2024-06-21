@@ -13,10 +13,16 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using FuStudy_Repository;
 using FuStudy_Service;
+using Net.payOS;
 using Quartz.Impl;
 using Quartz;
 using Tools;
 using Tools.Quartz;
+
+IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+PayOS payOS = new PayOS(configuration["Environment:PAYOS_CLIENT_ID"],
+    configuration["Environment:PAYOS_API_KEY"],
+    configuration["Environment:PAYOS_CHECKSUM_KEY"]);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -107,6 +113,7 @@ builder.Services.AddScoped<Tools.Firebase>();
 
 
 builder.Services.AddScoped<IBlogCommentService, BlogCommentService>();
+builder.Services.AddSingleton(payOS);
 
 //Mapper
 var config = new MapperConfiguration(cfg =>

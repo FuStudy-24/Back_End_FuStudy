@@ -140,6 +140,14 @@ namespace FuStudy_Repository.Repository
         {
             return await context.Set<Token>().Where(t => t.UserId == userId && !t.IsExpired && !t.Revoked).FirstOrDefaultAsync();
         }
+        public async Task<Order> GetOrderByTransactionIdAsync(long transactionId)
+        {
+            return await context.Set<Order>().FirstOrDefaultAsync(o => o.TransactionId == transactionId);
+        }
+        public async Task<Order> GetOrderByPaymentAsync(long transactionId)
+        {
+            return await context.Set<Order>().FirstOrDefaultAsync(o => o.PaymentCode == transactionId.ToString());
+        }
 
 
         public virtual async Task<IEnumerable<TEntity>> GetAsync(

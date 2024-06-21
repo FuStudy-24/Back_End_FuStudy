@@ -16,5 +16,7 @@ namespace FuStudy_Service.Interface
         Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest);
         Task<OrderResponse> UpdateOrderAsync(OrderRequest orderRequest, long orderId);
         Task<bool> DeleteOrderAsync(long orderId);
+        Task<OrderResponse> GetOrderByTransactionCodeAsync(long id);
+        Task<OrderResponse> UpdateOrderByTransAsync(OrderRequest orderRequest, long orderId);
     }
 }

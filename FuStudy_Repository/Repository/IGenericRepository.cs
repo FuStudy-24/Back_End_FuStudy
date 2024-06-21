@@ -21,9 +21,11 @@ namespace FuStudy_Repository.Repository
 
         TEntity GetByID(object id);
         void Insert(TEntity entity);
+        Task<Order> GetOrderByPaymentAsync(long transactionId);
         void Delete(object id);
         void Delete(TEntity entityToDelete);
         void Update(TEntity entityToUpdate);
+        Task<Order> GetOrderByTransactionIdAsync(long transactionId);
         Task<TEntity> UpdateAsync(TEntity entity);
         Task<IEnumerable<TEntity>> GetByFilterAsync(Expression<Func<TEntity, bool>> filterExpression);
         Task<TEntity> AddAsync(TEntity entity);
