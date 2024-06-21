@@ -37,7 +37,7 @@ namespace FuStudy_API.Controllers.Authentication
             _userService = userService;
         }
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] CreateAccountDTORequest createAccountDTORequest)
+        public async Task<IActionResult> Register([FromForm] CreateAccountDTORequest createAccountDTORequest)
         {
              try
              {
