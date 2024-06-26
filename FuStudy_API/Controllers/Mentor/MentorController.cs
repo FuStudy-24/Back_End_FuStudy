@@ -27,7 +27,7 @@ namespace FuStudy_API.Controllers.Mentor
         {
             try
             {
-                var mentors = _mentorService.GetAllMentorVerify(queryPbject);
+                var mentors = await _mentorService.GetAllMentorVerify(queryPbject);
                 return CustomResult("Data Load Successfully", mentors);
             }
             catch (CustomException.DataNotFoundException ex)
@@ -41,12 +41,31 @@ namespace FuStudy_API.Controllers.Mentor
         }
 
         [HttpGet("GetAllMentorWaiting")]
-        public IActionResult GetAllMentor([FromQuery] QueryObject queryPbject)
+        public async Task<IActionResult> GetAllMentor([FromQuery] QueryObject queryPbject)
         {
             try
             {
-                var mentors = _mentorService.GetAllMentorWaiting(queryPbject);
+                var mentors = await _mentorService.GetAllMentorWaiting(queryPbject);
                 return CustomResult("Data Load Successfully", mentors);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet("GetMentorByUserId/{id}")]
+        public async Task<IActionResult> GetMentorByUserId(long id)
+        {
+            try
+            {
+                var mentor = await _mentorService.GetMentorByUserId(id);
+
+                return CustomResult("Data Load Successfully", mentor);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -132,7 +151,7 @@ namespace FuStudy_API.Controllers.Mentor
         {
             try
             {
-                var mentor = _mentorService.UpdateMentorLoggingIn(mentorRequest);
+                var mentor = await _mentorService.UpdateMentorLoggingIn(mentorRequest);
                 return CustomResult("Update mentor successful!!", mentor, HttpStatusCode.OK);
             }
             catch (CustomException.DataNotFoundException ex)
