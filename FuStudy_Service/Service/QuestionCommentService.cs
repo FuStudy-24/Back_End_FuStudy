@@ -50,6 +50,7 @@ public class QuestionCommentService : IQuestionCommentService
         foreach (var comment in response)
         {
             IsMentorFromUserId(comment);
+            comment.Username = _unitOfWork.UserRepository.GetByID(comment.UserId).Username;
             var question = _unitOfWork.QuestionRepository.Get(q => q.Id == comment.QuestionId, includeProperties:"Category").FirstOrDefault();
             comment.QuestionResponse = _mapper.Map<QuestionResponse>(question);
         }
