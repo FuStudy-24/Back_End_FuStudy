@@ -12,13 +12,7 @@ namespace FuStudy_Model.DTO.Request
     public class BlogRequest
     {
         [Required]
-        public long UserId { get; set; }
-        [Required]
         public string BlogContent { get; set; }
-        //[Required]
-        //public string Image { get; set; }
-        //[Required]
-        //public DateTime CreateDate { get; set; }
         public IFormFile? FormFile { get; set; } = null;
     }
 }

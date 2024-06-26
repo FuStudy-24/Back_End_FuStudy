@@ -5,11 +5,13 @@ using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
@@ -21,17 +23,27 @@ namespace FuStudy_Service.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly Tools.Firebase _firebase;
+        private readonly IHttpContextAccessor _contextAccessor; 
         public BlogService(IUnitOfWork unitOfWork, IMapper mapper,
-                            Tools.Firebase firebase)
+                            Tools.Firebase firebase, 
+                            IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _firebase = firebase;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<BlogResponse> CreateBlog(BlogRequest request)
         {
             string imageUrl = null;
+            var getUserId = Authentication.GetUserIdFromHttpContext(_contextAccessor.HttpContext);
+
+            if (!long.TryParse(getUserId, out long userId))
+            {
+                throw new Exception("User ID claim invalid.");
+            }
+
             if (request.FormFile != null)
             {
                 if (request.FormFile.Length > 10 * 1024 * 1024)
@@ -43,19 +55,25 @@ namespace FuStudy_Service.Service
             }
 
             var respone = _mapper.Map<Blog>(request);
-
+            respone.UserId = long.Parse(getUserId);
             respone.TotalLike = 0;
             respone.Image = imageUrl;
             respone.CreateDate = DateTime.UtcNow;
 
             await _unitOfWork.BlogRepository.AddAsync(respone);
-            _unitOfWork.Save();
             return _mapper.Map<BlogResponse>(respone);
         }
 
 
-        public async Task<bool> DeleteBlog(long id, long userId)
+        public async Task<bool> DeleteBlog(long id)
         {
+            var getUserId = Authentication.GetUserIdFromHttpContext(_contextAccessor.HttpContext);
+
+            if (!long.TryParse(getUserId, out long userId))
+            {
+                throw new Exception("User ID claim invalid.");
+            }
+
             var getOneBlog = _unitOfWork.BlogRepository
                                 .Get(filter: x =>
                                     x.UserId == userId && x.Id == id)
@@ -75,11 +93,10 @@ namespace FuStudy_Service.Service
             return _mapper.Map<IEnumerable<BlogResponse>>(listBlog);
         }
 
-        public async Task<BlogResponse> GetOneBlog(long id, long userId)
+        public async Task<BlogResponse> GetOneBlog(long id)
         {
             var getOneBlog = _unitOfWork.BlogRepository
-                                .Get(filter: x => 
-                                    x.UserId == userId && x.Id == id,includeProperties: "User")
+                                .Get(filter: x => x.Id == id,includeProperties: "User")
                                 .FirstOrDefault();
 
             if (getOneBlog == null)
@@ -92,9 +109,17 @@ namespace FuStudy_Service.Service
 
         public async Task<BlogResponse> UpdateBlog(long id, BlogRequest request)
         {
+            var getUserId = Authentication.GetUserIdFromHttpContext(_contextAccessor.HttpContext);
+
+            if (!long.TryParse(getUserId, out long userId))
+            {
+                throw new Exception("User ID claim invalid.");
+            }
+
             var existBlog = _unitOfWork.BlogRepository
                                 .Get(x => x.Id == id 
-                                    && x.UserId == request.UserId).FirstOrDefault();
+                                        && x.User.Id == long.Parse(getUserId))
+                                .FirstOrDefault();
             if (existBlog == null)
             {
                 return null;

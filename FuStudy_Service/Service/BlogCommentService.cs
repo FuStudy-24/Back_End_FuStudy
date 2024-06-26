@@ -4,6 +4,7 @@ using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,16 @@ namespace FuStudy_Service.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly Tools.Firebase _firebase;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public BlogCommentService(IUnitOfWork unitOfWork, IMapper mapper, Tools.Firebase firebase)
+        public BlogCommentService(IUnitOfWork unitOfWork, IMapper mapper,
+                                    Tools.Firebase firebase,
+                                    IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _firebase = firebase;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<BlogCommentResponse> CreateBlogComment(BlogCommentRequest request)
@@ -39,14 +44,27 @@ namespace FuStudy_Service.Service
                     throw new CustomException.DataNotFoundException("Bad request! Blog doest not exist !");
                 }
 
+                var getUserId = Authentication.GetUserIdFromHttpContext(_contextAccessor.HttpContext);
+
+                if (!long.TryParse(getUserId, out long userId))
+                {
+                    throw new Exception("User ID claim invalid.");
+                }
+
+                var getInfoUser = _unitOfWork.UserRepository
+                                                .Get(filter: x => x.Id == long.Parse(getUserId))
+                                                .FirstOrDefault();
+
                 var blogCmt = _mapper.Map<BlogComment>(request);
+                blogCmt.UserId = long.Parse(getUserId);
                 blogCmt.CreateDate = DateTime.Now;
                 blogCmt.ModifiedDate = blogCmt.CreateDate;
                 blogCmt.Status = true;
 
                 await _unitOfWork.BlogCommentRepository.AddAsync(blogCmt);
                 var response = _mapper.Map<BlogCommentResponse>(blogCmt);
-
+                response.Avatar = getInfoUser.Avatar;
+                response.Fullname = getInfoUser.Fullname;
                 string imageUrl = null;
 
                 if (request.CommentImage.FormFile != null)
@@ -83,7 +101,17 @@ namespace FuStudy_Service.Service
             {
                 using (TransactionScope transaction = new TransactionScope())
                 {
-                    var getBlogComment = _unitOfWork.BlogCommentRepository.GetByID(id);
+                    var getUserId = Authentication.GetUserIdFromHttpContext(_contextAccessor.HttpContext);
+
+                    if (!long.TryParse(getUserId, out long userId))
+                    {
+                        throw new Exception("User ID claim invalid.");
+                    }
+
+                    var getBlogComment = _unitOfWork.BlogCommentRepository
+                                                        .Get(filter: x => x.Id == id 
+                                                                    && x.UserId == long.Parse(getUserId))
+                                                        .FirstOrDefault();
                     var getCommentImgExist = _unitOfWork.CommentImageRepository
                                              .Get(filter: x => x.BlogCommentId == id)
                                              .FirstOrDefault();
@@ -154,16 +182,41 @@ namespace FuStudy_Service.Service
         }
         public async Task<BlogCommentResponse> UpdateBlogComment(BlogCommentRequest request, long id)
         {
-            using (TransactionScope transaction = new TransactionScope())
+            var transactionOptions = new TransactionOptions
             {
+                IsolationLevel = IsolationLevel.ReadCommitted,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+
+            using (TransactionScope transaction = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled))
+            {
+                var getUserId = Authentication.GetUserIdFromHttpContext(_contextAccessor.HttpContext);
+
+                if (!long.TryParse(getUserId, out long userId))
+                {
+                    throw new Exception("User ID claim invalid.");
+                }
+
+                var getInfoUser = _unitOfWork.UserRepository
+                                                .Get(filter: x => x.Id == long.Parse(getUserId))
+                                                .FirstOrDefault();
+
                 var getBlogComment = _unitOfWork.BlogCommentRepository
                                                     .Get(filter: x => x.Id == id
+                                                            && x.UserId == userId
+                                                            && x.BlogId == request.BlogId
                                                             && x.Status)
                                                     .FirstOrDefault();
                 var getCommentImgExist = _unitOfWork.CommentImageRepository
                                          .Get(filter: x => x.BlogCommentId == id
                                                     && x.Status)
                                          .FirstOrDefault();
+
+                getBlogComment.Comment = request.Comment;
+                getBlogComment.ModifiedDate = DateTime.Now;
+                _unitOfWork.BlogCommentRepository.Update(getBlogComment);
+
+                _unitOfWork.Save();
 
                 string imageUrl = null;
                 if (getCommentImgExist != null)
@@ -182,18 +235,15 @@ namespace FuStudy_Service.Service
                     _unitOfWork.Save();
                 }
 
-                getBlogComment.Comment = request.Comment;
-                getBlogComment.ModifiedDate = DateTime.Now;
-                _unitOfWork.BlogCommentRepository.Update(getBlogComment);
-                _unitOfWork.Save();
-
                 transaction.Complete();
 
                 var response = _mapper.Map<BlogCommentResponse>(getBlogComment);
                 response.CommentImage = _mapper.Map<CommentImageResponse>(getCommentImgExist);
-
+                response.Fullname = getInfoUser.Fullname;
+                response.Avatar = getInfoUser.Avatar;
                 return response;
             }
         }
+
     }
 }

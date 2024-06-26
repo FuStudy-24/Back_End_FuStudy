@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using Tools;
 
@@ -13,7 +14,7 @@ public class CreateAccountDTORequest
     public required string Password { get; set; }
     [CustomDataValidation.EmailValidation]
     public required string Email { get; set; }
-    public string Avatar { get; set; }
+    public IFormFile? Avatar { get; set; }
     public string Gender { get; set; }
     public string RoleName { get; set; }
     [RegularExpression("^0(0[1-9]|[1-8][0-9]|9[0-6])[0-3]([0-9][0-9])[0-9]{6}$", ErrorMessage = "CMND này éo có mày đùa tao à?")]

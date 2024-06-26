@@ -4,6 +4,7 @@ using FuStudy_Model.DTO.Response;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,19 +20,27 @@ namespace FuStudy_Service.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public BlogLikeService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public BlogLikeService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<BlogLikeResponse> CreateBlogLikeAsync(BlogLikeRequest request)
         {
             using (TransactionScope transaction = new TransactionScope())
             {
+                var getUserId = Authentication.GetUserIdFromHttpContext(_contextAccessor.HttpContext);
+
+                if (!long.TryParse(getUserId, out long userId))
+                {
+                    throw new Exception("User ID claim invalid.");
+                }
                 var checkBlogLike = _unitOfWork.BlogLikeRepository
                                     .Get(filter: x => x.Blog.Id == request.BlogId
-                                        && x.User.Id == request.UserId, includeProperties: "Blog")
+                                        && x.User.Id == userId, includeProperties: "Blog")
                                     .FirstOrDefault();
 
                 if (checkBlogLike != null)
@@ -41,6 +50,7 @@ namespace FuStudy_Service.Service
 
                 var blogLike = _mapper.Map(request, checkBlogLike);
                 blogLike.Status = true;
+                blogLike.UserId = long.Parse(getUserId);
                 _unitOfWork.BlogLikeRepository.Insert(blogLike);
 
                 var getBlog = _unitOfWork.BlogRepository.GetByID(request.BlogId);
@@ -61,10 +71,15 @@ namespace FuStudy_Service.Service
 
         public async Task<BlogLikeResponse> DeleteBlogLikeAsync(BlogLikeRequest request)
         {
+            var getUserId = Authentication.GetUserIdFromHttpContext(_contextAccessor.HttpContext);
 
+            if (!long.TryParse(getUserId, out long userId))
+            {
+                throw new Exception("User ID claim invalid.");
+            }
             var checkBlogLike = _unitOfWork.BlogLikeRepository
                                     .Get(filter: x => x.Blog.Id == request.BlogId
-                                        && x.User.Id == request.UserId, includeProperties: "Blog")
+                                        && x.User.Id == userId, includeProperties: "Blog")
                                     .FirstOrDefault();
 
             if (checkBlogLike == null)
