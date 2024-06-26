@@ -40,7 +40,7 @@ namespace FuStudy_Service.Service
             return mentorMajorResponses;
         }
 
-        public async Task<List<MentorMajorResponse>> GetAllMajorByMentorId(long id)
+        public async Task<List<MentorMajorResponse>> GetAllMentorMajorByMentorId(long id)
         {
             var mms = _unitOfWork.MentorMajorRepository.Get(filter: p =>
                                                         p.MentorId == id, includeProperties: "Mentor,Major");
@@ -54,7 +54,7 @@ namespace FuStudy_Service.Service
             return mentorMajorResponses;
         }
 
-        public async Task<List<MentorMajorResponse>> GetAllMentorByMajorId(long id)
+        public async Task<List<MentorMajorResponse>> GetAllMentorMajorByMajorId(long id)
         {
             var mms = _unitOfWork.MentorMajorRepository.Get(filter: p =>
                                                         p.MajorId == id, includeProperties: "Mentor,Major");

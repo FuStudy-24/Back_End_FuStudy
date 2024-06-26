@@ -39,12 +39,12 @@ namespace FuStudy_API.Controllers.Major
             }
         }
 
-        [HttpGet("GetAllMajorByMentorId/{id}")]
-        public async Task<IActionResult> GetAllMajorByMentorId(long id)
+        [HttpGet("GetAllMentorMajorByMentorId/{id}")]
+        public async Task<IActionResult> GetAllMentorMajorByMentorId(long id)
         {
             try
             {
-                var majors = await _mentorMajorService.GetAllMajorByMentorId(id);
+                var majors = await _mentorMajorService.GetAllMentorMajorByMentorId(id);
 
                 return CustomResult("Data Load Successfully", majors);
             }
@@ -58,12 +58,12 @@ namespace FuStudy_API.Controllers.Major
             }
         }
 
-        [HttpGet("GetAllMentorByMajorId/{id}")]
-        public async Task<IActionResult> GetAllMentorByMajorId(long id)
+        [HttpGet("GetAllMentorMajorByMajorId/{id}")]
+        public async Task<IActionResult> GetAllMentorMajorByMajorId(long id)
         {
             try
             {
-                var mentors = await _mentorMajorService.GetAllMentorByMajorId(id);
+                var mentors = await _mentorMajorService.GetAllMentorMajorByMajorId(id);
 
                 return CustomResult("Data Load Successfully", mentors);
             }
