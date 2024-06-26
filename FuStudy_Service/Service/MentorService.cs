@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Org.BouncyCastle.Crypto;
 using Tools;
+using FuStudy_Repository.Entity;
 
 namespace FuStudy_Service.Service
 {
@@ -63,9 +64,22 @@ namespace FuStudy_Service.Service
             return mentorResponses;
         }
 
+        public async Task<List<MentorResponse>> GetMentorByUserId(long id)
+        {
+            var mentor = _unitOfWork.MentorRepository.Get(p => p.UserId == id, includeProperties: "User");
+
+            if (mentor == null)
+            {
+                throw new CustomException.DataNotFoundException($"Mentor not found with ID: {id}");
+            }
+
+            var mentorResponse = _mapper.Map<List<MentorResponse>>(mentor);
+            return mentorResponse;
+        }
+
         public async Task<List<MentorResponse>> GetMentorById(long id)
         {
-            var mentor = _unitOfWork.MentorRepository.Get(p => p.Id == id, includeProperties: "User");
+            var mentor = _unitOfWork.MentorRepository.Get(p => p.UserId == id, includeProperties: "User");
 
             if (mentor == null)
             {
@@ -78,7 +92,7 @@ namespace FuStudy_Service.Service
 
         public async Task<MentorResponse> UpdateMentor(long id, MentorRequest mentorRequest)
         {
-            var existingMentor = _unitOfWork.MentorRepository.GetByID(id);
+            var existingMentor = _unitOfWork.MentorRepository.Get(p => p.UserId == id).FirstOrDefault();
 
             if (existingMentor == null)
             {
@@ -112,9 +126,21 @@ namespace FuStudy_Service.Service
             return mentorResponse;
         }
 
-        public Task<bool> DeleteMentor(long id)
+        public async Task<MentorResponse> DeleteMentor(long id)
         {
-            throw new NotImplementedException();
+            var deleteMentor = _unitOfWork.MentorRepository.Get(p => p.UserId == id).FirstOrDefault();
+            if (deleteMentor == null)
+            {
+                throw new Exception("Mentor with ID: {id} is not exist");
+            }
+
+            deleteMentor.VerifyStatus = false;
+            _unitOfWork.MentorRepository.Update(deleteMentor);
+            _unitOfWork.Save();
+
+            //map vào giá trị response
+            var mentorResponse = _mapper.Map<MentorResponse>(deleteMentor);
+            return mentorResponse;
         }
 
         public async Task<UpdateMentorOnlineStatusResponse> UpdateOnlineStatus(long id, UpdateMentorOnlineStatusResquest updateMentorOnlineStatusResquest)

@@ -12,8 +12,8 @@ namespace FuStudy_Service.Interface
     public interface IMentorMajorService
     {
         Task<List<MentorMajorResponse>> GetAllMentorMajor(QueryObject queryObject);
-        Task<List<MentorMajorResponse>> GetAllMajorByMentorId(long id);
-        Task<List<MentorMajorResponse>> GetAllMentorByMajorId(long id);
+        Task<List<MentorMajorResponse>> GetAllMentorMajorByMentorId(long id);
+        Task<List<MentorMajorResponse>> GetAllMentorMajorByMajorId(long id);
         Task<List<MentorMajorResponse>> GetMentorMajorById(long id);
         Task<MentorMajorResponse> CreateMentorMajor(MentorMajorRequest mentorMajorRequest);
         Task<bool> DeleteMentorMajor(long id);

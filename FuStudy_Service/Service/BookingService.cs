@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Tools;
 using System.Linq.Expressions;
 using System.Security.Claims;
+using System.Data.Entity.Core.Common.EntitySql;
 
 namespace FuStudy_Service.Service
 {
@@ -45,16 +46,34 @@ namespace FuStudy_Service.Service
                 throw new Exception("User does not have the required role to create a booking.");
             }
 
-            // Kiểm tra xem MentorId có tồn tại hay không
+            // Check if MentorId exists
             bool mentorExists = await _unitOfWork.MentorRepository.ExistsAsync(m => m.Id == request.MentorId);
             if (!mentorExists)
             {
-                throw new Exception($"Mentor with ID {request.MentorId} does not exist.");
+                throw new CustomException.DataNotFoundException($"Mentor with ID {request.MentorId} does not exist.");
             }
 
-            // biến tìm thông tin student và mentor
-            var mentorInformation = _unitOfWork.BookingRepository.Get(
-                filter: mi => mi.User.Id == userId, includeProperties:"User,Mentor");
+            // Get Student by UserId
+            var student = _unitOfWork.StudentRepository.Get(s => s.UserId == userId).FirstOrDefault();
+            if (student == null)
+            {
+                throw new CustomException.DataNotFoundException("Student not found.");
+            }
+
+            // Get StudentSubscription with Subscription included
+            var studentSubscription = _unitOfWork.StudentSubcriptionRepository.Get(
+                p => p.StudentId == student.Id, includeProperties: "Subcription").FirstOrDefault();
+
+            if (studentSubscription == null)
+            {
+                throw new CustomException.DataNotFoundException("Student subscription not found.");
+            }
+
+            // Check if currentMeeting has reached limitMeeting
+            if (studentSubscription.CurrentMeeting >= studentSubscription.Subcription.LimitMeeting)
+            {
+                throw new Exception("You have reached the limit of meetings for your subscription.");
+            }
 
             try
             {
