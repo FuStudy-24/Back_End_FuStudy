@@ -78,6 +78,7 @@ public class QuestionCommentService : IQuestionCommentService
         foreach (var comment in response)
         {
             IsMentorFromUserId(comment);
+            comment.Username = _unitOfWork.UserRepository.GetByID(comment.UserId).Username;
             var question = _unitOfWork.QuestionRepository.Get(q => q.Id == comment.QuestionId, includeProperties:"Category").FirstOrDefault();
             comment.QuestionResponse = _mapper.Map<QuestionResponse>(question);
         }
@@ -93,6 +94,7 @@ public class QuestionCommentService : IQuestionCommentService
         }
         var response = _mapper.Map<QuestionCommentResponse>(questionComment);
         IsMentorFromUserId(response);
+        response.Username = _unitOfWork.UserRepository.GetByID(response.UserId).Username;
         var question = _unitOfWork.QuestionRepository.Get(q => q.Id == response.QuestionId, includeProperties:"Category").FirstOrDefault();
         response.QuestionResponse = _mapper.Map<QuestionResponse>(question);
         return response;
@@ -120,6 +122,7 @@ public class QuestionCommentService : IQuestionCommentService
 
         var response = _mapper.Map<QuestionCommentResponse>(questionComment);
         IsMentorFromUserId(response);
+        response.Username = _unitOfWork.UserRepository.GetByID(response.UserId).Username;
         var question = _unitOfWork.QuestionRepository.Get(q => q.Id == response.QuestionId, includeProperties:"Category").FirstOrDefault();
         response.QuestionResponse = _mapper.Map<QuestionResponse>(question);
         return response;
@@ -155,6 +158,7 @@ public class QuestionCommentService : IQuestionCommentService
 
         var response = _mapper.Map<QuestionCommentResponse>(questionComment);
         IsMentorFromUserId(response);
+        response.Username = _unitOfWork.UserRepository.GetByID(response.UserId).Username;
         var question = _unitOfWork.QuestionRepository.Get(q => q.Id == response.QuestionId, includeProperties:"Category").FirstOrDefault();
         response.QuestionResponse = _mapper.Map<QuestionResponse>(question);
         return response;
