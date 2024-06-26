@@ -10,6 +10,9 @@ public class QuestionCommentResponse
     public long Id { get; set; }
     
     public long UserId { get; set; }
+    
+    public string Username { get; set; }
+
 
     public long QuestionId { get; set; }
 
