@@ -107,4 +107,42 @@ public class UserService : IUserService
         }
         return result;
     }
+
+    public async Task<UserDTOResponse> GetLoginUser()
+    {
+        var user = GetUserFromHttpContext();
+        
+
+        return _mapper.Map<UserDTOResponse>(user);
+    }
+
+    public async Task<UserDTOResponse> UpdateLoginUser(UpdateAccountDTORequest updateAccountDTORequest)
+    {
+
+        var user = GetUserFromHttpContext();
+        
+        _mapper.Map(updateAccountDTORequest, user);
+        await _unitOfWork.UserRepository.UpdateAsync(user);
+        _unitOfWork.Save();
+        
+        return _mapper.Map<UserDTOResponse>(user);
+    }
+
+    private User GetUserFromHttpContext()
+    {
+        var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
+        var user = _unitOfWork.UserRepository.Get(u => u.Id == userId, includeProperties:"Role").FirstOrDefault();
+        if (user == null)
+        {
+            throw new CustomException.DataNotFoundException("This user not found!");
+        }
+
+        if (user.Status == false)
+        {
+            throw new CustomException.InvalidDataException("This user not activated!");
+
+        }
+
+        return user;
+    }
 }

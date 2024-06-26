@@ -14,4 +14,8 @@ public interface IUserService
     Task<User> GetUserById(long id);
     Task<User> UpdateUser(long id, UpdateAccountDTORequest updateAccountDTORequest);
     string GetUserID();
+    Task<UserDTOResponse> GetLoginUser();
+    
+    Task<UserDTOResponse> UpdateLoginUser(UpdateAccountDTORequest updateAccountDTORequest);
+
 }
