@@ -12,6 +12,7 @@ using Tools;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Data.Entity.Core.Common.EntitySql;
+using FuStudy_Model.Enum;
 
 namespace FuStudy_Service.Service
 {
@@ -20,12 +21,77 @@ namespace FuStudy_Service.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IConversationService _conversationService;
 
-        public BookingService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public BookingService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, IConversationService conversationService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _conversationService = conversationService;
+        }
+
+        public async Task<List<BookingResponse>> GetAllBooking(QueryObject queryObject)
+        {
+            var bookings = _unitOfWork.BookingRepository.Get(includeProperties: "User,Mentor",
+                pageIndex: queryObject.PageIndex,
+                pageSize: queryObject.PageSize)
+                .ToList();
+
+            if (!bookings.Any())
+            {
+                throw new CustomException.DataNotFoundException("No Booking in Database");
+            }
+
+            var bookingResponses = _mapper.Map<List<BookingResponse>>(bookings);
+
+            return bookingResponses;
+        }
+
+        public async Task<List<BookingResponse>> GetAllStudentBookingByUserId()
+        {
+            var userIdStr = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            if (!long.TryParse(userIdStr, out long userId))
+            {
+                throw new Exception("User ID claim invalid.");
+            }
+
+            // hàm để check role trong HttpContext
+            var userRoles = _httpContextAccessor.HttpContext.User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value).ToList();
+
+            if (!userRoles.Contains("Student"))
+            {
+                throw new Exception("User does not have the required role to get all self booking history.");
+            }
+
+            var bookings = _unitOfWork.BookingRepository.Get(filter: p =>
+                                                        p.UserId == userId, includeProperties: "User,Mentor");
+
+            if (bookings == null)
+            {
+                throw new CustomException.DataNotFoundException($"Booking not found with UserId: {userId}");
+            }
+
+            var bookingResponses = _mapper.Map<List<BookingResponse>>(bookings);
+
+            return bookingResponses;
+
+        }
+
+        public async Task<List<BookingResponse>> GetAllBookingByMentorId(long id)
+        {
+            var bookings = _unitOfWork.BookingRepository.Get(filter: p =>
+                                                        p.MentorId == id, includeProperties: "User,Mentor");
+
+            if (bookings == null)
+            {
+                throw new CustomException.DataNotFoundException($"Booking not found with MentorId: {id}");
+            }
+
+            var bookingResponses = _mapper.Map<List<BookingResponse>>(bookings);
+            return bookingResponses;
         }
 
         public async Task<BookingResponse> CreateBooking(CreateBookingRequest request)
@@ -75,6 +141,14 @@ namespace FuStudy_Service.Service
                 throw new Exception("You have reached the limit of meetings for your subscription.");
             }
 
+            var existingConversation = _unitOfWork.ConversationRepository.Get(
+                    filter: p => p.EndTime > DateTime.Now && p.IsClose == false).FirstOrDefault();
+
+            if (existingConversation != null)
+            {
+                throw new Exception($"The Conversation with {existingConversation.User2.Fullname} still exists within the requested time.");
+            }
+
             try
             {
                 // Tạo biến mapper với model booking
@@ -82,7 +156,7 @@ namespace FuStudy_Service.Service
 
                 booking.UserId = userId;
                 booking.EndTime = request.StartTime.Add(request.Duration);
-                booking.Status = "Pending";
+                booking.Status = BookingStatus.Pending.ToString();
 
                 await _unitOfWork.BookingRepository.AddAsync(booking);
                 await _unitOfWork.BookingRepository.SaveChangesAsync();
@@ -102,6 +176,45 @@ namespace FuStudy_Service.Service
             }
         }
 
-        
+        public async Task<bool> AcceptBooking(long id)
+        {
+            var booking = await _unitOfWork.BookingRepository.GetByIdAsync(id);
+            if (booking == null)
+            {
+                throw new CustomException.DataNotFoundException($"Booking with id:{id} not found");
+            }
+
+            booking.EndTime = DateTime.Now + booking.Duration;
+
+            booking.Status = BookingStatus.Accepted.ToString();
+            await _unitOfWork.BookingRepository.UpdateAsync(booking);
+
+            ConversationRequest conversationRequest = new ConversationRequest();
+            conversationRequest.User2Id = booking.UserId;
+            await _conversationService.CreateConversation(conversationRequest);// UserId cua role Student
+
+            var student = _unitOfWork.StudentRepository.Get(s => s.UserId == booking.UserId).FirstOrDefault();
+
+            var studentSubcription = _unitOfWork.StudentSubcriptionRepository.Get(
+                        filter: p => p.StudentId == student.Id).FirstOrDefault();
+            studentSubcription.CurrentMeeting++;
+            _unitOfWork.Save();
+
+            return true;
+        }
+
+        public async Task<bool> RejectBooking(long id)
+        {
+            var booking = await _unitOfWork.BookingRepository.GetByIdAsync(id);
+            if (booking == null)
+            {
+                throw new CustomException.DataNotFoundException($"Booking with id:{id} not found");
+            }
+            booking.Status = BookingStatus.Declined.ToString();
+            await _unitOfWork.BookingRepository.UpdateAsync(booking);
+
+            return true;
+        }
+
     }
 }
