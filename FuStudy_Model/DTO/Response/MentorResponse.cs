@@ -25,5 +25,6 @@ namespace FuStudy_Model.DTO.Response
 
         public bool VerifyStatus { get; set; }
 
+        public UserDTOResponse User { get; set; }
     }
 }
