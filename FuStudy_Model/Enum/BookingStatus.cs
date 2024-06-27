@@ -9,7 +9,7 @@ namespace FuStudy_Model.Enum
     public enum BookingStatus
     {
         Accepted,
-        Confirmed,
+        Pending,
         Declined
     }
 }
