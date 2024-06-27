@@ -69,7 +69,7 @@ namespace FuStudy_Service.Service
             var bookings = _unitOfWork.BookingRepository.Get(filter: p =>
                                                         p.UserId == userId, includeProperties: "User,Mentor");
 
-            if (bookings == null)
+            if (!bookings.Any())
             {
                 throw new CustomException.DataNotFoundException($"Booking not found with UserId: {userId}");
             }
@@ -85,7 +85,7 @@ namespace FuStudy_Service.Service
             var bookings = _unitOfWork.BookingRepository.Get(filter: p =>
                                                         p.MentorId == id, includeProperties: "User,Mentor");
 
-            if (bookings == null)
+            if (!bookings.Any())
             {
                 throw new CustomException.DataNotFoundException($"Booking not found with MentorId: {id}");
             }
@@ -189,17 +189,15 @@ namespace FuStudy_Service.Service
             booking.Status = BookingStatus.Accepted.ToString();
             await _unitOfWork.BookingRepository.UpdateAsync(booking);
 
-            ConversationRequest conversationRequest = new ConversationRequest();
-            conversationRequest.User2Id = booking.UserId;
-            await _conversationService.CreateConversation(conversationRequest);// UserId cua role Student
+            await _conversationService.CreateConversationWithStudent(booking.UserId, booking.MentorId);
 
             var student = _unitOfWork.StudentRepository.Get(s => s.UserId == booking.UserId).FirstOrDefault();
 
             var studentSubcription = _unitOfWork.StudentSubcriptionRepository.Get(
                         filter: p => p.StudentId == student.Id).FirstOrDefault();
             studentSubcription.CurrentMeeting++;
-            _unitOfWork.Save();
 
+            _unitOfWork.Save();
             return true;
         }
 

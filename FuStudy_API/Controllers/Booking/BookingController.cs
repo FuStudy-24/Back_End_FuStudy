@@ -106,6 +106,7 @@ namespace FuStudy_API.Controllers.Booking
         }
 
         [HttpPost("AcceptBooking")]
+        [Authorize]
         public async Task<IActionResult> AcceptBooking(long id)
         {
             try
@@ -124,6 +125,7 @@ namespace FuStudy_API.Controllers.Booking
         }
 
         [HttpPost("RejectBooking")]
+        [Authorize]
         public async Task<IActionResult> RejectBooking(long id)
         {
             try
