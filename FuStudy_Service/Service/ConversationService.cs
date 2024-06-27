@@ -5,6 +5,7 @@ using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
 using Microsoft.AspNetCore.Http;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -134,6 +135,37 @@ namespace FuStudy_Service.Service
             var conversationResponse = _mapper.Map<ConversationResponse>(conversation);
 
             return conversationResponse;
+        }
+
+        public Conversation CreateConversationWithStudent(long userId, long mentorId)
+        {
+            var conversation = new Conversation();
+            conversation.User1Id = userId;
+            conversation.User2Id = mentorId;
+            conversation.CreateAt = DateTime.Now;
+            conversation.LastMessage = "";
+            conversation.IsClose = false;
+
+            var userId2 = _unitOfWork.UserRepository.GetByID(conversation.User2Id);
+
+            var durationBooking = _unitOfWork.BookingRepository.Get(d => d.UserId == userId && d.MentorId == conversation.User2Id).FirstOrDefault();
+
+
+            if (userId2 == null || userId2.RoleId != 4)
+            {
+                conversation.EndTime = DateTime.MaxValue;
+            }
+
+            if (durationBooking != null)
+            {
+                conversation.Duration = durationBooking.Duration;
+                conversation.EndTime = conversation.CreateAt + durationBooking.Duration;
+            }
+
+            _unitOfWork.ConversationRepository.Insert(conversation);
+            _unitOfWork.Save();
+
+            return conversation;
         }
 
         public async Task<List<ConversationResponse>> GetConversation()
