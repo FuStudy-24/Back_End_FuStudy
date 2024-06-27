@@ -68,9 +68,9 @@ namespace FuStudy_Service.Service
         {
             var mentor = _unitOfWork.MentorRepository.Get(p => p.UserId == id, includeProperties: "User");
 
-            if (mentor == null)
+            if (!mentor.Any())
             {
-                throw new CustomException.DataNotFoundException($"Mentor not found with ID: {id}");
+                throw new CustomException.DataNotFoundException($"Mentor not found with UserId: {id}");
             }
 
             var mentorResponse = _mapper.Map<List<MentorResponse>>(mentor);
@@ -79,9 +79,9 @@ namespace FuStudy_Service.Service
 
         public async Task<List<MentorResponse>> GetMentorById(long id)
         {
-            var mentor = _unitOfWork.MentorRepository.Get(p => p.UserId == id, includeProperties: "User");
+            var mentor = _unitOfWork.MentorRepository.Get(p => p.Id == id, includeProperties: "User");
 
-            if (mentor == null)
+            if (!mentor.Any())
             {
                 throw new CustomException.DataNotFoundException($"Mentor not found with ID: {id}");
             }
