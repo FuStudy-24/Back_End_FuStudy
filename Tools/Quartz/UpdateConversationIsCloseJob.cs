@@ -39,23 +39,34 @@ public class UpdateConversationIsCloseJob : IJob
             }
 
             var acceptBookings = _unitOfWork.BookingRepository
-                .Get(b => b.Status == "Accept");
+                .Get(b => b.Status == "Accepted")
+                .ToList();
 
             foreach (var booking in acceptBookings)
             {
                 if (booking.EndTime >= currentTime)
                 {
-                    booking.Status = "End";
-                    //var conversation = _unitOfWork.ConversationRepository.Get
+                    // Fetch the corresponding conversation
+                    var conversation = _unitOfWork.ConversationRepository.Get(
+                        c => c.User1Id == booking.UserId &&
+                        c.User2Id == booking.MentorId &&
+                        c.EndTime == booking.EndTime &&
+                        c.IsClose == false).FirstOrDefault(); // Get the first matching conversation
 
-                    _unitOfWork.BookingRepository.Update(booking);
+                    if (conversation != null) // Ensure conversation exists
+                    {
+                        booking.Status = "Ended";
+                        conversation.IsClose = true;
+
+                        _unitOfWork.BookingRepository.Update(booking);
+                        _unitOfWork.ConversationRepository.Update(conversation);
+                    }
                 }
             }
 
-            var conversations = _unitOfWork.ConversationRepository
+            /*var conversations = _unitOfWork.ConversationRepository
                 .Get(c => c.IsClose == false)
                 .ToList();
-            var bk =  _unitOfWork.BookingRepository.Get(b => b.Status == "End").FirstOrDefault();
 
             foreach (var conversation in conversations)
             {
@@ -65,7 +76,7 @@ public class UpdateConversationIsCloseJob : IJob
                         conversation.IsClose = true;
                         _unitOfWork.ConversationRepository.Update(conversation);
                     }
-            }
+            }*/
 
             var openconversations = _unitOfWork.ConversationRepository
                 .Get(oc => oc.IsClose == true)
@@ -74,7 +85,7 @@ public class UpdateConversationIsCloseJob : IJob
             foreach (var conversation in openconversations)
             {
                 var startTimeWithDuration = conversation.EndTime - conversation.Duration;
-                if (startTimeWithDuration == currentTime)
+                if (startTimeWithDuration >= currentTime)
                 {
                     conversation.IsClose = false;
                     _unitOfWork.ConversationRepository.Update(conversation);
