@@ -26,7 +26,7 @@ namespace FuStudy_API.Controllers.Major
         {
             try
             {
-                var mms = _mentorMajorService.GetAllMentorMajor(queryPbject);
+                var mms = await _mentorMajorService.GetAllMentorMajor(queryPbject);
                 return CustomResult("Data Load Successfully", mms);
             }
             catch (CustomException.DataNotFoundException ex)

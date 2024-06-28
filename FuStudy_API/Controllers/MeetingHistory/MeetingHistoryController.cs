@@ -20,11 +20,11 @@ namespace FuStudy_API.Controllers.MeetingHistory
         }
 
         [HttpGet("GetAllMeetingHistory")]
-        public IActionResult GetAllMeetingHistory([FromQuery] QueryObject queryPbject)
+        public async Task<IActionResult> GetAllMeetingHistory([FromQuery] QueryObject queryPbject)
         {
             try
             {
-                var meetings = _meetingHistory.GetAllMeetingHistory(queryPbject);
+                var meetings = await _meetingHistory.GetAllMeetingHistory(queryPbject);
                 return CustomResult("Data Load Successfully", meetings);
             }
             catch (CustomException.DataNotFoundException ex)
