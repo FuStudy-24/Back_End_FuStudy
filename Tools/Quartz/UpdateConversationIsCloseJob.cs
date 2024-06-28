@@ -1,4 +1,5 @@
-﻿using FuStudy_Repository.Repository;
+﻿using FuStudy_Repository.Entity;
+using FuStudy_Repository.Repository;
 using Quartz;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ public class UpdateConversationIsCloseJob : IJob
 
             foreach (var booking in bookings)
             {
-                var overTimeBooking = booking.CreateAt.AddMinutes(5);
+                var overTimeBooking = booking.CreateAt.AddHours(1);
                 if (overTimeBooking <= currentTime)
                 {
                     booking.Status = "OverTime";
@@ -38,22 +39,23 @@ public class UpdateConversationIsCloseJob : IJob
 
             }
 
+            //Auto End Booking & close conversation
             var acceptBookings = _unitOfWork.BookingRepository
                 .Get(b => b.Status == "Accepted")
                 .ToList();
 
             foreach (var booking in acceptBookings)
             {
-                if (booking.EndTime >= currentTime)
+                if (booking.EndTime <= currentTime)
                 {
                     // Fetch the corresponding conversation
                     var conversation = _unitOfWork.ConversationRepository.Get(
                         c => c.User1Id == booking.UserId &&
                         c.User2Id == booking.MentorId &&
                         c.EndTime == booking.EndTime &&
-                        c.IsClose == false).FirstOrDefault(); // Get the first matching conversation
+                        c.IsClose == false).FirstOrDefault();
 
-                    if (conversation != null) // Ensure conversation exists
+                    if (conversation != null)
                     {
                         booking.Status = "Ended";
                         conversation.IsClose = true;
@@ -70,26 +72,36 @@ public class UpdateConversationIsCloseJob : IJob
 
             foreach (var conversation in conversations)
             {
-                    var endTimeWithDuration = conversation.EndTime;
-                    if (endTimeWithDuration <= currentTime)
-                    {
-                        conversation.IsClose = true;
-                        _unitOfWork.ConversationRepository.Update(conversation);
-                    }
-            }*/
-
-            var openconversations = _unitOfWork.ConversationRepository
-                .Get(oc => oc.IsClose == true)
-                .ToList() ;
-
-            foreach (var conversation in openconversations)
-            {
-                var startTimeWithDuration = conversation.EndTime - conversation.Duration;
-                if (startTimeWithDuration >= currentTime)
+                var endTimeWithDuration = conversation.EndTime;
+                if (endTimeWithDuration <= currentTime)
                 {
-                    conversation.IsClose = false;
+                    conversation.IsClose = true;
                     _unitOfWork.ConversationRepository.Update(conversation);
                 }
+            }*/
+
+            //Auto openconversation
+            var openConversations = _unitOfWork.ConversationRepository
+                .Get(oc => oc.IsClose == true)
+                .ToList();
+
+            foreach (var conversation in openConversations)
+            {
+                if (conversation.CreateAt >= currentTime)
+                {
+                    var startTimeWithDuration = conversation.EndTime - conversation.Duration;
+                    var booking = _unitOfWork.BookingRepository.Get(
+                            c => c.UserId == conversation.User1Id &&
+                            c.MentorId == conversation.User2Id &&
+                            c.EndTime == conversation.EndTime &&
+                            c.Status == "Accepted").FirstOrDefault();
+                    if (booking != null)
+                    {
+                        conversation.IsClose = false;
+                        _unitOfWork.ConversationRepository.Update(conversation);
+                    }
+                }
+                    
             }
 
             var studentSubcriptions = _unitOfWork.StudentSubcriptionRepository
