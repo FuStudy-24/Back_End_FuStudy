@@ -146,20 +146,22 @@ namespace FuStudy_Service.Service
 
             var userId2 = _unitOfWork.UserRepository.GetByID(conversation.User2Id);
 
-            var durationBooking = _unitOfWork.BookingRepository.Get(d => d.UserId == userId && d.MentorId == conversation.User2Id).FirstOrDefault();
-
-
             if (userId2 == null || userId2.RoleId != 4)
             {
                 conversation.EndTime = DateTime.MaxValue;
             }
+
+            var durationBooking = _unitOfWork.BookingRepository.Get(
+                    d => d.UserId == userId && 
+                    d.MentorId == conversation.User2Id &&
+                    d.Status == "Accepted").FirstOrDefault();
 
             if (durationBooking != null)
             {
                 conversation.CreateAt = durationBooking.StartTime;
                 conversation.Duration = durationBooking.Duration;
                 conversation.EndTime = durationBooking.EndTime;
-                conversation.IsClose = false;
+                conversation.IsClose = true;
             }
 
             _unitOfWork.ConversationRepository.Insert(conversation);
