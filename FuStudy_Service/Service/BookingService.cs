@@ -143,7 +143,7 @@ namespace FuStudy_Service.Service
             }
 
             var existingConversation = _unitOfWork.ConversationRepository.Get(
-                    filter: p => p.EndTime > DateTime.Now && p.IsClose == false).FirstOrDefault();
+                    filter: p => p.EndTime > DateTime.Now && p.IsClose == false, includeProperties: "User2").FirstOrDefault();
 
             if (existingConversation != null)
             {
