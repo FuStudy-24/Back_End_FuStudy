@@ -1,5 +1,6 @@
 using FuStudy_Model.DTO.Request;
 using FuStudy_Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 using Net.payOS;
@@ -29,7 +30,7 @@ public class PaymentController : ControllerBase
         this._walletService = walletService;
         _userService = userService;
     }
-
+    [Authorize]
     [HttpPost("create")]
     public async Task<IActionResult> CreatePaymentLink(CreatePaymentLinkRequest body)
     {
@@ -67,7 +68,7 @@ public class PaymentController : ControllerBase
             return Ok(new Response(-1, "fail", null));
         }
     }
-
+    [Authorize]
     [HttpGet("{orderId}")]
     public async Task<IActionResult> GetOrder([FromRoute] int orderId)
     {
