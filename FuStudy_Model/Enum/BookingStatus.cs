@@ -11,8 +11,8 @@ namespace FuStudy_Model.Enum
         Accepted,
         Pending,
         Declined,
-        Cancel,
+        Canceled,
         OverTime,
-        End
+        Ended
     }
 }

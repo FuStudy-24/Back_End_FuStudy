@@ -180,13 +180,20 @@ namespace FuStudy_Service.Service
                 throw new Exception("You have reached the limit of meetings for your subscription.");
             }
 
-            var existingConversation = _unitOfWork.ConversationRepository.Get(
+            var existingBooking = _unitOfWork.BookingRepository.Get(
+                    filter: p => p.Status == BookingStatus.Accepted.ToString()).FirstOrDefault();
+            if (existingBooking != null)
+            {
+                throw new CustomException.DataExistException($"Booking with {existingBooking.Mentor.User.Fullname} still exists within the requested time.");
+            }
+
+            /*var existingConversation = _unitOfWork.ConversationRepository.Get(
                     filter: p => p.EndTime > DateTime.Now && p.IsClose == false, includeProperties: "User2").FirstOrDefault();
 
             if (existingConversation != null)
             {
                 throw new CustomException.DataExistException($"The Conversation with {existingConversation.User2.Fullname} still exists within the requested time.");
-            }
+            }*/
 
             try
             {
@@ -250,7 +257,7 @@ namespace FuStudy_Service.Service
                     .FirstOrDefault();
 
                 studentSubcription.CurrentMeeting -= 1;
-                booking.Status = BookingStatus.Cancel.ToString();
+                booking.Status = BookingStatus.Canceled.ToString();
 
                 _unitOfWork.StudentSubcriptionRepository.Update(studentSubcription);
                 _unitOfWork.BookingRepository.Update(booking);
@@ -258,9 +265,9 @@ namespace FuStudy_Service.Service
             }
 
             //Cancel after Mentor Accepted
-            if (booking.Status.Contains("Accept")) 
+            if (booking.Status.Contains("Accepted")) 
             {
-                booking.Status = BookingStatus.End.ToString();
+                booking.Status = BookingStatus.Ended.ToString();
                 var conversation = _unitOfWork.ConversationRepository
                     .Get(c => c.User1Id == userId && c.IsClose == false)
                     .FirstOrDefault();
@@ -310,6 +317,7 @@ namespace FuStudy_Service.Service
                         filter: p => p.StudentId == student.Id).FirstOrDefault();
             studentSubcription.CurrentMeeting++;
 
+            await _unitOfWork.StudentSubcriptionRepository.UpdateAsync(studentSubcription);
             _unitOfWork.Save();
             return true;
         }
