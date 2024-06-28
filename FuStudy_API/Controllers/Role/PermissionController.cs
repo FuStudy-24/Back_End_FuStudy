@@ -25,7 +25,7 @@ namespace FuStudy_API.Controllers.Role
         {
             try
             {
-                var rps = _permissionService.GetAllPermission(queryObject);
+                var rps = await _permissionService.GetAllPermission(queryObject);
                 return CustomResult("Data Load Successfully", rps);
             }
             catch (CustomException.DataNotFoundException ex)

@@ -20,11 +20,11 @@ namespace FuStudy_API.Controllers.Student
         }
 
         [HttpGet("GetAllStudent")]
-        public IActionResult GetAllStudent([FromQuery] QueryObject queryObject)
+        public async Task<IActionResult> GetAllStudent([FromQuery] QueryObject queryObject)
         {
             try
             {
-                var students = _studentService.GetAllStudent(queryObject);
+                var students = await _studentService.GetAllStudent(queryObject);
                 return CustomResult("Data Load Successfully", students);
             }
             catch (CustomException.DataNotFoundException ex)

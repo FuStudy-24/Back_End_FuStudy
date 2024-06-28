@@ -11,7 +11,7 @@ namespace FuStudy_Service.Interface
 {
     public interface IBookingService
     {
-        Task<List<BookingResponse>> GetAllBooking(QueryObject queryObject);
+        Task<IEnumerable<BookingResponse>> GetAllBooking(QueryObject queryObject);
         Task<List<BookingResponse>> GetAllStudentBookingByUserId();
         Task<List<BookingResponse>> GetAllBookingByMentorId(long id);
         Task<BookingResponse> CreateBooking(CreateBookingRequest request);
