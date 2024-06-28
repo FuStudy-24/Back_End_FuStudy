@@ -6,21 +6,28 @@ using Net.payOS;
 using Net.payOS.Types;
 
 namespace FuStudy_API.Controllers.Transaction;
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class PaymentController : ControllerBase
 {
     // GET
     private readonly PayOS _payOS;
+    private readonly IUserService _userService;
     private readonly IOrderService _orderService;
     private readonly ITransactionService _transactionService;
     private readonly IWalletService _walletService;
-    public PaymentController(PayOS payOS,IOrderService orderService,ITransactionService transactionService, IWalletService walletService)
+    public PaymentController(PayOS payOS,
+        IOrderService orderService,
+        ITransactionService transactionService, 
+        IWalletService walletService,
+        IUserService userService
+        )
     {
         _payOS = payOS;
         _orderService = orderService;
         _transactionService = transactionService;
         this._walletService = walletService;
+        _userService = userService;
     }
 
     [HttpPost("create")]
@@ -37,7 +44,9 @@ public class PaymentController : ControllerBase
             CreatePaymentResult createPayment = await _payOS.createPaymentLink(paymentData);
             OrderRequest orderRequest = new OrderRequest();
             TransactionRequest transactionRequest = new TransactionRequest();
-            transactionRequest.WalletId = body.WalletID;
+            var userId = _userService.GetUserID();
+            var walletId = await _walletService.GetWalletByUserIdAsync(long.Parse(userId));
+            transactionRequest.WalletId = walletId.Id;
             transactionRequest.Description = paymentData.description;
             transactionRequest.Ammount = paymentData.amount;
             transactionRequest.Type = "Deposit";
