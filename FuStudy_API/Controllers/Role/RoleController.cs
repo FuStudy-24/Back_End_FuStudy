@@ -25,7 +25,7 @@ namespace FuStudy_API.Controllers.Role
         {
             try
             {
-                var roles = _roleService.GetAllRole(queryObject);
+                var roles = await _roleService.GetAllRole(queryObject);
                 return CustomResult("Data Load Successfully", roles);
             }
             catch (CustomException.DataNotFoundException ex)

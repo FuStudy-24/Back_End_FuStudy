@@ -26,7 +26,7 @@ namespace FuStudy_API.Controllers.Major
         {
             try
             {
-                var majors = _majorService.GetAllMajor(queryObject);
+                var majors = await _majorService.GetAllMajor(queryObject);
                 return CustomResult("Data Load Successfully", majors);
             }
             catch (CustomException.DataNotFoundException ex)

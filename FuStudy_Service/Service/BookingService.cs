@@ -13,6 +13,7 @@ using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Data.Entity.Core.Common.EntitySql;
 using FuStudy_Model.Enum;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FuStudy_Service.Service
 {
@@ -31,19 +32,19 @@ namespace FuStudy_Service.Service
             _conversationService = conversationService;
         }
 
-        public async Task<List<BookingResponse>> GetAllBooking(QueryObject queryObject)
+        public async Task<IEnumerable<BookingResponse>> GetAllBooking(QueryObject queryObject)
         {
-            var bookings = _unitOfWork.BookingRepository.Get(includeProperties: "User,Mentor",
+            var bookings = _unitOfWork.BookingRepository.Get(
+                includeProperties: "User,Mentor",
                 pageIndex: queryObject.PageIndex,
-                pageSize: queryObject.PageSize)
-                .ToList();
+                pageSize: queryObject.PageSize);
 
-            if (!bookings.Any())
+            if (bookings.IsNullOrEmpty())
             {
                 throw new CustomException.DataNotFoundException("No Booking in Database");
             }
 
-            var bookingResponses = _mapper.Map<List<BookingResponse>>(bookings);
+            var bookingResponses = _mapper.Map<IEnumerable<BookingResponse>>(bookings);
 
             return bookingResponses;
         }
@@ -63,7 +64,7 @@ namespace FuStudy_Service.Service
 
             if (!userRoles.Contains("Student"))
             {
-                throw new Exception("User does not have the required role to get all self booking history.");
+                throw new CustomException.UnauthorizedAccessException("User does not have the required role to get all self booking history.");
             }
 
             var bookings = _unitOfWork.BookingRepository.Get(filter: p =>
@@ -109,7 +110,7 @@ namespace FuStudy_Service.Service
 
             if (!userRoles.Contains("Student"))
             {
-                throw new Exception("User does not have the required role to create a booking.");
+                throw new CustomException.UnauthorizedAccessException("User does not have the required role to create a booking.");
             }
 
             // Check if MentorId exists
@@ -146,7 +147,7 @@ namespace FuStudy_Service.Service
 
             if (existingConversation != null)
             {
-                throw new Exception($"The Conversation with {existingConversation.User2.Fullname} still exists within the requested time.");
+                throw new CustomException.DataExistException($"The Conversation with {existingConversation.User2.Fullname} still exists within the requested time.");
             }
 
             try

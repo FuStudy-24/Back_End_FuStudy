@@ -22,16 +22,16 @@ namespace FuStudy_API.Controllers.Booking
         }
 
         [HttpGet("GetAllBooking")]
-        public async Task<IActionResult> GetAllBooking([FromQuery] QueryObject queryPbject)
+        public async Task<IActionResult> GetAllBooking([FromQuery] QueryObject queryObject)
         {
             try
             {
-                var bookings = _bookingService.GetAllBooking(queryPbject);
+                var bookings = await _bookingService.GetAllBooking(queryObject);
                 return CustomResult("Data Load Successfully", bookings);
             }
-            catch (CustomException.DataNotFoundException ex)
+            catch (CustomException.DataNotFoundException e)
             {
-                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
             }
             catch (Exception ex)
             {
@@ -52,6 +52,10 @@ namespace FuStudy_API.Controllers.Booking
             catch (CustomException.DataNotFoundException ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.UnauthorizedAccessException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (Exception ex)
             {
@@ -87,9 +91,10 @@ namespace FuStudy_API.Controllers.Booking
             {
                 BookingResponse response = await _bookingService.CreateBooking(request);
                 return CustomResult("Created Successfully", response, HttpStatusCode.OK);
-            }catch (CustomException.InvalidDataException ex)
+            }
+            catch (CustomException.DataExistException ex)
             {
-                return CustomResult(ex.Message, HttpStatusCode.BadRequest);
+                return CustomResult(ex.Message, HttpStatusCode.Conflict);
             }
             catch (CustomException.DataNotFoundException ex)
             {
