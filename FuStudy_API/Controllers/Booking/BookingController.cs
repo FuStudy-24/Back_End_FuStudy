@@ -63,6 +63,30 @@ namespace FuStudy_API.Controllers.Booking
             }
         }
 
+        [HttpGet("GetAllMentorBookingByUserId")]
+        [Authorize]
+        public async Task<IActionResult> GetAllMentorBookingByUserId()
+        {
+            try
+            {
+                var bookings = await _bookingService.GetAllMentorBookingByUserId();
+
+                return CustomResult("Data Load Successfully", bookings);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.UnauthorizedAccessException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
         [HttpGet("GetAllBookingByMentorId/{id}")]
         public async Task<IActionResult> GetAllBookingByMentorId(long id)
         {
@@ -110,6 +134,29 @@ namespace FuStudy_API.Controllers.Booking
             }
         }
 
+        [HttpPost("CancelBooking/{id}")]
+        [Authorize]
+        public async Task<IActionResult> CancelBooking(long id)
+        {
+            try
+            {
+                var booking = await _bookingService.CancelBooking(id);
+                return CustomResult("Cancel Booking Susseccful", id, HttpStatusCode.OK);
+            }
+            catch (CustomException.UnauthorizedAccessException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
         [HttpPost("AcceptBooking")]
         [Authorize]
         public async Task<IActionResult> AcceptBooking(long id)
@@ -118,6 +165,10 @@ namespace FuStudy_API.Controllers.Booking
             {
                 var booking = await _bookingService.AcceptBooking(id);
                 return CustomResult("Accept Booking Susseccful", id, HttpStatusCode.OK);
+            }
+            catch(CustomException.UnauthorizedAccessException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {
@@ -137,6 +188,10 @@ namespace FuStudy_API.Controllers.Booking
             {
                 var booking = await _bookingService.RejectBooking(id);
                 return CustomResult("Reject Booking Susseccful", id, HttpStatusCode.OK);
+            }
+            catch (CustomException.UnauthorizedAccessException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
             }
             catch (CustomException.DataNotFoundException ex)
             {

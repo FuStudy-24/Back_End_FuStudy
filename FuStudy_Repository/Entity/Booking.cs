@@ -20,6 +20,8 @@ namespace FuStudy_Repository.Entity
 
         public long MentorId { get; set; }
 
+        public DateTime CreateAt { get; set; }
+
         public DateTime StartTime { get; set; }
 
         public TimeSpan Duration { get; set; }
