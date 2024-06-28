@@ -13,8 +13,10 @@ namespace FuStudy_Service.Interface
     {
         Task<IEnumerable<BookingResponse>> GetAllBooking(QueryObject queryObject);
         Task<List<BookingResponse>> GetAllStudentBookingByUserId();
+        Task<List<BookingResponse>> GetAllMentorBookingByUserId();
         Task<List<BookingResponse>> GetAllBookingByMentorId(long id);
         Task<BookingResponse> CreateBooking(CreateBookingRequest request);
+        Task<bool> CancelBooking(long id);
         Task<bool> AcceptBooking(long id);
         Task<bool> RejectBooking(long id);
     }

@@ -107,17 +107,17 @@ namespace FuStudy_Repository.Entity
             {
                 new User
                 {
-                    Id = 1, RoleId = roles[2].Id, Username = "student1", Password = "hashedPassword1", Fullname = "John Doe",
+                    Id = 1, RoleId = roles[2].Id, Username = "student1", Password = "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2", Fullname = "John Doe",
                     Email = "johndoe@example.com", Avatar = "ahihi", Gender = "male", IdentityCard = "ahihi", Status = true, Phone = "123123"
                 },
                 new User
                 {
-                    Id = 2, RoleId = roles[3].Id, Username = "mentor1", Password = "hashedPassword2", Fullname = "Jane Smith",
+                    Id = 2, RoleId = roles[3].Id, Username = "mentor1", Password = "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2", Fullname = "Jane Smith",
                     Email = "janesmith@example.com", Avatar = "ahihi", Gender = "Gay", IdentityCard = "Ahihi", Status = true, Phone = "12312321"
                 },
                 new User
                 {
-                    Id = 3, RoleId = roles[0].Id, Username = "admin1", Password = "hashedPassword3", Fullname = "Alice Johnson",
+                    Id = 3, RoleId = roles[0].Id, Username = "admin1", Password = "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2", Fullname = "Alice Johnson",
                     Email = "alicejohnson@example.com", Avatar = "ahihi", Gender = "Female", IdentityCard = "Ahihi", Status = true, Phone = "123123"
                 }
             };
@@ -202,7 +202,9 @@ namespace FuStudy_Repository.Entity
             var wallets = new List<Wallet>
             {
                 new Wallet {Id = 1, UserId = users[0].Id, Balance = 100, Status = true },
-                new Wallet {Id = 2, UserId = users[1].Id, Balance = 200, Status = false }
+                new Wallet {Id = 2, UserId = users[1].Id, Balance = 200, Status = true },
+                new Wallet {Id = 3, UserId = users[2].Id, Balance = 200, Status = true }
+
             };
             modelBuilder.Entity<Wallet>().HasData(wallets);
 
