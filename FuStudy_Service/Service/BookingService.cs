@@ -181,10 +181,25 @@ namespace FuStudy_Service.Service
             }
 
             var existingBooking = _unitOfWork.BookingRepository.Get(
-                    filter: p => p.Status == BookingStatus.Accepted.ToString()).FirstOrDefault();
+                    filter: p => p.Status == BookingStatus.Accepted.ToString(),
+                    includeProperties: "Mentor,User").FirstOrDefault();
+
             if (existingBooking != null)
             {
-                throw new CustomException.DataExistException($"Booking with {existingBooking.Mentor.User.Fullname} still exists within the requested time.");
+                var existingMentor = _unitOfWork.MentorRepository.GetByID(existingBooking.MentorId);
+                var existingUser = _unitOfWork.UserRepository.GetByID(existingMentor.UserId);
+                throw new CustomException.DataExistException($"Booking with {existingUser} still exists within the requested time.");
+            }
+
+            var pendingBooking = _unitOfWork.BookingRepository.Get(
+                    filter: p => p.Status == BookingStatus.Pending.ToString(),
+                    includeProperties: "Mentor,User").FirstOrDefault();
+
+            if (pendingBooking != null)
+            {
+                var pendingMentor = _unitOfWork.MentorRepository.GetByID(pendingBooking.MentorId);
+                var pendingUser = _unitOfWork.UserRepository.GetByID(pendingMentor.UserId);
+                throw new CustomException.DataExistException($"The Previous Booking with {pendingUser.Fullname} still Pending. Please Cancel!!!");
             }
 
             /*var existingConversation = _unitOfWork.ConversationRepository.Get(
@@ -203,6 +218,10 @@ namespace FuStudy_Service.Service
                 booking.UserId = userId;
                 booking.CreateAt = DateTime.Now;
                 booking.StartTime = request.StartTime;
+                if (booking.StartTime <= booking.CreateAt.AddHours(2))
+                {
+                    throw new CustomException.InvalidDataException("Start time must be at least 2 hour away from create time!!!");
+                }
                 booking.EndTime = request.StartTime.Add(request.Duration);
                 booking.Status = BookingStatus.Pending.ToString();
 

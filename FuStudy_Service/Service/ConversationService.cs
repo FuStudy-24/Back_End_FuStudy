@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
+using FuStudy_Model.Enum;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
@@ -154,7 +155,7 @@ namespace FuStudy_Service.Service
             var durationBooking = _unitOfWork.BookingRepository.Get(
                     d => d.UserId == userId && 
                     d.MentorId == conversation.User2Id &&
-                    d.Status == "Accepted").FirstOrDefault();
+                    d.Status == BookingStatus.Accepted.ToString()).FirstOrDefault();
 
             if (durationBooking != null)
             {
