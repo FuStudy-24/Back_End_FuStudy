@@ -3,12 +3,15 @@
 
 name: Deploy FuStudy API
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch: 
     
 env: 
   AZURE_WEBAPP_NAME: "fustudyapi"
 
-jobs: 
+jobs:
   build:
     runs-on: windows-latest
     steps:
