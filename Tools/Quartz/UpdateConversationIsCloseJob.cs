@@ -23,16 +23,60 @@ public class UpdateConversationIsCloseJob : IJob
         try
         {
             var currentTime = DateTime.Now;
+
+            var bookings = _unitOfWork.BookingRepository
+                .Get(b => b.Status == "Pending");
+
+            foreach (var booking in bookings)
+            {
+                var overTimeBooking = booking.CreateAt.AddMinutes(5);
+                if (overTimeBooking <= currentTime)
+                {
+                    booking.Status = "OverTime";
+                    _unitOfWork.BookingRepository.Update(booking);
+                }
+
+            }
+
+            var acceptBookings = _unitOfWork.BookingRepository
+                .Get(b => b.Status == "Accept");
+
+            foreach (var booking in acceptBookings)
+            {
+                if (booking.EndTime >= currentTime)
+                {
+                    booking.Status = "End";
+                    //var conversation = _unitOfWork.ConversationRepository.Get
+
+                    _unitOfWork.BookingRepository.Update(booking);
+                }
+            }
+
             var conversations = _unitOfWork.ConversationRepository
                 .Get(c => c.IsClose == false)
                 .ToList();
+            var bk =  _unitOfWork.BookingRepository.Get(b => b.Status == "End").FirstOrDefault();
 
             foreach (var conversation in conversations)
             {
-                var endTimeWithDuration = conversation.EndTime;
-                if (endTimeWithDuration <= currentTime)
+                    var endTimeWithDuration = conversation.EndTime;
+                    if (endTimeWithDuration <= currentTime)
+                    {
+                        conversation.IsClose = true;
+                        _unitOfWork.ConversationRepository.Update(conversation);
+                    }
+            }
+
+            var openconversations = _unitOfWork.ConversationRepository
+                .Get(oc => oc.IsClose == true)
+                .ToList() ;
+
+            foreach (var conversation in openconversations)
+            {
+                var startTimeWithDuration = conversation.EndTime - conversation.Duration;
+                if (startTimeWithDuration == currentTime)
                 {
-                    conversation.IsClose = true;
+                    conversation.IsClose = false;
                     _unitOfWork.ConversationRepository.Update(conversation);
                 }
             }
@@ -50,6 +94,8 @@ public class UpdateConversationIsCloseJob : IJob
                     _unitOfWork.StudentSubcriptionRepository.Update(studentSubcription);
                 }
             }
+
+            
 
             _unitOfWork.Save();
         }

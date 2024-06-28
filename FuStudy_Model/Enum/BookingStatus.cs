@@ -10,6 +10,9 @@ namespace FuStudy_Model.Enum
     {
         Accepted,
         Pending,
-        Declined
+        Declined,
+        Cancel,
+        OverTime,
+        End
     }
 }

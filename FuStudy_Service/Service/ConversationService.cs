@@ -142,9 +142,7 @@ namespace FuStudy_Service.Service
             var conversation = new Conversation();
             conversation.User1Id = userId;
             conversation.User2Id = mentorId;
-            conversation.CreateAt = DateTime.Now;
             conversation.LastMessage = "";
-            conversation.IsClose = false;
 
             var userId2 = _unitOfWork.UserRepository.GetByID(conversation.User2Id);
 
@@ -158,8 +156,10 @@ namespace FuStudy_Service.Service
 
             if (durationBooking != null)
             {
+                conversation.CreateAt = durationBooking.StartTime;
                 conversation.Duration = durationBooking.Duration;
-                conversation.EndTime = conversation.CreateAt + durationBooking.Duration;
+                conversation.EndTime = durationBooking.EndTime;
+                conversation.IsClose = false;
             }
 
             _unitOfWork.ConversationRepository.Insert(conversation);

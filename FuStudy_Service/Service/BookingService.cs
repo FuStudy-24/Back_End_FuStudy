@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Data.Entity.Core.Common.EntitySql;
 using FuStudy_Model.Enum;
 using Microsoft.IdentityModel.Tokens;
+using Firebase.Auth;
 
 namespace FuStudy_Service.Service
 {
@@ -68,11 +69,48 @@ namespace FuStudy_Service.Service
             }
 
             var bookings = _unitOfWork.BookingRepository.Get(filter: p =>
-                                                        p.UserId == userId, includeProperties: "User,Mentor");
+                                                        p.UserId == userId,
+                                                        orderBy: q => q.OrderBy(b => b.Status),
+                                                        includeProperties: "User,Mentor");
 
             if (!bookings.Any())
             {
                 throw new CustomException.DataNotFoundException($"Booking not found with UserId: {userId}");
+            }
+
+            var bookingResponses = _mapper.Map<List<BookingResponse>>(bookings);
+
+            return bookingResponses;
+
+        }
+
+        public async Task<List<BookingResponse>> GetAllMentorBookingByUserId()
+        {
+            var userIdStr = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            if (!long.TryParse(userIdStr, out long userId))
+            {
+                throw new Exception("User ID claim invalid.");
+            }
+
+            // hàm để check role trong HttpContext
+            var userRoles = _httpContextAccessor.HttpContext.User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value).ToList();
+
+            if (!userRoles.Contains("Mentor"))
+            {
+                throw new CustomException.UnauthorizedAccessException("User does not have the required role to get all self booking history.");
+            }
+            var mentor = _unitOfWork.MentorRepository.Get(m => m.UserId == userId).FirstOrDefault();
+
+            var bookings = _unitOfWork.BookingRepository.Get(filter: p =>
+                                                        p.MentorId == mentor.Id,
+                                                        orderBy: q => q.OrderBy(b => b.Status),
+                                                        includeProperties: "User,Mentor");
+
+            if (!bookings.Any())
+            {
+                throw new CustomException.DataNotFoundException($"Booking not found with MentorId: {mentor.Id}");
             }
 
             var bookingResponses = _mapper.Map<List<BookingResponse>>(bookings);
@@ -156,6 +194,8 @@ namespace FuStudy_Service.Service
                 var booking = _mapper.Map<Booking>(request);
 
                 booking.UserId = userId;
+                booking.CreateAt = DateTime.Now;
+                booking.StartTime = request.StartTime;
                 booking.EndTime = request.StartTime.Add(request.Duration);
                 booking.Status = BookingStatus.Pending.ToString();
 
@@ -177,15 +217,87 @@ namespace FuStudy_Service.Service
             }
         }
 
-        public async Task<bool> AcceptBooking(long id)
+        public async Task<bool>  CancelBooking(long id)
         {
-            var booking = await _unitOfWork.BookingRepository.GetByIdAsync(id);
+            var userIdStr = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            if (!long.TryParse(userIdStr, out long userId))
+            {
+                throw new Exception("User ID claim invalid.");
+            }
+
+            // hàm để check role trong HttpContext
+            var userRoles = _httpContextAccessor.HttpContext.User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value).ToList();
+
+            if (!userRoles.Contains("Student"))
+            {
+                throw new CustomException.UnauthorizedAccessException("User does not have the required role to create a booking.");
+            }
+
+            var booking = _unitOfWork.BookingRepository.GetByID(id);
             if (booking == null)
             {
                 throw new CustomException.DataNotFoundException($"Booking with id:{id} not found");
             }
 
-            booking.EndTime = DateTime.Now + booking.Duration;
+            //Cancel before OverTime
+            if (booking.Status.Contains("Pending"))
+            {
+                var student = _unitOfWork.StudentRepository.Get(s => s.UserId == userId).FirstOrDefault();
+                var studentSubcription = _unitOfWork.StudentSubcriptionRepository
+                    .Get(ss => ss.StudentId == student.Id)
+                    .FirstOrDefault();
+
+                studentSubcription.CurrentMeeting -= 1;
+                booking.Status = BookingStatus.Cancel.ToString();
+
+                _unitOfWork.StudentSubcriptionRepository.Update(studentSubcription);
+                _unitOfWork.BookingRepository.Update(booking);
+                _unitOfWork.Save();
+            }
+
+            //Cancel after Mentor Accepted
+            if (booking.Status.Contains("Accept")) 
+            {
+                booking.Status = BookingStatus.End.ToString();
+                var conversation = _unitOfWork.ConversationRepository
+                    .Get(c => c.User1Id == userId && c.IsClose == false)
+                    .FirstOrDefault();
+
+                conversation.IsClose = true;
+
+                _unitOfWork.ConversationRepository.Update(conversation);
+                _unitOfWork.BookingRepository.Update(booking);
+                _unitOfWork.Save();
+            }
+
+            return true;
+        }
+
+        public async Task<bool> AcceptBooking(long id)
+        {
+            var userIdStr = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            if (!long.TryParse(userIdStr, out long userId))
+            {
+                throw new Exception("User ID claim invalid.");
+            }
+
+            // hàm để check role trong HttpContext
+            var userRoles = _httpContextAccessor.HttpContext.User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value).ToList();
+
+            if (!userRoles.Contains("Mentor"))
+            {
+                throw new CustomException.UnauthorizedAccessException("User does not have the required role to create a booking.");
+            }
+
+            var booking = await _unitOfWork.BookingRepository.GetByIdAsync(id);
+            if (booking == null)
+            {
+                throw new CustomException.DataNotFoundException($"Booking with id:{id} not found");
+            }
 
             booking.Status = BookingStatus.Accepted.ToString();
             await _unitOfWork.BookingRepository.UpdateAsync(booking);
@@ -204,6 +316,22 @@ namespace FuStudy_Service.Service
 
         public async Task<bool> RejectBooking(long id)
         {
+            var userIdStr = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            if (!long.TryParse(userIdStr, out long userId))
+            {
+                throw new Exception("User ID claim invalid.");
+            }
+
+            // hàm để check role trong HttpContext
+            var userRoles = _httpContextAccessor.HttpContext.User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value).ToList();
+
+            if (!userRoles.Contains("Mentor"))
+            {
+                throw new CustomException.UnauthorizedAccessException("User does not have the required role to create a booking.");
+            }
+
             var booking = await _unitOfWork.BookingRepository.GetByIdAsync(id);
             if (booking == null)
             {
