@@ -134,6 +134,37 @@ namespace FuStudy_API.Controllers.Booking
             }
         }
 
+        [HttpPost("CreateBookingByCoin")]
+        [Authorize]
+        public async Task<IActionResult> CreateBookingByCoin([FromBody] CreateBookingRequest request)
+        {
+            try
+            {
+                BookingResponse response = await _bookingService.CreateBookingByCoin(request);
+                return CustomResult("Created Successfully", response, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataExistException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Conflict);
+            }
+            catch(CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Conflict);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.UnauthorizedAccessException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Forbidden);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
         [HttpPost("CancelBooking/{id}")]
         [Authorize]
         public async Task<IActionResult> CancelBooking(long id)

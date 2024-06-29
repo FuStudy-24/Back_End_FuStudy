@@ -243,6 +243,106 @@ namespace FuStudy_Service.Service
             }
         }
 
+        public async Task<BookingResponse> CreateBookingByCoin(CreateBookingRequest request)
+        {
+            var userIdStr = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            if (!long.TryParse(userIdStr, out long userId))
+            {
+                throw new Exception("User ID claim invalid.");
+            }
+
+            // hàm để check role trong HttpContext
+            var userRoles = _httpContextAccessor.HttpContext.User.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value).ToList();
+
+            if (!userRoles.Contains("Student"))
+            {
+                throw new CustomException.UnauthorizedAccessException("User does not have the required role to create a booking.");
+            }
+
+            // Check if MentorId exists
+            bool mentorExists = await _unitOfWork.MentorRepository.ExistsAsync(m => m.Id == request.MentorId);
+            if (!mentorExists)
+            {
+                throw new CustomException.DataNotFoundException($"Mentor with ID {request.MentorId} does not exist.");
+            }
+
+            var existingBooking = _unitOfWork.BookingRepository.Get(
+                    filter: p => p.Status == BookingStatus.Accepted.ToString(),
+                    includeProperties: "Mentor,User").FirstOrDefault();
+
+            if (existingBooking != null)
+            {
+                var existingMentor = _unitOfWork.MentorRepository.GetByID(existingBooking.MentorId);
+                var existingUser = _unitOfWork.UserRepository.GetByID(existingMentor.UserId);
+                throw new CustomException.DataExistException($"Booking with {existingUser} still exists within the requested time.");
+            }
+
+            var pendingBooking = _unitOfWork.BookingRepository.Get(
+                    filter: p => p.Status == BookingStatus.Pending.ToString(),
+                    includeProperties: "Mentor,User").FirstOrDefault();
+
+            if (pendingBooking != null)
+            {
+                var pendingMentor = _unitOfWork.MentorRepository.GetByID(pendingBooking.MentorId);
+                var pendingUser = _unitOfWork.UserRepository.GetByID(pendingMentor.UserId);
+                throw new CustomException.DataExistException($"The Previous Booking with {pendingUser.Fullname} still Pending. Please Cancel!!!");
+            }
+
+            /*var existingConversation = _unitOfWork.ConversationRepository.Get(
+                    filter: p => p.EndTime > DateTime.Now && p.IsClose == false, includeProperties: "User2").FirstOrDefault();
+
+            if (existingConversation != null)
+            {
+                throw new CustomException.DataExistException($"The Conversation with {existingConversation.User2.Fullname} still exists within the requested time.");
+            }*/
+
+            var walet = _unitOfWork.WalletRepository.Get(w => w.UserId == userId && w.Status == true).FirstOrDefault();
+            if (walet == null)
+            {
+                throw new CustomException.DataNotFoundException("User need to create wallet first!!!");
+            }
+            if (walet.Balance < 1)
+            {
+                throw new CustomException.InvalidDataException("Your current coins are not available. Please go to the payment page to add more coins.");
+            }
+            walet.Balance--;
+            _unitOfWork.WalletRepository.Update(walet);
+
+            try
+            {
+                // Tạo biến mapper với model booking
+                var booking = _mapper.Map<Booking>(request);
+
+                booking.UserId = userId;
+                booking.CreateAt = DateTime.Now;
+                booking.StartTime = request.StartTime;
+                if (booking.StartTime <= booking.CreateAt.AddHours(2))
+                {
+                    throw new CustomException.InvalidDataException("Start time must be at least 2 hour away from create time!!!");
+                }
+                booking.EndTime = request.StartTime.Add(request.Duration);
+                booking.Status = BookingStatus.Pending.ToString();
+
+                await _unitOfWork.BookingRepository.AddAsync(booking);
+                await _unitOfWork.BookingRepository.SaveChangesAsync();
+
+                // Map lại với response
+                var response = _mapper.Map<BookingResponse>(booking);
+                Console.WriteLine(response);
+                return response;
+            }
+            catch (DbUpdateException ex)
+            {
+                // Log lỗi để có thể xem được thông tin chi tiết
+                Console.WriteLine($"DbUpdateException occurred: {ex.InnerException?.Message}");
+
+                // Bao gồm chi tiết lỗi từ inner exception
+                throw new Exception($"Error occurred while saving to database. Details: {ex.InnerException?.Message}");
+            }
+        }
+
         public async Task<bool>  CancelBooking(long id)
         {
             var userIdStr = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
