@@ -15,6 +15,7 @@ namespace FuStudy_Service.Interface
         Task<List<BookingResponse>> GetAllStudentBookingByUserId();
         Task<List<BookingResponse>> GetAllMentorBookingByUserId();
         Task<List<BookingResponse>> GetAllBookingByMentorId(long id);
+        Task<List<BookingResponse>> GetAllAcceptedBookingByMentorId(long id);
         Task<BookingResponse> CreateBooking(CreateBookingRequest request);
         Task<BookingResponse> CreateBookingByCoin(CreateBookingRequest request);
         Task<bool> CancelBooking(long id);

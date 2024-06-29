@@ -133,6 +133,21 @@ namespace FuStudy_Service.Service
             return bookingResponses;
         }
 
+        public async Task<List<BookingResponse>> GetAllAcceptedBookingByMentorId(long id)
+        {
+            var bookings = _unitOfWork.BookingRepository.Get(filter: p =>
+                                                        p.MentorId == id && p.Status == BookingStatus.Accepted.ToString(),
+                                                        includeProperties: "User,Mentor");
+
+            if (!bookings.Any())
+            {
+                throw new CustomException.DataNotFoundException($"Booking not found with MentorId: {id}");
+            }
+
+            var bookingResponses = _mapper.Map<List<BookingResponse>>(bookings);
+            return bookingResponses;
+        }
+
         public async Task<BookingResponse> CreateBooking(CreateBookingRequest request)
         {
             var userIdStr = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
@@ -165,34 +180,35 @@ namespace FuStudy_Service.Service
                 throw new CustomException.DataNotFoundException("Student not found.");
             }
 
-            // Get StudentSubscription with Subscription included
-            var studentSubscription = _unitOfWork.StudentSubcriptionRepository.Get(
+            // Get StudentSubcription with Subscription included
+            var studentSubcription = _unitOfWork.StudentSubcriptionRepository.Get(
                 p => p.StudentId == student.Id, includeProperties: "Subcription").FirstOrDefault();
 
-            if (studentSubscription == null)
+            if (studentSubcription == null)
             {
                 throw new CustomException.DataNotFoundException("Student subscription not found.");
             }
 
-            // Check if currentMeeting has reached limitMeeting
-            if (studentSubscription.CurrentMeeting >= studentSubscription.Subcription.LimitMeeting)
-            {
-                throw new Exception("You have reached the limit of meetings for your subscription.");
-            }
+            var existingBookings = _unitOfWork.BookingRepository.Get(
+                    filter: p => p.UserId == userId &&
+                    p.MentorId == request.MentorId &&
+                    p.Status == BookingStatus.Accepted.ToString(),
+                    includeProperties: "Mentor,User").ToList();
 
-            var existingBooking = _unitOfWork.BookingRepository.Get(
-                    filter: p => p.Status == BookingStatus.Accepted.ToString(),
-                    includeProperties: "Mentor,User").FirstOrDefault();
-
-            if (existingBooking != null)
+            foreach (var existingBooking in existingBookings)
             {
-                var existingMentor = _unitOfWork.MentorRepository.GetByID(existingBooking.MentorId);
-                var existingUser = _unitOfWork.UserRepository.GetByID(existingMentor.UserId);
-                throw new CustomException.DataExistException($"Booking with {existingUser} still exists within the requested time.");
+                if (existingBooking.StartTime <= request.StartTime && request.StartTime < existingBooking.EndTime)
+                {
+                    var existingMentor = _unitOfWork.MentorRepository.GetByID(existingBooking.MentorId);
+                    var existingUser = _unitOfWork.UserRepository.GetByID(existingMentor.UserId);
+                    throw new CustomException.DataExistException($"Booking with {existingUser} still exists within the requested time.");
+                }
             }
 
             var pendingBooking = _unitOfWork.BookingRepository.Get(
-                    filter: p => p.Status == BookingStatus.Pending.ToString(),
+                    filter: p => p.UserId == userId &&
+                    p.MentorId == request.MentorId &&
+                    p.Status == BookingStatus.Pending.ToString(),
                     includeProperties: "Mentor,User").FirstOrDefault();
 
             if (pendingBooking != null)
@@ -202,36 +218,45 @@ namespace FuStudy_Service.Service
                 throw new CustomException.DataExistException($"The Previous Booking with {pendingUser.Fullname} still Pending. Please Cancel!!!");
             }
 
-            /*var existingConversation = _unitOfWork.ConversationRepository.Get(
-                    filter: p => p.EndTime > DateTime.Now && p.IsClose == false, includeProperties: "User2").FirstOrDefault();
-
-            if (existingConversation != null)
-            {
-                throw new CustomException.DataExistException($"The Conversation with {existingConversation.User2.Fullname} still exists within the requested time.");
-            }*/
-
             try
             {
                 // Tạo biến mapper với model booking
                 var booking = _mapper.Map<Booking>(request);
-
                 booking.UserId = userId;
                 booking.CreateAt = DateTime.Now;
                 booking.StartTime = request.StartTime;
-                if (booking.StartTime <= booking.CreateAt.AddHours(2))
+
+                if (booking.StartTime <= booking.CreateAt.AddHours(1))
                 {
-                    throw new CustomException.InvalidDataException("Start time must be at least 2 hour away from create time!!!");
+                    throw new CustomException.InvalidDataException("Start time must be at least 1 hours away from create time!");
                 }
+
                 booking.EndTime = request.StartTime.Add(request.Duration);
                 booking.Status = BookingStatus.Pending.ToString();
+
+                if (studentSubcription.CurrentMeeting == studentSubcription.Subcription.LimitMeeting)
+                {
+                    var bookingResponse = _mapper.Map<BookingResponse>(booking);
+                    bookingResponse.Warning = "You have reached the meeting limit for your subscription. The system will use your coins to buy them.";
+
+                    var wallet = _unitOfWork.WalletRepository.Get(w => w.UserId == userId).FirstOrDefault();
+                    if (wallet.Balance <= 0)
+                    {
+                        throw new CustomException.InvalidDataException("Your coin is not enough to make a booking.");
+                    }
+                }
 
                 await _unitOfWork.BookingRepository.AddAsync(booking);
                 await _unitOfWork.BookingRepository.SaveChangesAsync();
 
-                // Map lại với response
-                var response = _mapper.Map<BookingResponse>(booking);
-                Console.WriteLine(response);
-                return response;
+                var finalBookingResponse = _mapper.Map<BookingResponse>(booking);
+
+                if (studentSubcription.CurrentMeeting == studentSubcription.Subcription.LimitMeeting)
+                {
+                    finalBookingResponse.Warning = "You have reached the meeting limit for your subscription. The system will use your coins to buy them.";
+                }
+
+                return finalBookingResponse;
             }
             catch (DbUpdateException ex)
             {
@@ -433,10 +458,20 @@ namespace FuStudy_Service.Service
             var student = _unitOfWork.StudentRepository.Get(s => s.UserId == booking.UserId).FirstOrDefault();
 
             var studentSubcription = _unitOfWork.StudentSubcriptionRepository.Get(
-                        filter: p => p.StudentId == student.Id).FirstOrDefault();
-            studentSubcription.CurrentMeeting++;
+                        filter: p => p.StudentId == student.Id, includeProperties: "Subcription").FirstOrDefault();
 
-            await _unitOfWork.StudentSubcriptionRepository.UpdateAsync(studentSubcription);
+            if (studentSubcription.CurrentMeeting == studentSubcription.Subcription.LimitMeeting)
+            {
+                var wallet = _unitOfWork.WalletRepository.Get(w => w.UserId == studentSubcription.Student.UserId).FirstOrDefault();
+                wallet.Balance--;
+                await _unitOfWork.WalletRepository.UpdateAsync(wallet);
+            }
+            else
+            {
+                studentSubcription.CurrentMeeting++;
+                await _unitOfWork.StudentSubcriptionRepository.UpdateAsync(studentSubcription);
+            }
+            
             _unitOfWork.Save();
             return true;
         }

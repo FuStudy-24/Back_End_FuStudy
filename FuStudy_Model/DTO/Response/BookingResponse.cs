@@ -22,6 +22,8 @@ namespace FuStudy_Model.DTO.Response
 
         public DateTime EndTime { get; set; }
 
+        public String Warning { get; set; }
+
         public string Status { get; set; }
 
         public virtual User User { get; set; }

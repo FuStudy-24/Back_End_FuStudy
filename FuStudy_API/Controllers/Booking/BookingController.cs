@@ -106,6 +106,24 @@ namespace FuStudy_API.Controllers.Booking
             }
         }
 
+        [HttpGet("GetAllAcceptedBookingByMentorId/{id}")]
+        public async Task<IActionResult> GetAllAcceptedBookingByMentorId(long id)
+        {
+            try
+            {
+                var bookings = await _bookingService.GetAllAcceptedBookingByMentorId(id);
+
+                return CustomResult("Data Load Successfully", bookings);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
 
         [HttpPost("CreateBooking")]
         [Authorize]
@@ -117,6 +135,10 @@ namespace FuStudy_API.Controllers.Booking
                 return CustomResult("Created Successfully", response, HttpStatusCode.OK);
             }
             catch (CustomException.DataExistException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Conflict);
+            }
+            catch (CustomException.InvalidDataException ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.Conflict);
             }
