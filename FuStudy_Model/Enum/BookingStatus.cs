@@ -13,6 +13,7 @@ namespace FuStudy_Model.Enum
         Declined,
         Canceled,
         OverTime,
+        Unavailable,
         Ended
     }
 }

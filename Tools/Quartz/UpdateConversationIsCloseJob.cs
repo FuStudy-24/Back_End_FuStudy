@@ -25,12 +25,13 @@ public class UpdateConversationIsCloseJob : IJob
         {
             var currentTime = DateTime.Now;
 
+            //Auto OverTime Booking 30min
             var bookings = _unitOfWork.BookingRepository
                 .Get(b => b.Status == "Pending");
 
             foreach (var booking in bookings)
             {
-                var overTimeBooking = booking.CreateAt.AddHours(1);
+                var overTimeBooking = booking.CreateAt.AddHours(0.5);
                 if (overTimeBooking <= currentTime)
                 {
                     booking.Status = "OverTime";
@@ -40,11 +41,11 @@ public class UpdateConversationIsCloseJob : IJob
             }
 
             //Auto End Booking & close conversation
-            var acceptBookings = _unitOfWork.BookingRepository
+            var closeBookings = _unitOfWork.BookingRepository
                 .Get(b => b.Status == "Accepted")
                 .ToList();
 
-            foreach (var booking in acceptBookings)
+            foreach (var booking in closeBookings)
             {
                 if (booking.EndTime <= currentTime)
                 {
@@ -66,6 +67,53 @@ public class UpdateConversationIsCloseJob : IJob
                 }
             }
 
+            //Auto Unavailable those Pending have same time with Accepted 
+            var pendingBookings = _unitOfWork.BookingRepository
+                    .Get(b => b.Status == "Pending")
+                    .ToList();
+
+            foreach (var pendingBooking in pendingBookings)
+            {
+                var overlappingAcceptedBookings = _unitOfWork.BookingRepository
+                    .Get(b => b.Status == "Accepted" && b.MentorId == pendingBooking.MentorId)
+                    .ToList();
+
+                bool isOverlapping = overlappingAcceptedBookings.Any(acceptedBooking =>
+                    (pendingBooking.StartTime >= acceptedBooking.StartTime && pendingBooking.StartTime < acceptedBooking.EndTime) ||
+                    (pendingBooking.EndTime > acceptedBooking.StartTime && pendingBooking.EndTime <= acceptedBooking.EndTime) ||
+                    (pendingBooking.StartTime <= acceptedBooking.StartTime && pendingBooking.EndTime >= acceptedBooking.EndTime)
+                );
+
+                if (isOverlapping)
+                {
+                    pendingBooking.Status = "Unavailable";
+                    _unitOfWork.BookingRepository.Update(pendingBooking);
+                }
+            }
+
+            // Auto Open Conversation
+            var openConversations = _unitOfWork.ConversationRepository
+                .Get(oc => oc.IsClose == true)
+                .ToList();
+
+            foreach (var conversation in openConversations)
+            {
+                if (conversation.CreateAt <= currentTime && currentTime <= conversation.EndTime)
+                {
+                    var booking = _unitOfWork.BookingRepository.Get(
+                        c => c.UserId == conversation.User1Id &&
+                             c.MentorId == conversation.User2Id &&
+                             c.EndTime == conversation.EndTime &&
+                             c.Status == "Accepted").FirstOrDefault();
+
+                    if (booking != null)
+                    {
+                        conversation.IsClose = false;
+                        _unitOfWork.ConversationRepository.Update(conversation);
+                    }
+                }
+            }
+
             /*var conversations = _unitOfWork.ConversationRepository
                 .Get(c => c.IsClose == false)
                 .ToList();
@@ -79,30 +127,6 @@ public class UpdateConversationIsCloseJob : IJob
                     _unitOfWork.ConversationRepository.Update(conversation);
                 }
             }*/
-
-            //Auto openconversation
-            var openConversations = _unitOfWork.ConversationRepository
-                .Get(oc => oc.IsClose == true)
-                .ToList();
-
-            foreach (var conversation in openConversations)
-            {
-                if (conversation.CreateAt >= currentTime)
-                {
-                    var startTimeWithDuration = conversation.EndTime - conversation.Duration;
-                    var booking = _unitOfWork.BookingRepository.Get(
-                            c => c.UserId == conversation.User1Id &&
-                            c.MentorId == conversation.User2Id &&
-                            c.EndTime == conversation.EndTime &&
-                            c.Status == "Accepted").FirstOrDefault();
-                    if (booking != null)
-                    {
-                        conversation.IsClose = false;
-                        _unitOfWork.ConversationRepository.Update(conversation);
-                    }
-                }
-                    
-            }
 
             var studentSubcriptions = _unitOfWork.StudentSubcriptionRepository
                 .Get(c => c.Status == true)
@@ -119,7 +143,6 @@ public class UpdateConversationIsCloseJob : IJob
             }
 
             
-
             _unitOfWork.Save();
         }
         catch (Exception ex)
