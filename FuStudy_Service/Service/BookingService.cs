@@ -263,6 +263,8 @@ namespace FuStudy_Service.Service
                 }
                 else if (request.BookingMethod == "Coin")
                 {
+                    await _unitOfWork.BookingRepository.AddAsync(booking);
+                    await _unitOfWork.BookingRepository.SaveChangesAsync();
                     var bookingResponse = _mapper.Map<BookingResponse>(booking);
                     return bookingResponse;
                 }
