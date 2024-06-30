@@ -179,7 +179,7 @@ namespace FuStudy_API.Controllers.Booking
             }
         }
 
-        [HttpPost("AcceptBooking")]
+        [HttpPost("AcceptBooking/{id}")]
         [Authorize]
         public async Task<IActionResult> AcceptBooking(long id)
         {
