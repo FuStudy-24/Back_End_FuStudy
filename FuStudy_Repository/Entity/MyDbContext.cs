@@ -169,7 +169,7 @@ namespace FuStudy_Repository.Entity
                     Content = "How to sort an array in C#?",
                     TotalRating = 1,
                     CreateDate = DateTime.Now,
-                    Image = "ahihi"
+                    Image = "https://media.discordapp.net/attachments/1100098066087940278/1253909122785476618/42f759bd063e0f6a6b00a00a8a1b83c8_91137315422485277.webp?ex=66821d5f&is=6680cbdf&hm=703d0469dbe6d51d7b1be7b182a9b514bee6d535d9dee450ef960c6bcebf453a&=&format=webp&width=635&height=635"
                     
                 }
             };
