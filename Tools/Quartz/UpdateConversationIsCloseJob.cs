@@ -49,7 +49,6 @@ public class UpdateConversationIsCloseJob : IJob
             {
                 if (booking.EndTime <= currentTime)
                 {
-                    // Fetch the corresponding conversation
                     var conversation = _unitOfWork.ConversationRepository.Get(
                         c => c.User1Id == booking.UserId &&
                         c.User2Id == booking.MentorId &&
@@ -58,9 +57,13 @@ public class UpdateConversationIsCloseJob : IJob
 
                     if (conversation != null)
                     {
+                        var mentor = _unitOfWork.MentorRepository.Get(m => m.Id == conversation.User2Id).FirstOrDefault();
+
+                        mentor.OnlineStatus = "Online";
                         booking.Status = "Ended";
                         conversation.IsClose = true;
 
+                        _unitOfWork.MentorRepository.Update(mentor);
                         _unitOfWork.BookingRepository.Update(booking);
                         _unitOfWork.ConversationRepository.Update(conversation);
                     }
@@ -108,8 +111,13 @@ public class UpdateConversationIsCloseJob : IJob
 
                     if (booking != null)
                     {
+                        var mentor = _unitOfWork.MentorRepository.Get(m => m.Id == booking.MentorId).FirstOrDefault();
+
+                        mentor.OnlineStatus = "BeingBook";
                         conversation.IsClose = false;
+
                         _unitOfWork.ConversationRepository.Update(conversation);
+                        _unitOfWork.MentorRepository.Update(mentor);
                     }
                 }
             }

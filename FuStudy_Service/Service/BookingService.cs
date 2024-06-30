@@ -234,29 +234,42 @@ namespace FuStudy_Service.Service
                 booking.EndTime = request.StartTime.Add(request.Duration);
                 booking.Status = BookingStatus.Pending.ToString();
 
-                if (studentSubcription.CurrentMeeting == studentSubcription.Subcription.LimitMeeting)
+                if (request.BookingMethod == "Subcription")
+                {
+                    // Logic when BookingMethod is Subcription
+                    if (studentSubcription.CurrentMeeting == studentSubcription.Subcription.LimitMeeting)
+                    {
+                        var bookingResponse = _mapper.Map<BookingResponse>(booking);
+                        bookingResponse.Warning = "You have reached the meeting limit for your subscription. The system will use your coins to buy them.";
+
+                        var wallet = _unitOfWork.WalletRepository.Get(w => w.UserId == userId).FirstOrDefault();
+                        if (wallet.Balance <= 0)
+                        {
+                            throw new CustomException.InvalidDataException("Your coin is not enough to make a booking.");
+                        }
+                    }
+
+                    await _unitOfWork.BookingRepository.AddAsync(booking);
+                    await _unitOfWork.BookingRepository.SaveChangesAsync();
+
+                    var finalBookingResponse = _mapper.Map<BookingResponse>(booking);
+
+                    if (studentSubcription.CurrentMeeting == studentSubcription.Subcription.LimitMeeting)
+                    {
+                        finalBookingResponse.Warning = "You have reached the meeting limit for your subscription. The system will use your coins to buy them.";
+                    }
+
+                    return finalBookingResponse;
+                }
+                else if (request.BookingMethod == "Coin")
                 {
                     var bookingResponse = _mapper.Map<BookingResponse>(booking);
-                    bookingResponse.Warning = "You have reached the meeting limit for your subscription. The system will use your coins to buy them.";
-
-                    var wallet = _unitOfWork.WalletRepository.Get(w => w.UserId == userId).FirstOrDefault();
-                    if (wallet.Balance <= 0)
-                    {
-                        throw new CustomException.InvalidDataException("Your coin is not enough to make a booking.");
-                    }
+                    return bookingResponse;
                 }
-
-                await _unitOfWork.BookingRepository.AddAsync(booking);
-                await _unitOfWork.BookingRepository.SaveChangesAsync();
-
-                var finalBookingResponse = _mapper.Map<BookingResponse>(booking);
-
-                if (studentSubcription.CurrentMeeting == studentSubcription.Subcription.LimitMeeting)
+                else
                 {
-                    finalBookingResponse.Warning = "You have reached the meeting limit for your subscription. The system will use your coins to buy them.";
+                    throw new CustomException.InvalidDataException("BookingMethod is invalid");
                 }
-
-                return finalBookingResponse;
             }
             catch (DbUpdateException ex)
             {
@@ -360,18 +373,27 @@ namespace FuStudy_Service.Service
             var studentSubcription = _unitOfWork.StudentSubcriptionRepository.Get(
                         filter: p => p.StudentId == student.Id, includeProperties: "Subcription").FirstOrDefault();
 
-            if (studentSubcription.CurrentMeeting == studentSubcription.Subcription.LimitMeeting)
+            if (booking.BookingMethod == "Coin")
             {
                 var wallet = _unitOfWork.WalletRepository.Get(w => w.UserId == studentSubcription.Student.UserId).FirstOrDefault();
                 wallet.Balance--;
                 await _unitOfWork.WalletRepository.UpdateAsync(wallet);
             }
-            else
+            else if (booking.BookingMethod == "Subcription")
             {
-                studentSubcription.CurrentMeeting++;
-                await _unitOfWork.StudentSubcriptionRepository.UpdateAsync(studentSubcription);
+                if (studentSubcription.CurrentMeeting == studentSubcription.Subcription.LimitMeeting)
+                {
+                    var wallet = _unitOfWork.WalletRepository.Get(w => w.UserId == studentSubcription.Student.UserId).FirstOrDefault();
+                    wallet.Balance--;
+                    await _unitOfWork.WalletRepository.UpdateAsync(wallet);
+                }
+                else
+                {
+                    studentSubcription.CurrentMeeting++;
+                    await _unitOfWork.StudentSubcriptionRepository.UpdateAsync(studentSubcription);
+                }
             }
-            
+
             _unitOfWork.Save();
             return true;
         }
