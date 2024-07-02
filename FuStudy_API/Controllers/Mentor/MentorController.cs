@@ -144,7 +144,33 @@ namespace FuStudy_API.Controllers.Mentor
             }
 
         }
-        
+
+        [HttpPatch("VerifyMentor/{id}")]
+        public async Task<IActionResult> VerifyMentor(long id)
+        {
+            try
+            {
+                MentorResponse mentorResponse = await _mentorService.VerifyMentor(id);
+                return CustomResult("Update Successfully", mentorResponse, HttpStatusCode.OK);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Conflict);
+            }
+            catch (CustomException.UnauthorizedAccessException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Unauthorized);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
         [HttpPatch("UpdateMentorLoggingIn")]
         [Authorize]
         public async Task<IActionResult> UpdateMentorLoggingIn([FromForm] MentorRequest mentorRequest)
