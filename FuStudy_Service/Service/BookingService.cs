@@ -50,7 +50,7 @@ namespace FuStudy_Service.Service
             return bookingResponses;
         }
 
-        public async Task<List<BookingResponse>> GetAllStudentBookingByUserId()
+        public async Task<List<BookingResponse>> GetAllStudentBookingByHttpContext()
         {
             var userIdStr = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
             if (!long.TryParse(userIdStr, out long userId))
@@ -84,7 +84,7 @@ namespace FuStudy_Service.Service
 
         }
 
-        public async Task<List<BookingResponse>> GetAllMentorBookingByUserId()
+        public async Task<List<BookingResponse>> GetAllMentorBookingByHttpContext()
         {
             var userIdStr = Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
             if (!long.TryParse(userIdStr, out long userId))
@@ -117,6 +117,25 @@ namespace FuStudy_Service.Service
 
             return bookingResponses;
 
+        }
+
+        public async Task<List<BookingResponse>> GetAllMentorBookingByUserId(long id)
+        {
+            var mentor = _unitOfWork.MentorRepository.Get(m => m.UserId ==  id, includeProperties: "User").FirstOrDefault();
+            if (mentor == null)
+            {
+                throw new CustomException.DataNotFoundException($"Not found Mentor with UserId: {id}");
+            }
+            var bookings = _unitOfWork.BookingRepository.Get(filter: p =>
+                                                        p.MentorId == mentor.Id, includeProperties: "User,Mentor");
+
+            if (!bookings.Any())
+            {
+                throw new CustomException.DataNotFoundException($"Booking not found with MentorId: {id}");
+            }
+
+            var bookingResponses = _mapper.Map<List<BookingResponse>>(bookings);
+            return bookingResponses;
         }
 
         public async Task<List<BookingResponse>> GetAllBookingByMentorId(long id)
@@ -434,5 +453,6 @@ namespace FuStudy_Service.Service
             return true;
         }
 
+        
     }
 }

@@ -39,13 +39,13 @@ namespace FuStudy_API.Controllers.Booking
             }
         }
 
-        [HttpGet("GetAllStudentBookingByUserId")]
+        [HttpGet("GetAllStudentBookingByHttpContext")]
         [Authorize]
-        public async Task<IActionResult> GetAllStudentBookingByUserId()
+        public async Task<IActionResult> GetAllStudentBookingByHttpContext()
         {
             try
             {
-                var bookings = await _bookingService.GetAllStudentBookingByUserId();
+                var bookings = await _bookingService.GetAllStudentBookingByHttpContext();
 
                 return CustomResult("Data Load Successfully", bookings);
             }
@@ -63,13 +63,13 @@ namespace FuStudy_API.Controllers.Booking
             }
         }
 
-        [HttpGet("GetAllMentorBookingByUserId")]
+        [HttpGet("GetAllMentorBookingByHttpContext")]
         [Authorize]
         public async Task<IActionResult> GetAllMentorBookingByUserId()
         {
             try
             {
-                var bookings = await _bookingService.GetAllMentorBookingByUserId();
+                var bookings = await _bookingService.GetAllMentorBookingByHttpContext();
 
                 return CustomResult("Data Load Successfully", bookings);
             }
@@ -80,6 +80,25 @@ namespace FuStudy_API.Controllers.Booking
             catch (CustomException.UnauthorizedAccessException ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.Forbidden);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet("GetAllMentorBookingByUserId/{id}")]
+        public async Task<IActionResult> GetAllMentorBookingByUserId(long id)
+        {
+            try
+            {
+                var bookings = await _bookingService.GetAllMentorBookingByUserId(id);
+
+                return CustomResult("Data Load Successfully", bookings);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
             }
             catch (Exception ex)
             {
