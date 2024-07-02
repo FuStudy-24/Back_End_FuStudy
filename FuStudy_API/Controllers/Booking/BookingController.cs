@@ -39,7 +39,7 @@ namespace FuStudy_API.Controllers.Booking
             }
         }
 
-        [HttpGet("GetAllStudentBookingByUserId")]
+        [HttpGet("GetAllStudentBookingByHttpContext")]
         [Authorize]
         public async Task<IActionResult> GetAllStudentBookingByUserId()
         {
@@ -63,7 +63,7 @@ namespace FuStudy_API.Controllers.Booking
             }
         }
 
-        [HttpGet("GetAllMentorBookingByUserId")]
+        [HttpGet("GetAllMentorBookingByHttpContext")]
         [Authorize]
         public async Task<IActionResult> GetAllMentorBookingByUserId()
         {
