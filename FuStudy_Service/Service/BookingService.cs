@@ -75,7 +75,7 @@ namespace FuStudy_Service.Service
 
             if (!bookings.Any())
             {
-                throw new CustomException.DataNotFoundException($"Booking not found with UserId: {userId}");
+                throw new CustomException.DataNotFoundException("Booking not found with current User");
             }
 
             var bookingResponses = _mapper.Map<List<BookingResponse>>(bookings);
@@ -110,7 +110,7 @@ namespace FuStudy_Service.Service
 
             if (!bookings.Any())
             {
-                throw new CustomException.DataNotFoundException($"Booking not found with MentorId: {mentor.Id}");
+                throw new CustomException.DataNotFoundException("Booking not found with current User");
             }
 
             var bookingResponses = _mapper.Map<List<BookingResponse>>(bookings);
