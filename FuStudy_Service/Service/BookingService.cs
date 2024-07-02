@@ -121,7 +121,7 @@ namespace FuStudy_Service.Service
 
         public async Task<List<BookingResponse>> GetAllMentorBookingByUserId(long id)
         {
-            var mentor = _unitOfWork.MentorRepository.Get(m => m.UserId ==  id, includeProperties: "Mentor").FirstOrDefault();
+            var mentor = _unitOfWork.MentorRepository.Get(m => m.UserId ==  id, includeProperties: "User").FirstOrDefault();
             if (mentor == null)
             {
                 throw new CustomException.DataNotFoundException($"Not found Mentor with UserId: {id}");
