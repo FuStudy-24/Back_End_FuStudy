@@ -192,7 +192,6 @@ namespace FuStudy_Service.Service
 
             var mentorResponse = _mapper.Map<MentorResponse>(existingMentor);
             return mentorResponse;
-
         }
 
 

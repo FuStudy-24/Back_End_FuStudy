@@ -157,6 +157,10 @@ namespace FuStudy_API.Controllers.Mentor
             {
                 return CustomResult(ex.Message, HttpStatusCode.NotFound);
             }
+            catch (CustomException.InvalidDataException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.Conflict);
+            }
             catch (CustomException.UnauthorizedAccessException ex)
             {
                 return CustomResult(ex.Message, HttpStatusCode.Unauthorized);
