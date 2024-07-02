@@ -170,7 +170,32 @@ namespace FuStudy_Service.Service
             var updateMentorOnlineStatusResponse = _mapper.Map<UpdateMentorOnlineStatusResponse>(existingMentor);
             return updateMentorOnlineStatusResponse;
         }
-        
+
+        public async Task<MentorResponse> VerifyMentor(long id)
+        {
+            var existingMentor = _unitOfWork.MentorRepository.GetByID(id);
+
+            if (existingMentor == null)
+            {
+                throw new CustomException.DataNotFoundException($"Mentor with ID {id} not found.");
+            }
+
+            if (existingMentor.VerifyStatus)
+            {
+                throw new CustomException.InvalidDataException($"Mentor with ID {id} was Active.");
+            }
+
+            existingMentor.VerifyStatus = true;
+
+            _unitOfWork.MentorRepository.Update(existingMentor);
+            _unitOfWork.Save();
+
+            var mentorResponse = _mapper.Map<MentorResponse>(existingMentor);
+            return mentorResponse;
+
+        }
+
+
         public async Task<MentorResponse> UpdateMentorLoggingIn(MentorRequest mentorRequest)
         { 
             var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));

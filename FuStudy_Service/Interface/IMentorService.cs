@@ -21,5 +21,6 @@ namespace FuStudy_Service.Interface
         Task<MentorResponse> UpdateMentorLoggingIn(MentorRequest mentorRequest);
         Task<MentorResponse> DeleteMentor(long id);
         Task<UpdateMentorOnlineStatusResponse> UpdateOnlineStatus(long id, UpdateMentorOnlineStatusResquest updateMentorOnlineStatusResquest);
+        Task<MentorResponse> VerifyMentor(long id);
     }
 }
