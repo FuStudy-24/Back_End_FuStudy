@@ -225,10 +225,15 @@ namespace FuStudy_Service.Service
                 booking.UserId = userId;
                 booking.CreateAt = DateTime.Now;
                 booking.StartTime = request.StartTime;
-
+                
                 if (booking.StartTime <= booking.CreateAt.AddHours(1))
                 {
                     throw new CustomException.InvalidDataException("Start time must be at least 1 hours away from create time!");
+                }
+
+                if (request.Duration < TimeSpan.FromMinutes(30))
+                {
+                    throw new CustomException.InvalidDataException("Duration must over 30mins");
                 }
 
                 booking.EndTime = request.StartTime.Add(request.Duration);
