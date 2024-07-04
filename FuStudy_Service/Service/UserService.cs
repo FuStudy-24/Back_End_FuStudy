@@ -22,12 +22,14 @@ public class UserService : IUserService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly Tools.Firebase _firebase;
 
-    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor, Tools.Firebase firebase)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _httpContextAccessor = httpContextAccessor;
+        _firebase = firebase;
     }
     public async Task<User> CreateUser(CreateAccountDTORequest createAccountRequest)
     {
@@ -122,9 +124,38 @@ public class UserService : IUserService
         var user = GetUserFromHttpContext();
         
         _mapper.Map(updateAccountDTORequest, user);
+        
+        IEnumerable<User> checkEmail =
+            await _unitOfWork.UserRepository.GetByFilterAsync(x => x.Email.Equals(updateAccountDTORequest.Email));
+        if (checkEmail.Count() != 0)
+        {
+            throw new InvalidDataException($"Email is exist");
+        }
+        var userGender = "Order";
+        switch (updateAccountDTORequest.Gender.Trim().ToLower())
+        {
+            case "male": userGender = "Male"; break;
+            case "female": userGender = "Female"; break;
+        }
+
+        user.Gender = userGender;
         await _unitOfWork.UserRepository.UpdateAsync(user);
         _unitOfWork.Save();
         
+        return _mapper.Map<UserDTOResponse>(user);
+    }
+
+    public async Task<UserDTOResponse> UpdateLoginUserAvatar(ImageRequest imageRequest)
+    {
+        var user = GetUserFromHttpContext();
+        string[] imgExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+        if (!imgExtensions.Contains(Path.GetExtension(imageRequest.Image.FileName)))
+        {
+            throw new CustomException.InvalidDataException("Just accept image!");
+        }
+        var imageurl = await _firebase.UploadImageAsync(imageRequest.Image);
+        user.Avatar = imageurl;
+        _unitOfWork.Save();
         return _mapper.Map<UserDTOResponse>(user);
     }
 
