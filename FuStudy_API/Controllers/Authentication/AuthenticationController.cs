@@ -39,25 +39,25 @@ namespace FuStudy_API.Controllers.Authentication
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
         {
-             /*try
-             {*/
+             try
+             {
                 CreateAccountDTOResponse user = await _authenticationService.Register(registerRequest);
 
                 return CustomResult("Register Success",user, HttpStatusCode.OK);
 
-             /*}
+             }
              catch (Exception e)
              {
                   return CustomResult(e.Message, HttpStatusCode.InternalServerError);
-             }*/
+             }
             
         }
         
         [HttpPost("Login")]
         public async Task<IActionResult> LoginUser([FromBody] LoginDTORequest loginDtoRequest)
         {
-            /*try
-            {*/
+            try
+            {
                 (string, LoginDTOResponse) tuple = await _authenticationService.Login(loginDtoRequest);
                 if (tuple.Item1 == null)
                 {
@@ -70,11 +70,11 @@ namespace FuStudy_API.Controllers.Authentication
                     { "user", tuple.Item2 ?? null }
                 };
                 return CustomResult("Login Success",result, HttpStatusCode.OK);
-            /*}
+            }
             catch (Exception e)
             {
                 return CustomResult(e.Message, HttpStatusCode.InternalServerError);
-            }*/
+            }
 
             
         }
