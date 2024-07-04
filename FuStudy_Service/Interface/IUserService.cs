@@ -17,5 +17,8 @@ public interface IUserService
     Task<UserDTOResponse> GetLoginUser();
     
     Task<UserDTOResponse> UpdateLoginUser(UpdateAccountDTORequest updateAccountDTORequest);
+    
+    Task<UserDTOResponse> UpdateLoginUserAvatar(ImageRequest imageRequest);
+
 
 }
