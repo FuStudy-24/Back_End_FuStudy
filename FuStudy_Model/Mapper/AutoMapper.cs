@@ -24,7 +24,7 @@ namespace FuStudy_Model.Mapper
             CreateMap<Mentor, RegisterTutorRequest>().ReverseMap();
             CreateMap<Mentor, RegisterTutorResponse>().ReverseMap();
             CreateMap<Token, TokenRequest>().ReverseMap();
-
+            CreateMap<RegisterRequest, User>().ReverseMap();
             #region RolePermission
             CreateMap<RolePermissionRequest, RolePermission>().ReverseMap();
             CreateMap<RolePermission, RolePermissionResponse>().ReverseMap();

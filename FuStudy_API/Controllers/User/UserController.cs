@@ -8,6 +8,7 @@ using Tools;
 
 namespace FUStudy_API.Controllers.User;
 
+[Authorize]
 public class UserController : BaseController
 {
     private readonly IUserService _userService;
@@ -16,7 +17,6 @@ public class UserController : BaseController
         _userService = userService;
     }
     
-    [Authorize]
     [HttpGet("GetLoginUser")]
     public async Task<IActionResult> GetLoginUser()
     {
@@ -34,13 +34,17 @@ public class UserController : BaseController
             return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
         }
     }
-
-    [Authorize]
+    
     [HttpPatch("UpdateLoginUser")]
     public async Task<IActionResult> UpdateLoginUser([FromBody]UpdateAccountDTORequest updateAccountDtoRequest)
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                return CustomResult(ModelState, HttpStatusCode.BadRequest);
+            }
+
             var user = await _userService.UpdateLoginUser(updateAccountDtoRequest);
             return CustomResult("Update Successful!", user);
         }
@@ -52,6 +56,29 @@ public class UserController : BaseController
         {
             return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
         }
+    }
+    
+    
+    [HttpPatch("UpdateLoginUserAvatar")]
+
+    public async Task<IActionResult> UpdateLoginUserAvatar([FromForm] ImageRequest imageRequest)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return CustomResult(ModelState, HttpStatusCode.BadRequest);
+            }
+
+            var users = await _userService.UpdateLoginUserAvatar(imageRequest);
+            return CustomResult("Change Avatar successful", users);
+
+        }
+        catch (Exception exception)
+        {
+            return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+        }
+
     }
 
     

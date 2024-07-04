@@ -31,28 +31,41 @@ public class AuthenticationService: IAuthenticationService
         _configuration = configuration;
         _userService = userService;
     }  
-    public async Task<CreateAccountDTOResponse> Register(CreateAccountDTORequest createAccountDTORequest)
+    public async Task<CreateAccountDTOResponse> Register(RegisterRequest registerRequest)
     {
         IEnumerable<User> checkEmail =
-            await _unitOfWork.UserRepository.GetByFilterAsync(x => x.Email.Equals(createAccountDTORequest.Email));
+            await _unitOfWork.UserRepository.GetByFilterAsync(x => x.Email.Equals(registerRequest.Email));
         IEnumerable<User> checkUsername =
-            await _unitOfWork.UserRepository.GetByFilterAsync(x => x.Username.Equals(createAccountDTORequest.Username));
-        if (checkEmail.Any())
+            await _unitOfWork.UserRepository.GetByFilterAsync(x => x.Username.Equals(registerRequest.Username));
+        if (checkEmail.Count() != 0)
         {
-            throw new CustomException.InvalidDataException("500","Email already exists.");
+            throw new InvalidDataException($"Email is exist");
         }
 
-        if (checkUsername.Any())
+        if (checkUsername.Count() != 0)
         {
-            throw new InvalidDataException("Username already exists.");
+            throw new InvalidDataException($"Username is exist");
         }
-        var user = _mapper.Map<User>(createAccountDTORequest);
+
+        if (registerRequest.Password != registerRequest.ConfirmPassword)
+        {
+            throw new CustomException.InvalidDataException("Confirm Password not match!");
+        }
+
+        var userGender = "Order";
+        switch (registerRequest.Gender.Trim().ToLower())
+        {
+            case "male": userGender = "Male"; break;
+            case "female": userGender = "Female"; break;
+        }
+        
+        var user = _mapper.Map<User>(registerRequest);
 /*			user.permission_id = (await _userPermissionRepository.GetByFilterAsync(r => r.role.Equals("Customer"))).First().id;
 */
-        
-        user.Password = EncryptPassword.Encrypt(createAccountDTORequest.Password);
+        user.Gender = userGender;
+        user.Password = EncryptPassword.Encrypt(registerRequest.Password);
         user.Status = true;
-        var role = _unitOfWork.RoleRepository.Get(role => role.RoleName.Trim().ToLower() == createAccountDTORequest.RoleName.Trim().ToLower())
+        var role = _unitOfWork.RoleRepository.Get(role => role.RoleName.Trim().ToLower() == registerRequest.RoleName.Trim().ToLower())
             .FirstOrDefault();
         if (role == null)
         {
@@ -72,7 +85,7 @@ public class AuthenticationService: IAuthenticationService
         {
             UserId = user.Id,
             Balance = 0,
-            Status = false
+            Status = true
         };
         await _unitOfWork.WalletRepository.AddAsync(wallet);
         if (roleName.RoleName == RoleName.Student.ToString())
