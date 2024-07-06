@@ -52,9 +52,9 @@ namespace FuStudy_API.Controllers.Transaction
         }
         
         [HttpGet("GetTransactionByWalletId/{walledId}")]
-        public async Task<IActionResult> GetTransactionByWalletId(long id)
+        public async Task<IActionResult> GetTransactionByWalletId(long walledId)
         {
-            var transaction = await _transactionService.GetTransactionByWalletIdAsync(id);
+            var transaction = await _transactionService.GetTransactionByWalletIdAsync(walledId);
 
             if (transaction == null)
             {
