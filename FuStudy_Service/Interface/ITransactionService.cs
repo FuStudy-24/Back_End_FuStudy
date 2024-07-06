@@ -13,6 +13,7 @@ namespace FuStudy_Service.Interface
     {
         Task<IEnumerable<TransactionResponse>> GetAllTransactionsAsync(QueryObject queryObject);
         Task<TransactionResponse> GetTransactionByIdAsync(long id);
+        Task<TransactionResponse> GetTransactionByWalletIdAsync(long walletId);
         Task<TransactionResponse> CreateTransactionAsync(TransactionRequest transactionRequest);
         Task<TransactionResponse> UpdateTransactionAsync(TransactionRequest transactionRequest, long transactionId);
         Task<bool> DeleteTransactionAsync(long transactionId);
