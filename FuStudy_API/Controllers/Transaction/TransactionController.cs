@@ -54,14 +54,20 @@ namespace FuStudy_API.Controllers.Transaction
         [HttpGet("GetTransactionByWalletId/{walledId}")]
         public async Task<IActionResult> GetTransactionByWalletId(long walledId)
         {
-            var transaction = await _transactionService.GetTransactionByWalletIdAsync(walledId);
-
-            if (transaction == null)
+            try
             {
-                return CustomResult("Transaction not found", HttpStatusCode.NotFound);
-            }
+                var transactions = await _transactionService.GetAllTransactionByWalletIdAsync(walledId);
+                return CustomResult("Data loaded!", transactions);
 
-            return CustomResult("Data loaded!", transaction);
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpPost("CreateTransaction")]
