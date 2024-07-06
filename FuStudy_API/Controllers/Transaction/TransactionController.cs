@@ -51,8 +51,8 @@ namespace FuStudy_API.Controllers.Transaction
             return CustomResult("Data loaded!", transaction);
         }
         
-        [HttpGet("GetTransactionByWalletId/{walledId}")]
-        public async Task<IActionResult> GetTransactionByWalletId(long walledId)
+        [HttpGet("GetAllTransactionByWalletId/{walledId}")]
+        public async Task<IActionResult> GetAllTransactionByWalletId(long walledId)
         {
             try
             {
