@@ -54,6 +54,12 @@ namespace FuStudy_Service.Service
             return _mapper.Map<TransactionResponse>(transaction);
         }
 
+        public async Task<TransactionResponse> GetTransactionByWalletIdAsync(long walletId)
+        {
+            var transactions = _unitOfWork.TransactionRepository.Get(x => x.WalletId == walletId);
+            return _mapper.Map<TransactionResponse>(transactions);
+        }
+
         public async Task<TransactionResponse> CreateTransactionAsync(TransactionRequest transactionRequest)
         {
             var wallet = _unitOfWork.WalletRepository.GetByID(transactionRequest.WalletId);
