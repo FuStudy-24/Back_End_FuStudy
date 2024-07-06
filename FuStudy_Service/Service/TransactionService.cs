@@ -10,6 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 using Tools;
 
 namespace FuStudy_Service.Service
@@ -54,10 +55,15 @@ namespace FuStudy_Service.Service
             return _mapper.Map<TransactionResponse>(transaction);
         }
 
-        public async Task<TransactionResponse> GetTransactionByWalletIdAsync(long walletId)
+        public async Task<IEnumerable<TransactionResponse>> GetAllTransactionByWalletIdAsync(long walletId)
         {
             var transactions = _unitOfWork.TransactionRepository.Get(x => x.WalletId == walletId);
-            return _mapper.Map<TransactionResponse>(transactions);
+            if (transactions.IsNullOrEmpty())
+            {
+                throw new CustomException.DataNotFoundException("The transaction list is empty!");
+            }
+
+            return _mapper.Map<IEnumerable<TransactionResponse>>(transactions);
         }
 
         public async Task<TransactionResponse> CreateTransactionAsync(TransactionRequest transactionRequest)
