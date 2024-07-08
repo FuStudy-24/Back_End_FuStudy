@@ -13,6 +13,7 @@ namespace FuStudy_Service.Interface
 {
     public interface IMentorService
     {
+        Task<IEnumerable<MentorResponse>> GetAllMentor(QueryObject queryObject);
         Task<IEnumerable<MentorResponse>> GetAllMentorVerify(QueryObject queryObject);
         Task<IEnumerable<MentorResponse>> GetAllMentorWaiting(QueryObject queryObject);
         Task<List<MentorResponse>> GetMentorById(long id);
