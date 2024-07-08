@@ -22,6 +22,24 @@ namespace FuStudy_API.Controllers.Mentor
             _mentorService = mentorService;
         }
 
+        [HttpGet("GetAllMentor")]
+        public async Task<IActionResult> GetAllMentor([FromQuery] QueryObject queryPbject)
+        {
+            try
+            {
+                var mentors = await _mentorService.GetAllMentor(queryPbject);
+                return CustomResult("Data Load Successfully", mentors);
+            }
+            catch (CustomException.DataNotFoundException ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
         [HttpGet("GetAllMentorVerify")]
         public async Task<IActionResult> GetAllMentorVerify([FromQuery] QueryObject queryPbject)
         {
