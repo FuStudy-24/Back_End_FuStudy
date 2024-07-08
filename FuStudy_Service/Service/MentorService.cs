@@ -30,6 +30,22 @@ namespace FuStudy_Service.Service
             _firebase = firebase;
             _httpContextAccessor = httpContextAccessor;
         }
+        public async Task<IEnumerable<MentorResponse>> GetAllMentor(QueryObject queryObject)
+        {
+            var mentors = _unitOfWork.MentorRepository.Get(includeProperties: "User",
+                pageIndex: queryObject.PageIndex,
+                pageSize: queryObject.PageSize)
+                .ToList();
+
+            if (!mentors.Any())
+            {
+                throw new CustomException.DataNotFoundException("No Mentor in Database");
+            }
+
+            var mentorResponses = _mapper.Map<IEnumerable<MentorResponse>>(mentors);
+
+            return mentorResponses;
+        }
 
         public async Task<IEnumerable<MentorResponse>> GetAllMentorVerify(QueryObject queryObject)
         {
