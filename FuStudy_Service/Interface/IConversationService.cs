@@ -12,7 +12,7 @@ namespace FuStudy_Service.Interface
     public interface IConversationService
     {
         Task<ConversationResponse> CreateConversation(ConversationRequest request);
-        Conversation CreateConversationWithStudent(long userId, long mentorId);
+        Conversation CreateConversationWithStudent(long id, long userId, long mentorId);
         /*Task<ConversationResponse> UpdateConversationAsync(ConversationRequest request);*/
         Task<List<ConversationResponse>> GetConversation();
     }
