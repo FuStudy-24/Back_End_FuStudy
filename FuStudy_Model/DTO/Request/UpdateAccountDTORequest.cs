@@ -17,4 +17,5 @@ public class UpdateAccountDTORequest
     [RegularExpression("^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$", ErrorMessage = "Só điện thoại này fake!")]
     [Required(ErrorMessage = "Số điện thoại là trường bắt buộc phải nhập.")]
     public string phone { get; set; }
+    public DateTime Dob { get; set; }
 }
