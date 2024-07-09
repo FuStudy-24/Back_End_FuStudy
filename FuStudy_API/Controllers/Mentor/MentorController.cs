@@ -59,7 +59,7 @@ namespace FuStudy_API.Controllers.Mentor
         }
 
         [HttpGet("GetAllMentorWaiting")]
-        public async Task<IActionResult> GetAllMentor([FromQuery] QueryObject queryPbject)
+        public async Task<IActionResult> GetAllMentorWaiting([FromQuery] QueryObject queryPbject)
         {
             try
             {
