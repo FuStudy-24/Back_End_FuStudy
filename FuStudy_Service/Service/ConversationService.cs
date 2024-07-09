@@ -138,7 +138,7 @@ namespace FuStudy_Service.Service
             return conversationResponse;
         }
 
-        public Conversation CreateConversationWithStudent(long userId, long mentorId)
+        public Conversation CreateConversationWithStudent(long id, long userId, long mentorId)
         {
             var conversation = new Conversation();
             conversation.User1Id = userId;
@@ -153,7 +153,8 @@ namespace FuStudy_Service.Service
             }
 
             var durationBooking = _unitOfWork.BookingRepository.Get(
-                    d => d.UserId == userId && 
+                    d => d.Id == id &&
+                    d.UserId == userId && 
                     d.MentorId == conversation.User2Id &&
                     d.Status == BookingStatus.Accepted.ToString()).FirstOrDefault();
 
