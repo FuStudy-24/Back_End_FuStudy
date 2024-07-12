@@ -55,9 +55,18 @@ namespace FuStudy_Service.Service
             return _mapper.Map<TransactionResponse>(transaction);
         }
 
-        public async Task<IEnumerable<TransactionResponse>> GetAllTransactionByWalletIdAsync(long walletId)
+        public async Task<IEnumerable<TransactionResponse>> GetAllTransactionByWalletIdAsync(long walletId, QueryObject queryObject)
         {
-            var transactions = _unitOfWork.TransactionRepository.Get(x => x.WalletId == walletId);
+            Expression<Func<Transaction, bool>> filter = x => x.WalletId == walletId;
+            if (!string.IsNullOrWhiteSpace(queryObject.Search))
+            {
+                filter = transaction => transaction.Type.Contains(queryObject.Search) && transaction.WalletId == walletId;
+            }
+            
+            var transactions = _unitOfWork.TransactionRepository.Get(
+                filter: filter,
+                pageIndex: queryObject.PageIndex,
+                pageSize: queryObject.PageSize);
             if (transactions.IsNullOrEmpty())
             {
                 throw new CustomException.DataNotFoundException("The transaction list is empty!");
