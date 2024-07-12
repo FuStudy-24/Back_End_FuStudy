@@ -36,6 +36,9 @@ namespace FuStudy_Service.Service
                                         transaction.WalletId.ToString().Contains(queryObject.Search);
             }
 
+
+
+
             var transactions = _unitOfWork.TransactionRepository.Get(
                 filter: filter,
                 pageIndex: queryObject.PageIndex,
@@ -46,7 +49,28 @@ namespace FuStudy_Service.Service
                 throw new CustomException.DataNotFoundException("The transaction list is empty!");
             }
 
-            return _mapper.Map<IEnumerable<TransactionResponse>>(transactions);
+            // Map transactions to response and include user information
+            var transactionResponses = transactions.Select(transaction =>
+            {
+                var wallet = _unitOfWork.WalletRepository.Get(w => w.Id == transaction.WalletId).FirstOrDefault();
+                var user = wallet != null ? _unitOfWork.UserRepository.Get(u => u.Id == wallet.UserId).FirstOrDefault() : null;
+
+                return new TransactionResponse
+                {
+                    Id = transaction.Id,
+                    WalletId = transaction.WalletId,
+                    Type = transaction.Type,
+                    Ammount = transaction.Ammount,
+                    CreateTime = transaction.CreateTime,
+                    Description = transaction.Description,
+                    UserId = user?.Id ?? 0,
+                    Username = user?.Username,
+                    Email = user?.Email,
+                    Fullname = user?.Fullname
+                };
+            });
+
+            return transactionResponses;
         }
 
         public async Task<TransactionResponse> GetTransactionByIdAsync(long id)
