@@ -52,11 +52,11 @@ namespace FuStudy_API.Controllers.Transaction
         }
         
         [HttpGet("GetAllTransactionByWalletId/{walledId}")]
-        public async Task<IActionResult> GetAllTransactionByWalletId(long walledId)
+        public async Task<IActionResult> GetAllTransactionByWalletId(long walledId, [FromQuery]QueryObject queryObject)
         {
             try
             {
-                var transactions = await _transactionService.GetAllTransactionByWalletIdAsync(walledId);
+                var transactions = await _transactionService.GetAllTransactionByWalletIdAsync(walledId, queryObject);
                 return CustomResult("Data loaded!", transactions);
 
             }
