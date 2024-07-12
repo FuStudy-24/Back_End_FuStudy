@@ -6,6 +6,7 @@ using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -181,7 +182,7 @@ namespace FuStudy_Service.Service
             }
 
             var conversation = _unitOfWork.ConversationRepository.Get(c => c.User1Id == userId || c.User2Id == userId);
-            if (conversation == null)
+            if (conversation.IsNullOrEmpty())
             {
                 throw new CustomException.UnauthorizedAccessException("Conversation not found for the current user.");
             }
