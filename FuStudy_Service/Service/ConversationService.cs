@@ -153,10 +153,12 @@ namespace FuStudy_Service.Service
                 conversation.EndTime = DateTime.MaxValue;
             }
 
+            var mentor = _unitOfWork.MentorRepository.Get(m => m.UserId == userId2).FirstOrDefault();
+
             var durationBooking = _unitOfWork.BookingRepository.Get(
                     d => d.Id == id &&
                     d.UserId == userId1 && 
-                    d.User.Id == conversation.User2Id &&
+                    d.MentorId == mentor.Id &&
                     d.Status == BookingStatus.Accepted.ToString(), includeProperties: "User").FirstOrDefault();
 
             if (durationBooking != null)
