@@ -156,8 +156,8 @@ namespace FuStudy_Service.Service
             var durationBooking = _unitOfWork.BookingRepository.Get(
                     d => d.Id == id &&
                     d.UserId == userId1 && 
-                    d.Mentor.UserId == conversation.User2Id &&
-                    d.Status == BookingStatus.Accepted.ToString()).FirstOrDefault();
+                    d.User.Id == conversation.User2Id &&
+                    d.Status == BookingStatus.Accepted.ToString(), includeProperties: "User").FirstOrDefault();
 
             if (durationBooking != null)
             {
