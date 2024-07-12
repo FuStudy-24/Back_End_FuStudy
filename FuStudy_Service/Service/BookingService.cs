@@ -383,7 +383,7 @@ namespace FuStudy_Service.Service
                 throw new CustomException.UnauthorizedAccessException("User does not have the required role to create a booking.");
             }
 
-            var booking = await _unitOfWork.BookingRepository.GetByIdAsync(id);
+            var booking = _unitOfWork.BookingRepository.Get(b => b.Id == id, includeProperties: "Mentor,Mentor.User,User").FirstOrDefault();
             if (booking == null)
             {
                 throw new CustomException.DataNotFoundException($"Booking with id:{id} not found");
