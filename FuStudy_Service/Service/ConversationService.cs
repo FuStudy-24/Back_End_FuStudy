@@ -139,24 +139,24 @@ namespace FuStudy_Service.Service
             return conversationResponse;
         }
 
-        public Conversation CreateConversationWithStudent(long id, long userId, long mentorId)
+        public Conversation CreateConversationWithStudent(long id, long userId1, long userId2)
         {
             var conversation = new Conversation();
-            conversation.User1Id = userId;
-            conversation.User2Id = mentorId;
+            conversation.User1Id = userId1;
+            conversation.User2Id = userId2;
             conversation.LastMessage = "";
 
-            var userId2 = _unitOfWork.UserRepository.GetByID(conversation.User2Id);
+            var userId = _unitOfWork.UserRepository.GetByID(conversation.User2Id);
 
-            if (userId2 == null || userId2.RoleId != 4)
+            if (userId == null || userId.RoleId != 4)
             {
                 conversation.EndTime = DateTime.MaxValue;
             }
 
             var durationBooking = _unitOfWork.BookingRepository.Get(
                     d => d.Id == id &&
-                    d.UserId == userId && 
-                    d.MentorId == conversation.User2Id &&
+                    d.UserId == userId1 && 
+                    d.Mentor.UserId == conversation.User2Id &&
                     d.Status == BookingStatus.Accepted.ToString()).FirstOrDefault();
 
             if (durationBooking != null)
