@@ -392,7 +392,7 @@ namespace FuStudy_Service.Service
             booking.Status = BookingStatus.Accepted.ToString();
             await _unitOfWork.BookingRepository.UpdateAsync(booking);
 
-            _conversationService.CreateConversationWithStudent(booking.Id, booking.UserId, booking.User.Id);
+            _conversationService.CreateConversationWithStudent(booking.Id, booking.UserId, booking.Mentor.User.Id);
 
             var student = _unitOfWork.StudentRepository.Get(s => s.UserId == booking.UserId).FirstOrDefault();
 
