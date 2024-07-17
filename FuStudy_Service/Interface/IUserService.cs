@@ -20,5 +20,9 @@ public interface IUserService
     
     Task<UserDTOResponse> UpdateLoginUserAvatar(ImageRequest imageRequest);
 
+    Task<UserDTOResponse> ActivateUser(long id);
+
+    Task<UserDTOResponse> DeactivateUser(long id);
+
 
 }
