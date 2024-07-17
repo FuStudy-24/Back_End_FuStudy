@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FuStudy_Model.DTO.Request;
 using FuStudy_Model.DTO.Response;
+using FuStudy_Model.Enum;
 using FuStudy_Repository.Entity;
 using FuStudy_Repository.Repository;
 using FuStudy_Service.Interface;
@@ -46,16 +47,69 @@ public class UserService : IUserService
         {
             throw new InvalidDataException($"Username is exist");
         }
-
+        var userGender = "Order";
+        switch (createAccountRequest.Gender.Trim().ToLower())
+        {
+            case "male": userGender = "Male"; break;
+            case "female": userGender = "Female"; break;
+        }
+        
         var user = _mapper.Map<User>(createAccountRequest);
+        user.Gender = userGender;
         user.Password = EncryptPassword.Encrypt(createAccountRequest.Password);
         user.Status = true;
         user.CreateDate = DateTime.Now;
-        user.Avatar = null;
+        user.Avatar =
+            "https://firebasestorage.googleapis.com/v0/b/artworks-sharing-platform.appspot.com/o/images%2F1.image.png?alt=media&token=3c77475f-90df-4f19-879e-c8024ae789b";
+        
+        var role = _unitOfWork.RoleRepository.Get(role => role.RoleName.Trim().ToLower() == createAccountRequest.RoleName.Trim().ToLower())
+            .FirstOrDefault();
+        if (role == null)
+        {
+            throw new CustomException.InvalidDataException( "500", "This role name does not exist");
+        }
+
+        user.RoleId = role.Id;
+        
+        var roleName = await _unitOfWork.RoleRepository.GetByIdAsync(user.RoleId);
         await _unitOfWork.UserRepository.AddAsync(user);
+        
+        //add Wallet and add mentor or student based on role
+        var wallet = new Wallet
+        {
+            UserId = user.Id,
+            Balance = 0,
+            Status = true
+        };
+        await _unitOfWork.WalletRepository.AddAsync(wallet);
+        if (roleName.RoleName == RoleName.Student.ToString())
+        {
+            var student = new Student();
+            student.UserId = user.Id;
+            await _unitOfWork.StudentRepository.AddAsync(student);
+            
+        }
+
+        if (roleName.RoleName == RoleName.Mentor.ToString() )
+        {
+            var mentor = new Mentor
+            {
+                UserId = user.Id,
+                AcademicLevel = "",
+                WorkPlace = "",
+                VerifyStatus = false,
+                OnlineStatus = OnlineStatus.Invisible.ToString(),
+                Skill = "",
+                Video = ""
+            };
+            
+            
+            await _unitOfWork.MentorRepository.AddAsync(mentor);
+            
+        }
         return user;
     }
-
+    
     public async Task<IEnumerable<UserDTOResponse>> GetAllUsers(QueryObject queryObject)
     {
         //check if QueryObject search is not null
@@ -155,6 +209,30 @@ public class UserService : IUserService
         }
         var imageurl = await _firebase.UploadImageAsync(imageRequest.Image);
         user.Avatar = imageurl;
+        _unitOfWork.Save();
+        return _mapper.Map<UserDTOResponse>(user);
+    }
+
+    public async Task<UserDTOResponse> ActivateUser(long id)
+    {
+        var user = _unitOfWork.UserRepository.Get(x => x.Id == id).FirstOrDefault();
+        if (user.Status)
+        {
+            throw new CustomException.InvalidDataException("This user already activated!");
+        }
+        user.Status = true;
+        _unitOfWork.Save();
+        return _mapper.Map<UserDTOResponse>(user);
+    }
+
+    public async Task<UserDTOResponse> DeactivateUser(long id)
+    {
+        var user = _unitOfWork.UserRepository.Get(x => x.Id == id).FirstOrDefault();
+        if (!user.Status)
+        {
+            throw new CustomException.InvalidDataException("This user is already disabled!");
+        }
+        user.Status = false;
         _unitOfWork.Save();
         return _mapper.Map<UserDTOResponse>(user);
     }

@@ -74,6 +74,11 @@ public class AuthenticationService: IAuthenticationService
         {
             throw new CustomException.InvalidDataException( "500", "This role name does not exist");
         }
+
+        if (!(role.RoleName == "Student" || role.RoleName == "Mentor"))
+        {
+            throw new CustomException.InvalidDataException( "500", "Invalid role!");
+        }
         user.RoleId = role.Id;
         user.CreateDate = DateTime.Now.Date;
 

@@ -34,7 +34,7 @@ namespace FuStudy_API.Controllers.Admin
                 return CustomResult(ex.Message, HttpStatusCode.InternalServerError);
             }
         }
-        [HttpPost("CreateUser")]
+        [HttpPost("CreateUserForAdmin")]
         public async Task<IActionResult> CreateUser([FromBody] CreateAccountDTORequest createAccountDTORequest)
         {
             try
@@ -86,6 +86,42 @@ namespace FuStudy_API.Controllers.Admin
            
         }
 
+        [HttpPatch("ActivateUser/{userId}")]
+        public async Task<IActionResult> ActivateUser(long userId)
+        {
+            try
+            {
+                var user = await _userService.ActivateUser(userId);
+                return CustomResult("Activate successful!", user);
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpPatch("Deactivate/{userId}")]
+        public async Task<IActionResult> DeactivateUser(long userId)
+        {
+            try
+            {
+                var user = await _userService.DeactivateUser(userId);
+                return CustomResult("Activate successful!", user);
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
+        }
 
     }
 }
