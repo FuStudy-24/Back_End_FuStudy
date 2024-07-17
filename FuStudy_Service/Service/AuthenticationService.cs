@@ -65,7 +65,7 @@ public class AuthenticationService: IAuthenticationService
         user.Gender = userGender;
         //default avatar
         user.Avatar =
-            "https://firebasestorage.googleapis.com/v0/b/artworks-sharing-platform.appspot.com/o/images%2F1.image.png?alt=media&token=3c77475f-90df-4f19-879e-c8024ae789b";
+            "https://firebasestorage.googleapis.com/v0/b/artworks-sharing-platform.appspot.com/o/images%2Favt.jpg?alt=media&token=13ab9b47-eff9-4d33-88b0-8e7d32e0de90";
         user.Password = EncryptPassword.Encrypt(registerRequest.Password);
         user.Status = true;
         var role = _unitOfWork.RoleRepository.Get(role => role.RoleName.Trim().ToLower() == registerRequest.RoleName.Trim().ToLower())

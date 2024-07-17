@@ -59,9 +59,7 @@ public class UserService : IUserService
         user.Password = EncryptPassword.Encrypt(createAccountRequest.Password);
         user.Status = true;
         user.CreateDate = DateTime.Now;
-        user.Avatar =
-            "https://firebasestorage.googleapis.com/v0/b/artworks-sharing-platform.appspot.com/o/images%2F1.image.png?alt=media&token=3c77475f-90df-4f19-879e-c8024ae789b";
-        
+        user.Avatar = "https://firebasestorage.googleapis.com/v0/b/artworks-sharing-platform.appspot.com/o/images%2Favt.jpg?alt=media&token=13ab9b47-eff9-4d33-88b0-8e7d32e0de90";
         var role = _unitOfWork.RoleRepository.Get(role => role.RoleName.Trim().ToLower() == createAccountRequest.RoleName.Trim().ToLower())
             .FirstOrDefault();
         if (role == null)
