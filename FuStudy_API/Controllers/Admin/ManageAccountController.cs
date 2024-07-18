@@ -123,5 +123,25 @@ namespace FuStudy_API.Controllers.Admin
             }
         }
 
+        [HttpGet("NumberOfUsers")]
+        public async Task<IActionResult> NumberOfUsers()
+        {
+            try
+            {
+                var count = await _userService.GetNumberOfUser();
+                return CustomResult("Activate successful!", count);
+
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
     }
 }

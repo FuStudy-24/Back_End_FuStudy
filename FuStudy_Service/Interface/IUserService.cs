@@ -24,5 +24,7 @@ public interface IUserService
 
     Task<UserDTOResponse> DeactivateUser(long id);
 
+    Task<UserCountResponse> GetNumberOfUser();
+
 
 }
