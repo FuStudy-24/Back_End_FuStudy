@@ -163,13 +163,34 @@ namespace FuStudy_Service.Service
 
         public async Task<IEnumerable<TransactionResponse>> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
         {
-            var transactions = _unitOfWork.TransactionRepository.Get(t => t.Type == "Deposit" && t.CreateTime >= startDate && t.CreateTime <= endDate);
+            var transactions = _unitOfWork.TransactionRepository.Get(
+                t => t.Type == "Deposit" && t.CreateTime >= startDate && t.CreateTime <= endDate);
             if (transactions.IsNullOrEmpty())
             {
                 throw new CustomException.DataNotFoundException("Transactions is empty!");
             }
+            
+            var transactionResponses = _mapper.Map<IEnumerable<TransactionResponse>>(transactions);
+            foreach (var transactionResponse in transactionResponses)
+            {
+                var wallet = _unitOfWork.WalletRepository.Get(w => w.Id == transactionResponse.WalletId).FirstOrDefault();
+                if (wallet == null)
+                {
+                    throw new CustomException.DataNotFoundException("Wallet not found!");
+                }
+                var user = _unitOfWork.UserRepository.Get(u => u.Id == wallet.UserId).FirstOrDefault();
+                if (user == null)
+                {
+                    throw new CustomException.DataNotFoundException("User not found!");
+                }
+                transactionResponse.UserId = user.Id;
+                transactionResponse.Username = user.Username;
+                transactionResponse.Email = user.Email;
+                transactionResponse.Fullname = user.Fullname;
 
-            return _mapper.Map<IEnumerable<TransactionResponse>>(transactions);
+            }
+
+            return transactionResponses;
         }
     }
 }
