@@ -18,5 +18,7 @@ namespace FuStudy_Service.Interface
         Task<TransactionResponse> UpdateTransactionAsync(TransactionRequest transactionRequest, long transactionId);
         Task<bool> DeleteTransactionAsync(long transactionId);
         Task<TotalRevenueResponse> GetTotalRevenue();
+        Task<IEnumerable<TransactionResponse>> GetTransactionsByDateRange(DateTime startDate, DateTime endDate);
+
     }
 }

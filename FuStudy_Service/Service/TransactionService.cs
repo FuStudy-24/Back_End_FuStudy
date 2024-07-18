@@ -160,5 +160,16 @@ namespace FuStudy_Service.Service
             
             return totalRevenueResponse;
         }
+
+        public async Task<IEnumerable<TransactionResponse>> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
+        {
+            var transactions = _unitOfWork.TransactionRepository.Get(t => t.Type == "Deposit" && t.CreateTime >= startDate && t.CreateTime <= endDate);
+            if (transactions.IsNullOrEmpty())
+            {
+                throw new CustomException.DataNotFoundException("Transactions is empty!");
+            }
+
+            return _mapper.Map<IEnumerable<TransactionResponse>>(transactions);
+        }
     }
 }

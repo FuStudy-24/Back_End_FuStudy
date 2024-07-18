@@ -150,5 +150,22 @@ namespace FuStudy_API.Controllers.Transaction
                 return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
             }
         }
+        [HttpGet("GetTransactionsByDateRange")]
+        public async Task<IActionResult> GetTransactionsByDateRange([FromQuery]DateTime startDate,[FromQuery] DateTime endDate)
+        {
+            try
+            {
+                var transactions = await _transactionService.GetTransactionsByDateRange(startDate, endDate);
+                return CustomResult("Data loaded!", transactions);
+            }
+            catch (CustomException.DataNotFoundException e)
+            {
+                return CustomResult(e.Message, HttpStatusCode.NotFound);
+            }
+            catch (Exception exception)
+            {
+                return CustomResult(exception.Message, HttpStatusCode.InternalServerError);
+            }
+        }
     }
 }
