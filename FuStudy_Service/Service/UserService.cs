@@ -235,6 +235,17 @@ public class UserService : IUserService
         return _mapper.Map<UserDTOResponse>(user);
     }
 
+    public async Task<UserCountResponse> GetNumberOfUser()
+    {
+        var users = _unitOfWork.UserRepository.Get(x => x.Role.RoleName == "Student" || x.Role.RoleName == "Mentor");
+        UserCountResponse userCountResponse = new UserCountResponse
+        {
+            NumberOfUsers = users.Count()
+        };
+
+        return userCountResponse;
+    }
+
     private User GetUserFromHttpContext()
     {
         var userId = long.Parse(Authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext));
