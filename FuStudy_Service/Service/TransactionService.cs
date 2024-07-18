@@ -143,5 +143,22 @@ namespace FuStudy_Service.Service
             _unitOfWork.Save();
             return true;
         }
+
+        public async Task<TotalRevenueResponse> GetTotalRevenue()
+        {
+            var transactions = _unitOfWork.TransactionRepository.Get(t => t.Type == "Deposit");
+            double total = 0;
+            foreach (var transaction in transactions)
+            {
+                total += transaction.Ammount;
+            }
+
+            TotalRevenueResponse totalRevenueResponse = new TotalRevenueResponse
+            {
+                TotalAmount = total
+            };
+            
+            return totalRevenueResponse;
+        }
     }
 }
