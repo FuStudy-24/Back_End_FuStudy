@@ -17,5 +17,6 @@ namespace FuStudy_Service.Interface
         Task<TransactionResponse> CreateTransactionAsync(TransactionRequest transactionRequest);
         Task<TransactionResponse> UpdateTransactionAsync(TransactionRequest transactionRequest, long transactionId);
         Task<bool> DeleteTransactionAsync(long transactionId);
+        Task<TotalRevenueResponse> GetTotalRevenue();
     }
 }
