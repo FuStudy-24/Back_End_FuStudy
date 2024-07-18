@@ -239,10 +239,14 @@ public class UserService : IUserService
 
     public async Task<UserCountResponse> GetNumberOfUser()
     {
-        var users = _unitOfWork.UserRepository.Get(x => x.Role.RoleName == "Student" || x.Role.RoleName == "Mentor");
+        var student = _unitOfWork.UserRepository.Get(x => x.Role.RoleName == "Student");
+        var mentor = _unitOfWork.UserRepository.Get(x => x.Role.RoleName == "Mentor");
+
         UserCountResponse userCountResponse = new UserCountResponse
         {
-            NumberOfUsers = users.Count()
+            NumberOfStudent = student.Count(),
+            NumberOfMentor = mentor.Count(),
+            NumberOfUsers = student.Count() + mentor.Count()
         };
 
         return userCountResponse;
