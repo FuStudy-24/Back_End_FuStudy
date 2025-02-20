@@ -3,9 +3,9 @@
 
 name: Deploy FuStudy API
 on:
-  push:
-    branches:
-      - main
+#  push:
+#    branches:
+#      - main
   workflow_dispatch: 
     
 env: 
